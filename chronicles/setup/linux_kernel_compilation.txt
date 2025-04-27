@@ -1,5 +1,5 @@
-Linux Kernel Image Update:
-==========================
+Linux Kernel Image Compilation:
+===============================
 1. Clone the latest stable Kernel Image from the BBB official GitHub link: https://github.com/beagleboard/linux
 2. After the cloning is completed, the steps are executed from inside the cloned directory.
 3. The temporary folder, object files, images generated and .config file generated previously has to be deleted:
@@ -15,3 +15,19 @@ Linux Kernel Image Update:
 8. The generated Kernel Modules are installed on the default path of the Host (/lib/modules/<kernel_ver>):
 	=> sudo make ARCH=arm modules_install
 
+Kernel Image Update on SD card:
+===============================
+1. Connect the SD card to the Host using a Card reader.
+2. In the BOOT partition, rename the the existing "uImage" and ".dtb" files as a backup.
+3. From the cloned directory, navigate to the path containing the "uImage" file (arch/arm/boot).
+4. Copy the "uImage" file from this path to the BOOT partition:
+	=> cp uImage /<SD_card_Mount_Path>/BOOT/
+5. From the cloned directory, navigate to the path containing the ".dtb" file (arch/arm/boot/dts).
+6. Copy the ".dtb" file from this path to the BOOT partition:
+	=> cp am335x-boneblack.dtb /<SD_card_Mount_Path>/BOOT/
+7. The BOOT partition will now contain both the updated and the backed-up "uImage" and ".dtb" files.
+8. On the Host, navigate to the path containing the Kernel Modules /lib/modules/<kernel_ver>).
+9. Copy the Kernel Modules from this path to the path (/lib/modules) on the ROOTFS partition:
+	=> sudo cp -a <kernel_ver>/ /<SD_card_Mount_Path>/ROOTFS/lib/modules/
+10. Synchronize the changes to ensure the data is written to the SD card properly.
+	=> sync
