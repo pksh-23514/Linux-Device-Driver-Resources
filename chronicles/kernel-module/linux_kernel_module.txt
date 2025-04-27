@@ -1,0 +1,18 @@
+Linux Kernel Module:
+====================
+1. Linux supports dynamic insertion and removal of code from the Kernel while the board is up and running. This code is called the Kernel Module.
+2. Once the Kernel Module is loaded into the Kernel, the new features and functionalities are available to use without restarting the board.
+3. The Kernel Module dynamically extends the functinalities of the Kernel by introducing security, device drivers, file system drivers, system calls etc.
+4. Support for Kernel Module allows the Embedded Linux systems to have minimal base Kernel Image and other features are supplied on-demand via Module addition.
+
+Static and Dynamic Kernel Module:
+=================================
+1. During the Build, if the Modules are statically linked to the Kernel Image i.e. Modules become a part of the final Image, it is Static LKM.
+2. During the Build, if the Modules are compiled and linked separately to produce .ko files and not a part of the final Image, it is Dynamic LKM.
+3. The Static LKM increases the size of the final Kernel Image. The Dynamic LKM is size efficient.
+4. The Static LKM is built-in the Kernel Image and cannot be unloaded. Hence, it occupies the Memory permanently during run-time.
+5. The Dynamic LKM can be loaded and unloaded into/from the Kernel based on the requirement during run-time through the User-space directly.
+
+User-space vs Kernel-space:
+===========================
+
