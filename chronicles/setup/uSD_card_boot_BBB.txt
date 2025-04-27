@@ -32,5 +32,11 @@ Hack for SD card Booting by Default:
 
 Erasing eMMC MBR for SD card Booting by Default:
 ================================================
-The newer Debian Images do not display the "/dev/mmcblk1p2" partition and the MLO file.
-In such cases,
+1. The newer Debian Images do not display the "/dev/mmcblk1p2" partition as verified by running the command "lsblk" on the board.
+2. If the "/dev/mmcblk1p1" is mounted, it is observed that the MLO file is not present.
+3. There is a very small partition called MBR containing the MLO and u-Boot.
+4. In such cases, the MBR partition has to be erased. However, the MBR partition can be recovered later if required.
+5. The MBR partition in the eMMC can be copied to a backup location by running the command "dd if=/dev/mmcblk1 of=emmc_bkup.img bs=1M count=1".
+6. After the backup is completed, the MBR partition can be erased by running the command "dd if=/dev/zero of=/dev/mmcblk1 bs=1M count=1".
+7. The board is restarted and the boot happens from the SD card.
+8. The MBR partition can be recovered by running the command "dd if=emmc_bkup.img of=/dev/mmcblk1 bs=1M count=1".
