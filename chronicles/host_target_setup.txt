@@ -1,0 +1,38 @@
+Install Packages on Host:
+=========================
+1. sudo apt update
+2. sudo apt install build-essential lzop u-boot-tools net-tools bison flex libssl-dev libncurses5-dev libncursesw5-dev unzip chrpath xz-utils minicom wget git-core
+
+Download Boot Images and Root File System:
+==========================================
+1. The SD card shall be partitioned into two:
+	1) Partition-1 (FAT-16) --> BOOT Images (MLO, u-Boot, Kernel Image)
+	2) Partition-2 (EXT-4)  --> ROOTFS
+2. The Boot Images can be downloaded from the link: https://github.com/niekiran/linux-device-driver-1/tree/master/downloads
+3. The Target BeagleBone Black board latest Image can be downloaded from the link: https://www.beagleboard.org/distros
+4. Check the Debian Image which is compatible with the HW board.
+
+Download Toolchain on Host:
+===========================
+1. To cross-compile the Linux Kernel or Applications or Kernel Modules to the ARM Cortex-Ax architecture, a Cross-Compiler is required.
+2. The Cross-Compiler can be downloaded from the link: https://releases.linaro.org/components/toolchain/binaries/
+3. Check the latest release for the Toolchain.
+4. The Target BeagleBone Black SoC is AM335x from TI which is based on ARM Cortex-A8 processor of 32-bit ARMv7 architecture.
+5. The Toolchain for the SoC is "arm-linux-gnueabihf". 
+6. For the 64-bit OS (uname -a), choose the version "gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf.tar.xz".
+
+Download GParted on Host:
+=========================
+1. sudo apt update
+2. sudo apt install gparted
+
+Add Toolchain binary path to PATH:
+==================================
+1. In the $HOME, open the ".bashrc" file.
+2. Write the command to include the Toolchain binary path: export PATH=$PATH:<absolute_path_to_Toolchain_binaries>
+3. Save and close the file. Re-open the Terminal for the changes to get sourced.
+4. Write "arm" on the terminal and hit TAB, all the commands present in the Toolchain will be printed.
+
+Target Setup:
+=============
+
