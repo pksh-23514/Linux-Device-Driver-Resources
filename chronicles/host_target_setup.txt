@@ -35,4 +35,6 @@ Add Toolchain binary path to PATH:
 
 Target Setup:
 =============
-
+1. The board can be powered up by connecting a USB cable Type-B from the Host to the USB mini-port on the Target.
+2. The UART connection has to be established between the Host and the Target by connecting a USB to TTL Serial cable.
+3. This Serial connection is a cross-connection with the Tx pin of the cable going to the Rx pin on the Target and vice-versa.
