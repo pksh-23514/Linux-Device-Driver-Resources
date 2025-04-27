@@ -1,0 +1,17 @@
+Linux Kernel Image Update:
+==========================
+1. Clone the latest stable Kernel Image from the BBB official GitHub link: https://github.com/beagleboard/linux
+2. After the cloning is completed, the steps are executed from inside the cloned directory.
+3. The temporary folder, object files, images generated and .config file generated previously has to be deleted:
+	=> make ARCH=arm distclean
+4. The .config file has to be generated based on the default file (arch/arm/configs/bb.org_defconfig) provided by the Vendor:
+	=> make ARCH=arm bb.org_defconfig
+5. The change in Kernel configurations can be done through the 'menuconfig' tool:
+	=> make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- menuconfig
+6. The  Kernel Image "uImage", Device Tree Binaries "dtb" etc are generated:
+	=> make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- uImage dtbs LOADADDR=0x80008000 -j4
+7. The Kernel Modules (.ko) are generated:
+	=> make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- modules -j4
+8. The generated Kernel Modules are installed on the default path of the Host (/lib/modules/<kernel_ver>):
+	=> sudo make ARCH=arm modules_install
+
