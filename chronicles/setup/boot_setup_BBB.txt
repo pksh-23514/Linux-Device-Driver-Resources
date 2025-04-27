@@ -1,0 +1,56 @@
+Boot Sequence for BeagleBone Black:
+===================================
+1. The Boot switch (S2) on the board decides the Boot sequence during Power-up.
+2. There are a certain number of ways through which the board can be booted-up.
+3. If the Boot button is not pressed, the sequence of methods through which the board can be booted is:
+	=> MMC1 (eMMC) ---> MMC0 (SD card) ---> UART0 ---> USB0
+4. If the Boot button is pressed, the sequence of methods through which the board can be booted is:
+	=> SPI0 ---> MMC0 (SD card) ---> USB0 ---> UART0
+5. Wherever, the valid Boot partitions and relevant files are available; the Booting happens from that souce. Otherwise, the next source in the sequence is checked.
+6. The board is pre-installed with the Debian OS present in the eMMC.
+7. To boot the board from the SD card, the Boot button has to be pressed so that the first source containing the valid Boot partitions is the SD card.
+8. The Boot button affects the register SYSBOOT[4:0]. The Reset button doesn't have any affect on this register.
+
+Preparing SD card for Booting:
+==============================
+1. Connect the SD card to the Host using a Card reader.
+2. Using the GParted application, create 2 partitions on the SD card: FAT16 and EXT4.
+3. Launch the GParted application and authenticate using the PC password.
+4. Select the correct Device (/dev/sdx) by checking the Device details from "/dev".
+5. The SD card initially could already have a particular file system formatting such as FAT32.
+6. Right click on the device and 'Delete' all the partitions so that the complete storage is available for allocation.
+7. After deleting the existing partitions, the device partiton displays as "unallocated".
+8. Right click again and select 'New' to create a new partition on the SD card. Select the following options and click 'Add':
+	1) Create as: Primary Partition
+	2) File system: fat16
+	3) New size (MiB): 256
+	4) Label: BOOT
+9. Right click again and select 'New' to create a new partition on the SD card. Select the following options and click 'Add':
+	1) Create as: Primary Partition
+	2) File system: ext4
+	3) New size (MiB): Whatever the remaining size is left
+	4) Label: ROOTFS
+10. Click on the 'Apply All Operations' (green arrow) option and select 'Apply' on the dialogue box.
+11. The operation will take sometime to delete and add the partitions.
+12. There are some flags to be managed for the BOOT partition to make it bootable. Right click on the partition and select the following options from 'Manage Flags':
+	1) boot
+	2) lba
+13. After this selection, the partition will have these flags displayed along with the other details.
+14. Close the GParted application.
+15. Now, 2 partitions are visible to be mounted. If these are not visible, remove and re-insert the SD card.
+
+Copying the Boot Images and Root FS to SD card:
+===============================================
+1. Run the "lsblk" command to check the Mount location for the BOOT and the ROOTFS partitions.
+2. The Boot Images downloaded contain the following:
+	1) Device Tree Binary (dtb)
+	2) Primary Boot Loader (MLO)
+	3) U-Boot Bootloader Image (u-boot.img)
+	4) U-Boot commands and Environment settings (uEnv.txt)
+	5) Kernel Image (uImage)
+3. Copy the Boot Image (unzipped form) files to the mounted location of the BOOT partition and run the "sync" command.
+4. Unzip the Root FS (.xz zipped form). The Root FS is now available in the Image format (.img). However, this Image has to be mounted first.
+5. Right click on the Image file and select 'Open with Disk Image Mounter'. Using "lsblk" command, the mounted location of the Root FS can be checked.
+6. Go to the Root FS mount location and copy the Root FS files to the mounted location of the ROOTFS partition. This migt require 'sudo' access to copy.
+7. Run the "sync" command. 'Sync' means synchronize cached writes to persistent storage. It deflushes the in between cache data to the physical media.
+8. In the BOOT and ROOTFS partitions, the copied files are displayed. Unmount the SD card from the Host.
