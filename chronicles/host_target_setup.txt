@@ -6,8 +6,8 @@ Install Packages on Host:
 Download Boot Images and Root File System:
 ==========================================
 1. The SD card shall be partitioned into two:
-	1) Partition-1 (FAT-16) --> BOOT Images (MLO, u-Boot, Kernel Image)
-	2) Partition-2 (EXT-4)  --> ROOTFS
+	1) Partition-1 (FAT16) --> BOOT Images (MLO, u-Boot, Kernel Image)
+	2) Partition-2 (EXT4)  --> ROOTFS
 2. The Boot Images can be downloaded from the link: https://github.com/niekiran/linux-device-driver-1/tree/master/downloads
 3. The Target BeagleBone Black board latest Image can be downloaded from the link: https://www.beagleboard.org/distros
 4. Check the Debian Image which is compatible with the HW board.
