@@ -1,0 +1,36 @@
+SD card Booting:
+================
+1. Make sure that the BeagleBone Black board is not powered up.
+2. The UART connection has to be established between the Host and the Target by connecting a USB to TTL Serial cable.
+3. This Serial connection is a cross-connection with the Tx pin of the cable going to the Rx pin on the Target and vice-versa.
+4. The Minicom can be configured by executing "sudo minicom -s". The 'Serial port setup' is done with the below configurations and saved:
+	1) Hardware Flow Control : No
+	2) Software Flow Control : No
+5. The USB (/dev/ttyUSBx) where the Serial connection is established can be verified and opened.
+6. Insert the SD card with the BOOT and ROOTFS partitions containing the Image files.
+7. The board can be powered up by connecting a USB cable Type-B from the Host to the USB mini-port on the Target.
+8. The board Boots up by using the pre-existing Images from the eMMC.
+9. After the board is booted-up, the Boot button (S2) is to be pressed and held for changing the Boot sequence.
+10. Without releasing the Boot button, the Power button (S3) is to be pressed and held until the blue LED is turned OFF and turned ON again.
+11. If the blue LED is not turned ON, the Power button needs to pressed gently. This indicates that the board is powered up again.
+12. After 2-5 seconds, the Boot button can be released.
+13. The board is now booted-up successfully from the SD card.
+14. After the boot is successful, the username and password details are typed to Log-in to the board.
+15. This is a tedious process to Boot the board by pressing the Boot button everytime.
+
+Hack for SD card Booting by Default:
+====================================
+1. If the Boot button is not pressed during the Power-up, the eMMC is the first source to be checked for the files.
+2. The SD card is the next source to be checked if the files are not present in the eMMC.
+3. After the board is up, a mount point is created by running the command "mkdir /media/tmp".
+4. The eMMC BOOT partition is mounted by running the command "sudo mount /dev/mmcblk1p1 /media/tmp". It might throw some warnings related to mounting.
+5. After the mount point can be verified to contain the Boot Image files.
+6. The MLO file needs to be backed up by renaming it to 'MLO_backup' in the mount point. And the "sync" command is executed.
+7. The board is then powered down by running the command "shutdown -h now".
+8. The Power button is pressed. Since, the MLO file is not present in the eMMC (as it is renamed), the MLO file is found in the next source i.e. SD card.
+9. Therefore, the SD card booting becomes the default method.
+
+Erasing eMMC MBR for SD card Booting by Default:
+================================================
+The newer Debian Images do not display the "/dev/mmcblk1p2" partition and the MLO file.
+In such cases,
