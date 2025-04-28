@@ -14,6 +14,50 @@ Header section:
 4. There is no User-space library that is linked to the LKM.
 5. The Kernel Headers include the C files that specify the interface between the Linux Kernel and User-space libraries and programs.
 6. The Kernel Headers define the structures and constants that are needed for the building of most standard programs.
+7. Lastly, every LKM needs to include <linux/module.h>.
 
 Code Section:
 =============
+1. The LKM must have at least two functions:
+	1) A start (initialization) function called "init_module()" which is called when the Module is 'insmod(ed)' into the Kernel.
+	2) An end (cleanup) function called "cleanup_module()" which is called just before it is removed from the Kernel.
+2. There is no restriction to the function names after the Kernel v_2.3.13.
+3. The "module_init" and "module_exit" Macros are used to give any names to the start and end functions.
+4. These Macros are defined in the Header file <linux/module.h>.
+5. The only requirement is that the 'init' and 'cleanup' functions must be defined before calling these Macros, otherwise there are compilation errors.
+
+Start function:
+***************
+1. The start fumction:
+	1) Either registers a Handler for something with the Kernel.
+	2) Or replaces one of the Kernel functions with it's own code (usually the code does something and then calls the original function).
+2. The prototype for the start function is: static int function_name(void)
+	1) static - Since the start function is LKM specific, it should never be called from another LKM. Although, it is optional.
+	2) 
+3. The return value of the start function is:
+	1) Zero --> Success
+	2) Non-Zero --> Failure
+4. If the start function returns a non-zero value i.e. the LKM initialization has failed and the LKM cannot be loaded in the Kernel.
+5. In case of Static LKM, the start function is called during the Boot time.
+6. In case of Dynamic LKM, the start function is called during the Module insertion.
+7. There is no main() function in the LKM as the start function is the entry point of the LKM.
+8. The start function can perform:
+	1) Initialization of Devices
+	2) Initialization of Device private Data Structures
+	3) Request Memory dynamically for the various Data Structures and Services
+	4) Device File creation
+
+End function:
+*************
+1. The end function is supposed to undo whatever the start function earlier did; so the Module can be unloaded safely.
+2. The prototype for the end function is: static void function_name(void)
+	1) static - Since the end function is LKM specific, it should never be called from another LKM. Although, it is optional.
+	2) 
+3. In case of Static LKM, the end function is never called as the LKM is never removed.
+4. In case of Dynamic LKM, the end function is called during the Module removal.
+5. Therefore, in the Static LKM implementations, there is no need to implement this function.
+6. If the Static LKM has an end function, the Kernel Build system removes such function during the Build process if there is an "__exit" marker.
+7. The end function can perform:
+	1) Undo-ing the start function
+	2) Free Memory requested during the start function
+	3) De-Initialization of Devices or leave the Device in a proper state
