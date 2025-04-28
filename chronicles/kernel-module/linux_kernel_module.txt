@@ -15,4 +15,15 @@ Static and Dynamic Kernel Module:
 
 User-space vs Kernel-space:
 ===========================
-
+1. User-space is the area of Memory that runs the non-Kernel applications.
+2. The User-space Process is executed by the USER in the OS rather than being a part of the OS.
+3. The User-space Process can also be executed by an 'init' system (systmed) but isn't a part of the Kernel.
+4. The User-space Process runs in User mode i.e. the Process instructions are executed with the Non-Privileged execution mode.
+5. The User-space applications are also known as User-land applications.
+6. The User-space applications cannot directly access the system's resources. They have to switch to Kernel mode to access the resources.
+7. The switch to Kernel mode triggers a system call to the Kernel with a request to access the resources. The 'syscall' is executed by the Kernel.
+8. This kind of execution ensures that a User-space Process cannot access or modify memory managed by the Kernel. Also, it can't interfere with the other Process executions.
+9. Kernel-space is the area of Memory that is reserved for the Kernel to run and execute the Kernel mode instructions.
+10. The Kernel is responsible for the management of the system's resources. It has unrestricted access to the system’s hardware resources.
+11. This is necessary for the Kernel to perform the essential tasks such as scheduling Processes, managing Memory and handling Interrupts.
+12. The Kernel mode is the execution mode of the Kernel which runs in a privileged, root-access mode.
