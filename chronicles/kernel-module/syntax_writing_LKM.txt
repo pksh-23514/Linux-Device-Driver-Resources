@@ -30,7 +30,7 @@ Code Section:
 8. They are Function Section attributes:
 	1) __init --> It directs the Compiler to keep the data or code in an Output section called ".init" of the final ELF of the Kernel.
 	2) __exit --> It directs the Compiler to keep the data or code in an Output section called ".exit" of the final ELF of the Kernel.
-	3) If no attributes are defined for the Function, they are placed in the ".text" section of the final ELF of the Kernel.
+	3) If no attributes are defined for the function, they are placed in the ".text" section of the final ELF of the Kernel.
 9. The Macros "__initdata" and "__initconst" discard the Variables after the initialization.
 
 Start function:
@@ -68,3 +68,9 @@ End function:
 	1) Undo-ing the start function
 	2) Free Memory requested during the start function
 	3) De-Initialization of Devices or leave the Device in a proper state
+
+Module Entry points Registration:
+*********************************
+1. The "module_init" and "module_exit" Macros are used to register the start and end functions with the Kernel.
+2. The "module_init" is used to add the parameter i.e. the start function to the 'init' Entry point database of the Kernel.
+3. The "module_exit" is used to add the parameter i.e. the end function to the 'exit' Entry point database of the Kernel.
