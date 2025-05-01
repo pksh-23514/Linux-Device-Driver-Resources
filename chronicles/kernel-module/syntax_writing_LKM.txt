@@ -14,7 +14,7 @@ Header section:
 4. There is no User-space library that is linked to the LKM.
 5. The Kernel Headers include the C files that specify the interface between the Linux Kernel and User-space libraries and programs.
 6. The Kernel Headers define the structures and constants that are needed for the building of most standard programs.
-7. Lastly, every LKM needs to include <linux/module.h>.
+7. Lastly, every LKM needs to include the Header file <linux/module.h>.
 
 Code Section:
 =============
@@ -32,6 +32,12 @@ Code Section:
 	2) __exit --> It directs the Compiler to keep the data or code in an Output section called ".exit" of the final ELF of the Kernel.
 	3) If no attributes are defined for the function, they are placed in the ".text" section of the final ELF of the Kernel.
 9. The Macros "__initdata" and "__initconst" discard the Variables after the initialization.
+10. The Module description can be provided using the Macros "MODULE_LICENSE", "MODULE_AUTHOR" and "MODULE_DESCRIPTION".
+11. The license can be GPL (free) or non-GPL (proprietary) licenses. If a Module license is non-GPL, the Kernel triggers a warning of being 'tainted'.
+12. The allowed free license parameters that can be used are defined in the Header file <linux/module.h>.
+13. The Macro "MODULE_INFO" is used to provide a custom message about the Module. It is used to store the Key-Value pairs in the ".modinfo" section of the compiled Modules.
+14. All the Module descriptions use "MODULE_INFO" to store the information in the ".modinfo" section of the compiled Modules.
+15. The "modinfo" command in Linux is used to display all the Module descriptions.
 
 Start function:
 ***************
