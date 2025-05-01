@@ -25,20 +25,27 @@ Code Section:
 3. The "module_init" and "module_exit" Macros are used to give any names to the start and end functions.
 4. These Macros are defined in the Header file <linux/module.h>.
 5. The only requirement is that the 'init' and 'cleanup' functions must be defined before calling these Macros, otherwise there are compilation errors.
+6. The other Macros "__init" and "__exit" are used to free the Kernel Memory (visible during the Kernel Boot).
+7. These Macros are defined in the Header file <linux/init.h>.
+8. They are Function Section attributes:
+	1) __init --> It directs the Compiler to keep the data or code in an Output section called ".init" of the final ELF of the Kernel.
+	2) __exit --> It directs the Compiler to keep the data or code in an Output section called ".exit" of the final ELF of the Kernel.
+	3) If no attributes are defined for the Function, they are placed in the ".text" section of the final ELF of the Kernel.
+9. The Macros "__initdata" and "__initconst" discard the Variables after the initialization.
 
 Start function:
 ***************
 1. The start fumction:
 	1) Either registers a Handler for something with the Kernel.
 	2) Or replaces one of the Kernel functions with it's own code (usually the code does something and then calls the original function).
-2. The prototype for the start function is: static int function_name(void)
+2. The prototype for the start function is: static int __init function_name(void)
 	1) static - Since the start function is LKM specific, it should never be called from another LKM. Although, it is optional.
-	2) 
+	2) __init - It causes the init function to be discarded and its Memory freed once the start function finishes for Built-in Modules, but not for loadable Modules.
 3. The return value of the start function is:
 	1) Zero --> Success
 	2) Non-Zero --> Failure
 4. If the start function returns a non-zero value i.e. the LKM initialization has failed and the LKM cannot be loaded in the Kernel.
-5. In case of Static LKM, the start function is called during the Boot time.
+5. In case of Static LKM, the start function is called during the Boot time only. It is never called until the next Reboot.
 6. In case of Dynamic LKM, the start function is called during the Module insertion.
 7. There is no main() function in the LKM as the start function is the entry point of the LKM.
 8. The start function can perform:
@@ -52,7 +59,7 @@ End function:
 1. The end function is supposed to undo whatever the start function earlier did; so the Module can be unloaded safely.
 2. The prototype for the end function is: static void function_name(void)
 	1) static - Since the end function is LKM specific, it should never be called from another LKM. Although, it is optional.
-	2) 
+	2) __exit - It causes the omission of the end function for Built-in Modules, but has no effect for loadable Modules.
 3. In case of Static LKM, the end function is never called as the LKM is never removed.
 4. In case of Dynamic LKM, the end function is called during the Module removal.
 5. Therefore, in the Static LKM implementations, there is no need to implement this function.
