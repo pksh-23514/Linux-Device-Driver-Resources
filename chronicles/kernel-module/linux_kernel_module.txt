@@ -27,3 +27,26 @@ User-space vs Kernel-space:
 10. The Kernel is responsible for the management of the system's resources. It has unrestricted access to the system’s hardware resources.
 11. This is necessary for the Kernel to perform the essential tasks such as scheduling Processes, managing Memory and handling Interrupts.
 12. The Kernel mode is the execution mode of the Kernel which runs in a privileged, root-access mode.
+
+Building the Kernel Module:
+===========================
+1. The LKM can be built in 2 ways:
+        1) Statically linked to the Kernel Image.
+        2) Dynamically loadable to the Kernel Image.
+2. The Dynamically loadable Kernel Module can be further divided into 2 types:
+        1) In-Tree Kernel Module
+        2) Out-of-Tree Kernel (External) Module
+3. Modules are built in the Linux Kernel using the "kbuild" Build system. It is used by the Modules:
+	1) To stay compatible with the changes in the Build infrastructure.
+	2) To pick up the right flags to GCC.
+4. To build Out-of-Tree Modules, a prebuilt Kernel is required that contains the configurations and Header files to be used in the Build.
+5. The reason for the pre-compiled Kernel Source Tree is that the Modules are linked against the Object files present in the Kernel Source Tree.
+6. For a distribution Kernel, there is a package for the running Kernel provided by the distributor.
+7. The advantage of the building the LKM separately from the Kernel's source files is to keep the Module organized, isolated and compatible across different systems.
+8. The LKM compiled against one Kernel version and loaded in the system having another Kernel version is either unsuccessful or could encounter Run-time issues.
+
+Definitions:
+************
+1. Linux Kernel Source Tree - It consists of all the source code for the Kernel and Device Drivers for all supported Processor Architectures.
+2. In-Tree Module - The Module that is internal to the Linux Kernel Source Tree. It is approved by the Kernel developers and maintainers.
+3. Out-of-Tree Module - The Module that is external to the Linux Kernel Source Tree. It taints the Kernel and a warning is issued by the Kernel.
