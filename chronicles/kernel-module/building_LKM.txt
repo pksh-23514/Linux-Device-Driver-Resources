@@ -46,8 +46,9 @@ Makefile Execution for Host:
 	=> uname -r
 4. The pre-Built Kernel Source and the Kernel Header files can be found at the path "/lib/modules/kernel_version".
 5. The Build is triggered using the 'make' command:
+	-------------------------------------------------------------
 	=> make -C /lib/modules/kernel_version/build/ M=$PWD modules
-
+	-------------------------------------------------------------
 	=> The Makefile references to the Kernel's Build directory for External Modules to access the Kernel Source files (/lib/modules/kernel_version/build).
 	=> The variable 'M' is pointing to the path of the Module which is generally used as the Absolute Current directory path.
 	=> The top-level Makefile gets the path of the Module through 'M' and the local Makefile is detected at the path.
@@ -63,8 +64,9 @@ Makefile Execution for Target:
 2. The build can be done for the Target system.
 3. The path to the Kernel Source shall be the cloned repository of the BBB Linux Kernel (/workdir/linux_source_BBB_ver).
 4. The Build is triggered using the 'make' command:
+	----------------------------------------------------------------------------------------------------------
 	=> sudo make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -C /workdir/linux_source_BBB_ver/ M=$PWD modules
-
+	----------------------------------------------------------------------------------------------------------
 	=> The 'sudo' command could cause error while building the Module. It could mess with the PATH Environment variable.
 	=> The Toolchain binary Absolute path must be copied from the '.bashrc' file in $HOME of the Host (added in the Host setup process).
 	=> It is pasted in the file '/etc/sudoers' under the variable 'secure_path' along with other paths separated by a colon.
