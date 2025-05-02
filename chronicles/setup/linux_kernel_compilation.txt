@@ -29,5 +29,5 @@ Kernel Image Update on SD card:
 8. On the Host, navigate to the path containing the Kernel Modules /lib/modules/<kernel_ver>).
 9. Copy the Kernel Modules from this path to the path (/lib/modules) on the ROOTFS partition:
 	=> sudo cp -a <kernel_ver>/ /<SD_card_Mount_Path>/ROOTFS/lib/modules/
-10. Synchronize the changes to ensure the data is written to the SD card properly.
+10. Synchronize the changes to ensure the data is written to the SD card properly:
 	=> sync
