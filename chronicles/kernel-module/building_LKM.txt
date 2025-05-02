@@ -15,8 +15,8 @@ Build Syntax for the External Module:
 	=> The 'make -C' is used to trigger the top-level Makefiles of the Linux Kernel Source. It utilizes the Compiler switches, the Dependency list and the Version string.
 	=> The top-level Makefile is directed to the local Makefile or to a local folder containing the Module source code by the 'M=<dir>' option.
 	=> The 'target' option can be included in the command for various Target options:
-		--> modules - The default target for External Modules. It builds the Module located in the the Absolute Path of the directory.
-		--> modules_install - To install the external module(s). The default location is "/lib/modules/<kernel_release>/extra".
+		--> modules - The default target option for External Modules. It builds the Module located in the the Absolute Path of the Module directory.
+		--> modules_install - To install the external Module(s). The default location is "/lib/modules/<kernel_release>/extra".
 		--> clean - To remove all the generated files in the Module directory only.
 		--> help - To list the available 'targets' for the External Modules.
 
@@ -32,6 +32,7 @@ Write Local Makefile:
 	=> CONFIG_MODULE=y --> It is compiled and linked to the Kernel Image i.e. Static Kernel Module.
 	=> CONFIG_MODULE=m --> It is compiled as a loadable Module i.e. Dynamic Kernel Module.
 	=> CONFIG_MODULE=n --> It is not compiled.
+	=> The 'CONFIG_MODULE' is the the kind of variables that are set in the .config file in the top-level directory of Linux Kernel Source Tree.
 7. The kbuild system builds the <Module_name>.o from <Module_name>.c and after linking, the result is the Kernel Module <Module_name>.ko.
 8. When the Module is built from multiple sources:
 	=> obj-<CONFIG_MODULE> := <Module_name>.o
@@ -46,7 +47,8 @@ Makefile Execution for Host:
 4. The pre-Built Kernel Source and the Kernel Header files can be found at the path "/lib/modules/kernel_version".
 5. The Build is triggered using the 'make' command:
 	=> make -C /lib/modules/kernel_version/build/ M=$PWD modules
-	=> The Makefile references to the Kernel's Build directory for External Modules to access the Kernel Build files (/lib/modules/kernel_version/build).
+
+	=> The Makefile references to the Kernel's Build directory for External Modules to access the Kernel Source files (/lib/modules/kernel_version/build).
 	=> The variable 'M' is pointing to the path of the Module which is generally used as the Absolute Current directory path.
 	=> The top-level Makefile gets the path of the Module through 'M' and the local Makefile is detected at the path.
 	=> The local Makefile is built and the <Module_name>.o file is generated.
@@ -54,6 +56,27 @@ Makefile Execution for Host:
 	=> The <Module_name>.mod.o is linked to generate the final <Module_name>.ko file.
 6. To clean the Build, the 'make' command with the 'clean' option is executed:
 	=> make -C /lib/modules/kernel_version/build/ M=$PWD clean
+
+Makefile Execution for Target:
+******************************
+1. The local folder is created at any suitable path on the system. It contains the C file of the Kernel Module and the corresponding Makefile.
+2. The build can be done for the Target system.
+3. The path to the Kernel Source shall be the cloned repository of the BBB Linux Kernel (/workdir/linux_source_BBB_ver).
+4. The Build is triggered using the 'make' command:
+	=> sudo make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -C /workdir/linux_source_BBB_ver/ M=$PWD modules
+
+	=> The 'sudo' command could cause error while building the Module. It could mess with the PATH Environment variable.
+	=> The Toolchain binary Absolute path must be copied from the '.bashrc' file in $HOME of the Host (added in the Host setup process).
+	=> It is pasted in the file '/etc/sudoers' under the variable 'secure_path' along with other paths separated by a colon.
+	=> The command is executed successfully and the final <Module_name>.ko file is generated.
+	=> The Makefile references to the Kernel's directory for External Modules to access the Kernel Source files (/workdir/linux_source_BBB_ver).
+	=> The rest of the Build process is the same as defined under the "Makefile Execution for Host" section.
+5. The .ko file generated will have the File Type as per the Cross Compiler mentioned.
+6. The "modinfo" command is used to display all the Module descriptions.
+7. The Sections of the Module can be analyzed by running the command:
+	=> arm-linux-gnueabihf-objdump -h <Module_name>.ko
+	=> The start and end functions of the Module are present in the '.init.text' and '.exit.text' Sections of the 'Module_name.ko' file.
+	=> The '.data' Section will contain the Data present in the Module.
 
 Insertion and Deletion of the Module to/from Kernel:
 ****************************************************
