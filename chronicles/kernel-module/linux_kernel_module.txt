@@ -39,7 +39,7 @@ Building the Kernel Module:
 3. Modules are built in the Linux Kernel using the "kbuild" Build system. It is used by the Modules:
 	1) To stay compatible with the changes in the Build infrastructure.
 	2) To pick up the right flags to GCC.
-4. To build Out-of-Tree Modules, a prebuilt Kernel is required that contains the configurations and Header files to be used in the Build.
+4. To build Out-of-Tree Modules, a pre-Built Kernel is required that contains the configurations and Header files to be used in the Build.
 5. The reason for the pre-compiled Kernel Source Tree is that the Modules are linked against the Object files present in the Kernel Source Tree.
 6. For a distribution Kernel, there is a package for the running Kernel provided by the distributor.
 7. The advantage of the building the LKM separately from the Kernel's source files is to keep the Module organized, isolated and compatible across different systems.
