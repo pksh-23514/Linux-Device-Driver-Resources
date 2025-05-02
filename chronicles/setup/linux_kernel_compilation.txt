@@ -4,7 +4,7 @@ Linux Kernel Image Compilation:
 2. After the cloning is completed, the steps are executed from inside the cloned directory.
 3. The temporary folder, object files, images generated and .config file generated previously has to be deleted:
 	=> make ARCH=arm distclean
-4. The .config file has to be generated based on the default file (arch/arm/configs/bb.org_defconfig) provided by the Vendor:
+4. The .config file has to be generated based on the default file (/arch/arm/configs/bb.org_defconfig) provided by the Vendor:
 	=> make ARCH=arm bb.org_defconfig
 5. The change in Kernel configurations can be done through the 'menuconfig' tool:
 	=> make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- menuconfig
@@ -19,10 +19,10 @@ Kernel Image Update on SD card:
 ===============================
 1. Connect the SD card to the Host using a Card reader.
 2. In the BOOT partition, rename the the existing "uImage" and ".dtb" files as a backup.
-3. From the cloned directory, navigate to the path containing the "uImage" file (arch/arm/boot).
+3. From the cloned directory, navigate to the path containing the "uImage" file (/arch/arm/boot).
 4. Copy the "uImage" file from this path to the BOOT partition:
 	=> cp uImage /<SD_card_Mount_Path>/BOOT/
-5. From the cloned directory, navigate to the path containing the ".dtb" file (arch/arm/boot/dts).
+5. From the cloned directory, navigate to the path containing the ".dtb" file (/arch/arm/boot/dts).
 6. Copy the ".dtb" file from this path to the BOOT partition:
 	=> cp am335x-boneblack.dtb /<SD_card_Mount_Path>/BOOT/
 7. The BOOT partition will now contain both the updated and the backed-up "uImage" and ".dtb" files.
