@@ -41,19 +41,19 @@ Makefile Execution for Host:
 ****************************
 1. The local folder is created at any suitable path on the system. It contains the C file of the Kernel Module and the corresponding Makefile.
 2. The build can be done for the Host system.
-3. The Linux version on the Host can be checked using the command:
+3. The Linux version on the Host "kernel_version" can be checked using the command:
 	=> uname -r
-4. The pre-Built Kernel Source and the Kernel Header files can be found at the path "/lib/modules/<kernel_version>".
+4. The pre-Built Kernel Source and the Kernel Header files can be found at the path "/lib/modules/kernel_version".
 5. The Build is triggered using the 'make' command:
-	=> make -C /lib/modules/<kernel_version>/build/ M=$PWD modules
-	=> The Makefile references to the Kernel's Build directory for External Modules to access the Kernel Build files (/lib/modules/<kernel_version>/build).
+	=> make -C /lib/modules/kernel_version/build/ M=$PWD modules
+	=> The Makefile references to the Kernel's Build directory for External Modules to access the Kernel Build files (/lib/modules/kernel_version/build).
 	=> The variable 'M' is pointing to the path of the Module which is generally used as the Absolute Current directory path.
 	=> The top-level Makefile gets the path of the Module through 'M' and the local Makefile is detected at the path.
 	=> The local Makefile is built and the <Module_name>.o file is generated.
 	=> The <Module_name>.o is further compiled as Module and the <Module_name>.mod.o file is generated.
 	=> The <Module_name>.mod.o is linked to generate the final <Module_name>.ko file.
 6. To clean the Build, the 'make' command with the 'clean' option is executed:
-	=> make -C /lib/modules/<kernel_version>/build/ M=$PWD clean
+	=> make -C /lib/modules/kernel_version/build/ M=$PWD clean
 
 Insertion and Deletion of the Module to/from Kernel:
 ****************************************************
