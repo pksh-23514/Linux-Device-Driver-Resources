@@ -73,7 +73,7 @@ Makefile Execution for Target:
 	=> The command is executed successfully and the final <Module_name>.ko file is generated.
 	=> The Makefile references to the Kernel's directory for External Modules to access the Kernel Source files (/workdir/linux_source_BBB_ver).
 	=> The rest of the Build process is the same as defined under the "Makefile Execution for Host" section.
-5. The .ko file generated will have the File Type as per the Cross Compiler mentioned.
+5. The .ko file generated will have the File Type as per the Cross-Compiler mentioned.
 6. The "modinfo" command is used to display all the Module descriptions.
 7. The Sections of the Module can be analyzed by running the command:
 	=> arm-linux-gnueabihf-objdump -h <Module_name>.ko
