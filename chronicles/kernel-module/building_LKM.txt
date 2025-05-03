@@ -1,14 +1,14 @@
 Steps to Build the Out-of-Tree (External) LKM:
 ==============================================
 
-Compile the Kernel Source Tree:
+Kernel Source Tree Compilation:
 *******************************
 1. The pre-Built Kernel version can be obtained by the following ways:
 	1) To download the Kernel source from the distributor (BeagleBone Black) and build it.
 	2) To install the Linux Headers of the Target Linux Kernel if the Kernel source is unavailable.
 
-Build Syntax for the External Module:
-*************************************
+Build Syntax for External Module:
+*********************************
 1. The command to build an External Module is:
 	=> make -C <path_to_Kernel_Source> M=<path_to_Module> [target]
 	=> The kbuild system understands that an External Module is being built due to the 'M=<dir>' option in the command.
@@ -86,8 +86,8 @@ Transfer and Testing of LKM on Target:
 2. The 'ssh-keygen' must be generated if the SCP throws some error in transferring the LKM to the Target.
 3. The LKM can be inserted to the running Kernel and later removed from the Kernel as per requirement.
 
-Insertion and Deletion of the Module to/from Kernel:
-****************************************************
+Insertion and Deletion of Module to/from Kernel:
+************************************************
 1. To insert the Kernel Module into the running Kernel, the command is:
 	=> sudo insmod <Module_name>.ko
 2. To verify the successful insertion of the LKM, the "dmesg" log can be verified:
@@ -98,3 +98,16 @@ Insertion and Deletion of the Module to/from Kernel:
 6. To remove the Kernel Module from the running Kernel, the command is:
 	=> sudo rmmod <Module_name>
 7. To verify the successful deletion of the LKM, the "dmesg" log can be verified to have the message from the exit function.
+
+Steps to Build the In-Tree (Internal) LKM:
+==========================================
+
+Module addition in Kernel Source Tree:
+**************************************
+1. The LKM must be added in the Linux Kernel Source Tree and the Build system builds that Module.
+2. The path to the Kernel Source shall be the cloned repository of the BBB Linux Kernel (/workdir/linux_source_BBB_ver).
+3. The path to include the LKM is (/workdir/linux_source_BBB_ver/drivers/char). A new directory is created to contain the LKM files.
+
+Create Kconfig file for Module:
+******************************* 
+1. To list the LKM selection in the Kernel menuconfig tool, a Kconfig file is created for the LKM.
