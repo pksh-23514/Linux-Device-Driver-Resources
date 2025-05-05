@@ -5,9 +5,24 @@ Module addition in Kernel Source Tree:
 **************************************
 1. The LKM must be added in the Linux Kernel Source Tree and the Build system builds that Module.
 2. The path to the Kernel Source shall be the cloned repository of the BBB Linux Kernel (/workdir/linux_source_BBB_ver).
-3. The path to include the LKM is (/workdir/linux_source_BBB_ver/drivers/char). A new directory is created to contain the LKM files.
+3. The path to include the LKM is (/workdir/linux_source_BBB_ver/drivers/char). A new directory (custom_driver) is created to contain the LKM files.
 
 Create Kconfig file for Module:
 ******************************* 
 1. To list the LKM selection in the Kernel menuconfig tool, a Kconfig file is created for the LKM.
+2. The file named 'Kconfig' is created at the path (/workdir/linux_source_BBB_ver/drivers/char/custom_driver).
+3. A basic Kconfig file can be as follows:
+	=>	menu "in-tree custom module"
+	=>	config IN_TREE_LKM
+	=>		tristate "In-Tree module"
+	=>		default m
+	=>	endmenu
+4. The local Kconfig file is saved with the configurations for the LKM.
 
+Add local Kconfig file to upper-level Kconfig file:
+***************************************************
+1. The local Kconfig file must be sourced inside the upper-level Kconfig file.
+2. The path (/workdir/linux_source_BBB_ver/drivers/char) has the upper-level Kconfig file.
+3. The upper-level Kconfig file is opened and at the end of that file, add the source command for the local Kconfig file.
+	=> source "drivers/char/custom_driver/Kconfig"
+4. The source command must be added before the 'endmenu' command of the upper-level Kconfig file.
