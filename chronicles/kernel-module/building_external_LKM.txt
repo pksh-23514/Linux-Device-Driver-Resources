@@ -28,13 +28,13 @@ Write Local Makefile:
 4. The Goal definitions are the main part of the kbuild Makefile.
 5. They define the files to be built, any special compilation options and any sub-directories to be entered recursively.
 6. The kbuild variable is defined as:
-	=> obj-<CONFIG_MODULE> := <Module_name>.o
+	=> obj-$(CONFIG_MODULE) := <Module_name>.o
 	=> CONFIG_MODULE=y --> It is compiled and linked to the Kernel Image i.e. Static Kernel Module.
 	=> CONFIG_MODULE=m --> It is compiled as a loadable Module i.e. Dynamic Kernel Module.
 	=> CONFIG_MODULE=n --> It is not compiled.
-	=> The 'CONFIG_MODULE' is the the kind of variables that are set in the .config file in the top-level directory of Linux Kernel Source Tree.
-7. The kbuild system builds the <Module_name>.o from <Module_name>.c and after linking, the result is the Kernel Module <Module_name>.ko.
-8. When the Module is built from multiple sources:
+7. The 'CONFIG_MODULE' is the the kind of variables that are set in the .config file in the top-level directory of Linux Kernel Source Tree.
+8. The kbuild system builds the <Module_name>.o from <Module_name>.c and after linking, the result is the Kernel Module <Module_name>.ko.
+9. When the Module is built from multiple sources:
 	=> obj-<CONFIG_MODULE> := <Module_name>.o
 	=> <Module_name>-<CONFIG_MODULE> := <src1>.o <src2>.o ...
 
