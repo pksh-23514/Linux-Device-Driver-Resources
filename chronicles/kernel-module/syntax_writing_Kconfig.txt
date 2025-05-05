@@ -1,6 +1,6 @@
 Write Kconfig file for Module:
 ==============================
-1. To list the LKM selection in the Kernel menuconfig tool, a Kconfig file is created for the LKM.
+1. To list the LKM selection in the Kernel 'menuconfig' tool, a Kconfig file is created for the LKM.
 2. The Kconfig file describes a series of menu entries, where every line starts with a keyword (except help texts). They are:
 	1) config:
 		=> This defines a config symbol '<symbol>' and accepts any of the attributes as options.
