@@ -1,0 +1,38 @@
+Steps to Build the In-Tree (Internal) LKM:
+==========================================
+
+Module addition in Kernel Source Tree:
+**************************************
+1. The LKM must be added in the Linux Kernel Source Tree and the Build system builds that Module.
+2. The path to the Kernel Source shall be the cloned repository of the BBB Linux Kernel (/workdir/linux_source_BBB_ver).
+3. The path to include the LKM is (/workdir/linux_source_BBB_ver/drivers/char). A new directory is created to contain the LKM files.
+
+Create Kconfig file for Module:
+******************************* 
+1. To list the LKM selection in the Kernel menuconfig tool, a Kconfig file is created for the LKM.
+2. The Kconfig file describes a series of menu entries, where every line starts with a keyword (except help texts).The keywords used in the Kconfig file are:
+	=> config
+	=> menuconfig
+	=> choice/endchoice
+	=> comment
+	=> menu/endmenu
+	=> if/endif
+	=> source
+3. The menu entry can have a number of attributes. However, not all of them are applicable everywhere. The attributes are:
+	=> type - Every 'config' option must have a type. The two basic types: 'tristate' and 'string'. The others are based on these 2: 'bool', 'hex' and 'int'.
+	=> input prompt - Every menu entry can have at most one prompt used to display. Optional dependencies can be added using 'if'.
+		---> "prompt" <prompt> ["if" <expr>]
+	=> default value - There can be any number of default values for a 'config' option. However, the first one is active.
+		1) Default values are not limited to the menu entry where they are defined. They can be defined somewhere else or overriden by earlier definition.
+		2) It is only assigned to the config symbol if no other value was set by the user (via the input prompt above) to override.
+		3) Optional dependencies can be added using 'if'.
+		4) The default value deliberately defaults to 'n' in order to avoid bloating the build.
+		---> "default" <expr> ["if" <expr>]
+	=> type definition + default value - This is a shorthand notation for a type definition plus a value. Optional dependencies can be added using 'if'.
+		---> "def_bool"/"def_tristate" <expr> ["if" <expr>]
+	=> dependencies - The menu entry can have dependencies defined.
+		1) If multiple dependencies are defined, they are connected with '&&'.
+		2) These are applicable to all other options within this menu entry. They also accept an 'if' expression.
+		---> "depends on" <expr>
+	=> help - This defines a help text. The end of the help text is determined by the indentation level.
+		---> "help" or "---help---"
