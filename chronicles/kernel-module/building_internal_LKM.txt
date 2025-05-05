@@ -10,7 +10,7 @@ Module addition in Kernel Source Tree:
 Create Kconfig file for Module:
 ******************************* 
 1. To list the LKM selection in the Kernel menuconfig tool, a Kconfig file is created for the LKM.
-2. The Kconfig file describes a series of menu entries, where every line starts with a keyword (except help texts).The keywords used in the Kconfig file are:
+2. The Kconfig file describes a series of menu entries, where every line starts with a keyword (except help texts). They are:
 	=> config
 	=> menuconfig
 	=> choice/endchoice
@@ -18,7 +18,7 @@ Create Kconfig file for Module:
 	=> menu/endmenu
 	=> if/endif
 	=> source
-3. The menu entry can have a number of attributes. However, not all of them are applicable everywhere. The attributes are:
+3. The menu entry can have a number of attributes. However, not all of them are applicable everywhere. They are:
 	=> type - Every 'config' option must have a type. The two basic types: 'tristate' and 'string'. The others are based on these 2: 'bool', 'hex' and 'int'.
 	=> input prompt - Every menu entry can have at most one prompt used to display. Optional dependencies can be added using 'if'.
 		---> "prompt" <prompt> ["if" <expr>]
@@ -36,3 +36,18 @@ Create Kconfig file for Module:
 		---> "depends on" <expr>
 	=> help - This defines a help text. The end of the help text is determined by the indentation level.
 		---> "help" or "---help---"
+4. The menu entry can have a number of menu dependencies. They define the visibility of a menu entry and can also reduce the input range of tristate symbols. They are:
+	=> <expr> ::= <symbol> - Convert the symbol into an expression. Boolean and tristate symbols are converted to their expression values and other types result in 'n'.
+	=> <expr> ::= <symbol> '=' <symbol> - If the values of both symbols are equal, it returns 'y', otherwise 'n'.
+	=> <expr> ::= <symbol> '!=' <symbol> - If the values of both symbols are equal, it returns 'n', otherwise 'y'.
+	=> <expr> ::= <symbol1> 'X' <symbol2> - Here 'X' can be '<', '>', '<=' or '>='. The comparision if True eturns 'y', otherwise 'n'
+	=> <expr> ::= '(' <expr> ')' - Returns the value of the expression. It is used to override precedence.
+	=> <expr> ::= '!' <expr> - Returns the result of (2-/expr/).
+	=> <expr> ::= <expr> '&&' <expr> - Returns the result of min(/expr/, /expr/).
+	=> <expr> ::= <expr> '||' <expr> - Returns the result of max(/expr/, /expr/).
+	=> The tristate logic used in the expressions uses one more state than normal boolean logic to express the module state.
+	=> An expression can have a value of 'n', 'm' or 'y' (or 0, 1, 2) respectively for calculations.
+	=> A menu entry becomes visible when its expression evaluates to 'm' or 'y'.
+	=> There are two types of symbols: constant and non-constant symbols.
+	=> Non-constant symbols are the most common ones and are defined with the 'config' statement. They are entirely of alphanumeric characters or underscores.
+	=> Constant symbols are only part of expressions. They are in single or double quotes. Any other character is allowed in quotes and quotes can be escaped using '\'.
