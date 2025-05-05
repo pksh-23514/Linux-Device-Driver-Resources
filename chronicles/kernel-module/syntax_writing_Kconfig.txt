@@ -8,6 +8,8 @@ Write Kconfig file for Module:
 			<config options>
 	2) menuconfig:
 		=> It similar to the simple config entry. it also gives a hint to front-end, that all sub-options should be displayed as a separate list of options.
+		---> "menuconfig" <symbol>
+		     <config options>
 		=> To make sure all the sub-options are really displayed under the menuconfig entry, every item in the list must depend on the menuconfig symbol.
 		---> menuconfig M
 		     if M
