@@ -1,0 +1,101 @@
+Write Kconfig file for Module:
+==============================
+1. To list the LKM selection in the Kernel menuconfig tool, a Kconfig file is created for the LKM.
+2. The Kconfig file describes a series of menu entries, where every line starts with a keyword (except help texts). They are:
+	1) config:
+		=> This defines a config symbol '<symbol>' and accepts any of the attributes as options.
+		---> "config" <symbol>
+			<config options>
+	2) menuconfig:
+		=> It similar to the simple config entry. it also gives a hint to front-end, that all sub-options should be displayed as a separate list of options.
+		=> To make sure all the sub-options are really displayed under the menuconfig entry, every item in the list must depend on the menuconfig symbol.
+		---> menuconfig M
+		     if M
+		         config C1
+		         config C2
+		     endif
+		---> menuconfig M
+		     config C1
+		         depends on M
+		     config C2
+		         depends on M
+		=> If any one of the sub-option is not dependent on the menuconfig symbol, all of the sub-options are not displayed under menuconfig symbol.
+		---> menuconfig M
+		         config C0
+		     if M
+		         config C1
+		         config C2
+		     endif
+	3) choice...endchoice:
+		=> This defines a choice group and accepts any of the attributes as options.
+		=> A choice can only be of type 'bool' or 'tristate'.
+		=> A 'bool' choice only allows a single 'config' entry to be selected.
+		=> A 'tristate' choice also allows any number of 'config' entries to be set to 'm'.
+		=> It can be used to select a single driver for the HW to be compiled/loaded into the Kernel but all the other related drivers are compiled as Modules.
+		=> If no type is specified for a choice, it's type will be determined by:
+			---> Either the type of the first choice element in the group.
+			---> Or remain unknown if none of the choice elements have a type specified, as well.
+		=> A choice accepts another option 'optional' which allows to set the choice to 'n' and no entry needs to be selected.
+		=> If no [symbol] is associated with a choice, there can be multiple definitions of that choice.
+		=> If a [symbol] is associated to the choice, then the same choice can be defined (i.e. with the same entries) at another place.
+		---> "choice" [symbol]
+		      <choice options>
+		      <choice block>
+		      "endchoice"
+	4) comment:
+		=> This defines a comment which is displayed to the user during the configuration process and is also echoed to the output files.
+		=> The only possible options are dependencies.
+		---> "comment" <prompt>
+		     <comment options>
+	=> menu/endmenu
+	=> if/endif
+	=> source
+3. The menu entry can have a number of attributes. However, not all of them are applicable everywhere. They are:
+	=> type - Every 'config' option must have a type. The two basic types: 'tristate' and 'string'. The others are based on these 2: 'bool', 'hex' and 'int'.
+	=> input prompt - Every menu entry can have at most one prompt used to display. Optional dependencies can be added using 'if'.
+		---> "prompt" <prompt> ["if" <expr>]
+	=> default value - There can be any number of default values for a 'config' option. However, the first one is active.
+		1) Default values are not limited to the menu entry where they are defined. They can be defined somewhere else or overriden by earlier definition.
+		2) It is only assigned to the config symbol if no other value was set by the user (via the input prompt above) to override.
+		3) Optional dependencies can be added using 'if'.
+		4) The default value deliberately defaults to 'n' in order to avoid bloating the build.
+		---> "default" <expr> ["if" <expr>]
+	=> type definition + default value - This is a shorthand notation for a type definition plus a value. Optional dependencies can be added using 'if'.
+		---> "def_bool"/"def_tristate" <expr> ["if" <expr>]
+	=> dependencies - The menu entry can have dependencies defined.
+		1) If multiple dependencies are defined, they are connected with '&&'.
+		2) These are applicable to all other options within this menu entry. They also accept an 'if' expression.
+		---> "depends on" <expr>
+	=> help - This defines a help text. The end of the help text is determined by the indentation level.
+		---> "help" or "---help---"
+4. The menu entry can have a number of menu dependencies. They define the visibility of a menu entry and can also reduce the input range of 'tristate' symbols. They are:
+	=> <expr> ::= <symbol> - Convert the symbol into an expression. The 'bool' or 'tristate' symbols are converted to their expression values and other types result in 'n'.
+	=> <expr> ::= <symbol> '=' <symbol> - If the values of both symbols are equal, it returns 'y', otherwise 'n'.
+	=> <expr> ::= <symbol> '!=' <symbol> - If the values of both symbols are equal, it returns 'n', otherwise 'y'.
+	=> <expr> ::= <symbol1> 'X' <symbol2> - Here 'X' can be '<', '>', '<=' or '>='. The comparision if True eturns 'y', otherwise 'n'
+	=> <expr> ::= '(' <expr> ')' - Returns the value of the expression. It is used to override precedence.
+	=> <expr> ::= '!' <expr> - Returns the result of (2-/expr/).
+	=> <expr> ::= <expr> '&&' <expr> - Returns the result of min(/expr/, /expr/).
+	=> <expr> ::= <expr> '||' <expr> - Returns the result of max(/expr/, /expr/).
+	=> The 'tristate' logic used in the expressions uses one more state than normal boolean logic to express the module state.
+	=> An expression can have a value of 'n', 'm' or 'y' (or 0, 1, 2) respectively for calculations.
+	=> A menu entry becomes visible when its expression evaluates to 'm' or 'y'.
+	=> There are two types of symbols: constant and non-constant symbols.
+	=> Non-constant symbols are the most common ones and are defined with the 'config' statement. They are entirely of alphanumeric characters or underscores.
+	=> Constant symbols are only part of expressions. They are in single or double quotes. Any other character is allowed in quotes and quotes can be escaped using '\'.
+5. The position of a menu entry in the tree (Menu structure) is determined in two ways. They are:
+	=> It can be specified explicitly within the 'menu' ... 'endmenu' block. All entries within become a sub-menu and inherit the dependencies from the menu entry.
+		---> menu "prompt"
+			     depends on <expr>
+		     config <symbol>
+		             <config options>
+		     endmenu
+	=> The other way to generate the menu structure is by analyzing the dependencies. If an entry somehow depends on the previous entry, it can be made a sub-menu of it.
+		1) First, the previous (parent) symbol must be part of the dependency list and then one of these two conditions must be true:
+			---> the child entry must become invisible, if the parent is set to 'n'.
+			---> the child entry must only be visible, if the parent is visible.
+		---> config <symbol1>
+                              <config options>
+		     config <symbol2>
+                              <config options>
+		              depends on <symbol1>
