@@ -47,9 +47,27 @@ Write Kconfig file for Module:
 		=> The only possible options are dependencies.
 		---> "comment" <prompt>
 		     <comment options>
-	=> menu/endmenu
-	=> if/endif
-	=> source
+	5) menu...endmenu:
+		=> This defines a menu block. The only possible options are dependencies and "visible" attributes.
+		---> "menu" <prompt>
+		     <menu options>
+		     <menu block>
+		     "endmenu"
+	6) if...endif:
+		=> This defines an if-block. The dependency expression '<expr>' is appended to all enclosed menu entries.
+		---> "if" <expr>
+		     <if-block>
+		     "endif"
+	7) source:
+		=> This reads the specified configuration file. This file is always parsed.
+		---> "source" <prompt>
+	8) mainmenu:
+		=> This sets the 'config' program's title-bar if the 'config' program chooses to use it.
+		=> It should be placed at the top of the configuration, before any other statement.
+		---> "mainmenu" <prompt>
+	9) Kconfig source file comment:
+		=> An unquoted '#' character anywhere in a source file line indicates the beginning of a source file comment.  The remainder of that line is a comment.
+		---> # "Kconfig comments"
 3. The menu entry can have a number of attributes. However, not all of them are applicable everywhere. They are:
 	=> type - Every 'config' option must have a type. The two basic types: 'tristate' and 'string'. The others are based on these 2: 'bool', 'hex' and 'int'.
 	=> input prompt - Every menu entry can have at most one prompt used to display. Optional dependencies can be added using 'if'.
