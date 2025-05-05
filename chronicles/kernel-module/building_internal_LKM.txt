@@ -40,5 +40,14 @@ Write Local Makefile:
 	=> CONFIG_MODULE=n --> It is not compiled.
 5. The variable 'MODULE' here must have the same name as the 'config' symbol in the Kconfig file. It should be preceded by the keyword 'CONFIG_'.
 6. This identifier will be replaced by the the Kernel menu configuration selection.
-5. A basic Makefile can be as follows:
+7. A basic Makefile can be as follows:
 	=> obj-$(CONFIG_IN_TREE_LKM) += lkm.o
+
+Add local Makefile to upper-level Makefile:
+*******************************************
+1. The local Makefile must be linked to the upper-level Makefile for the LKM to be build.
+2. The path (/workdir/linux_source_BBB_ver/drivers/char) has the upper-level Makefile.
+3. The entry for the LKM must be made at the end of the upper-level Makefile.
+	=> obj-y += custom_driver/
+	=> The folder has to be built always, therefore the '-y' option is selected in the command.
+4. There is no 'CONFIG_' keyword for the folder selection. It is only used for Module selection.
