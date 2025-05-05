@@ -98,16 +98,3 @@ Insertion and Deletion of Module to/from Kernel:
 6. To remove the Kernel Module from the running Kernel, the command is:
 	=> sudo rmmod <Module_name>
 7. To verify the successful deletion of the LKM, the "dmesg" log can be verified to have the message from the exit function.
-
-Steps to Build the In-Tree (Internal) LKM:
-==========================================
-
-Module addition in Kernel Source Tree:
-**************************************
-1. The LKM must be added in the Linux Kernel Source Tree and the Build system builds that Module.
-2. The path to the Kernel Source shall be the cloned repository of the BBB Linux Kernel (/workdir/linux_source_BBB_ver).
-3. The path to include the LKM is (/workdir/linux_source_BBB_ver/drivers/char). A new directory is created to contain the LKM files.
-
-Create Kconfig file for Module:
-******************************* 
-1. To list the LKM selection in the Kernel menuconfig tool, a Kconfig file is created for the LKM.
