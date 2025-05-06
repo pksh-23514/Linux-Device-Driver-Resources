@@ -1,0 +1,12 @@
+Debugging with printk:
+======================
+1. 'printf' is one of the best debugging tool used in User-level applications.
+2. In the Kernel-space, there is no access to the User-level functions like 'printf'.
+3. The Kernel has it's own API 'printk' for Kernel-space printing.
+4. The Syntax is:
+	---> printk(KERN_INFO "Message: %s\n", arg);
+5. The 'printk' messages are printed to the Kernel log buffer, which is a ring buffer exported to User-space through /dev/kmsg.
+6. The 'dmesg' command is used to read the Kernel messages.
+7. The 'printk' format String is mostly compatible with C99. However, it does not support Floating-point formats (%e, %f and %g).
+8. The 'printk' message can specify a Log-level specified by the 'KERN_INFO' value.
+9. 
