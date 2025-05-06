@@ -45,7 +45,7 @@ Write Kconfig file for Module:
 		      <choice block>
 		      "endchoice"
 	4) comment:
-		=> This defines a comment which is displayed to the user during the configuration process and is also echoed to the output files.
+		=> This defines a comment which is displayed to the User during the configuration process and is also echoed to the output files.
 		=> The only possible options are dependencies.
 		---> "comment" <prompt>
 		     <comment options>
@@ -92,7 +92,7 @@ Write Kconfig file for Module:
 		---> "prompt" <prompt> ["if" <expr>]
 	=> default value - There can be any number of default values for a 'config' option. However, the first one is active.
 		1) Default values are not limited to the menu entry where they are defined. They can be defined somewhere else or overriden by earlier definition.
-		2) It is only assigned to the config symbol if no other value was set by the user (via the input prompt above) to override.
+		2) It is only assigned to the config symbol if no other value was set by the User (via the input prompt above) to override.
 		3) Optional dependencies can be added using 'if'.
 		4) The default value deliberately defaults to 'n' in order to avoid bloating the build.
 		---> "default" <expr> ["if" <expr>]
