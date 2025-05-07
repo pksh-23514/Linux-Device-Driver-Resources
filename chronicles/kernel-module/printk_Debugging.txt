@@ -4,12 +4,12 @@ Debugging with printk:
 2. In the Kernel-space, there is no access to the User-level functions like 'printf'.
 3. The Kernel has it's own API 'printk' for Kernel-space printing.
 4. The Syntax is:
-	---> printk(KERN_INFO "Message: %s\n", arg);
-	---> There is no comma in between the 'KERN_INFO' and the 'Message'.
+	---> printk(KERN_LEVEL "Message: %s %d %u %x %c %p %n ...\n", arg1, arg2, arg3, arg4, arg5, ...);
+	---> There is no comma in between the 'KERN_LEVEL' and the 'Message'.
 5. The 'printk' messages are printed to the Kernel log buffer, which is a ring buffer exported to User-space through "/dev/kmsg".
 6. The 'dmesg' command is used to read the Kernel messages.
 7. The 'printk' format String is mostly compatible with C99. However, it does not support Floating-point formats (%e, %f and %g).
-8. The 'printk' message can specify a Log-level specified by the 'KERN_INFO' value. There are 8 Log-levels provided in Linux.
+8. The 'printk' message can specify a Log-level specified by the 'KERN_LEVEL' value. There are 8 Log-levels provided in Linux.
 9. The Log-level details are Macros defined in the Header file <linux/kern_levels.h>.
 10. The Log-level specifies the importance of a message. A lower number Log-level indicates a higher priority and vice-versa.
 11. The Log-level definitions are as follows:
