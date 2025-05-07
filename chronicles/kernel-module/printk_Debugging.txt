@@ -39,11 +39,23 @@ Significance of the Log-level:
 4. The Console Log-level can be determined by running the command:
 	=> cat /proc/sys/kernel/printk
 	--->	4	4	1	7
-	---> The output displays the current, default, minimum and boot-time-default Console Log-levels.
+	---> The output displays the 'current', 'default', 'minimum' and 'boot-time-default' Console Log-levels.
 5. To update the current Console Log-level during the Kernel running, write the desired value by running the command:
 	=> echo 8 > /proc/sys/kernel/printk
 	---> This value (level-8) can be used to print all the Kernel messages to the Console.
 
 printk Wrappers:
 ****************
-1. 
+1. There are alternative Macros to 'printk' function used for logging. They are more concise than the equivalent 'printk' calls.
+2. These Macros embed the Log-level in the Macro names. They are:
+	=> pr_emerg("Message: %s\n", arg); - printk with KERN_EMERG.
+	=> pr_alert("Message: %s\n", arg); - printk with KERN_ALERT.
+	=> pr_crit("Message: %s\n", arg); - printk with KERN_CRIT.
+	=> pr_err("Message: %s\n", arg); - printk with KERN_ERR.
+	=> pr_warn("Message: %s\n", arg); - printk with KERN_WARNING.
+	=> pr_notice("Message: %s\n", arg); - printk with KERN_NOTICE.
+	=> pr_info("Message: %s\n", arg); - printk with KERN_INFO.
+	=> pr_cont("Message: %s\n", arg); - printk with KERN_CONT.
+	=> pr_devel("Message: %s\n", arg); - printk with KERN_DEBUG (if DEBUG is defined). Otherwise it does nothing.
+	=> pr_debug("Message: %s\n", arg); - dynamic_pr_debug() (if CONFIG_DYNAMIC_DEBUG is SET). Or printk with KERN_DEBUG (if DEBUG is defined). Otherwise it does nothing.
+3. The Macros are defined in the Header file <linux/printk.h>
