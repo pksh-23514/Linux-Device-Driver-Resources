@@ -29,8 +29,21 @@ Debugging with printk:
 	=>  * during early bootup (a continued line is not SMP-safe otherwise).
 	=>  */
 	=> #define KERN_CONT	KERN_SOH "c"
-12. The Kernel configuration 'CONFIG_MESSAGE_LOGLEVEL_DEFAULT' defined in the file <lib/Kconfig.debug> determines the default Kernel Log-level.
+12. The Kernel configuration 'CONFIG_MESSAGE_LOGLEVEL_DEFAULT' defined in the file <lib/Kconfig.debug> determines the default Kernel Log-level (i.e. level-4).
 
 Significance of the Log-level:
 ******************************
+1. The Kernel decides whether to display the message on the current Console by comparing the message Log-level with the current Console Log-level.
+2. If the message priority is higher (lower Log-level value) than the Console Log-level, the message gets printed to the Console.
+3. The Kernel configuration 'CONFIG_CONSOLE_LOGLEVEL_DEFAULT' defined in the file <lib/Kconfig.debug> determines the default Console Log-level (i.e. level-7).
+4. The Console Log-level can be determined by running the command:
+	=> cat /proc/sys/kernel/printk
+	--->	4	4	1	7
+	---> The output displays the current, default, minimum and boot-time-default Console Log-levels.
+5. To update the current Console Log-level during the Kernel running, write the desired value by running the command:
+	=> echo 8 > /proc/sys/kernel/printk
+	---> This value (level-8) can be used to print all the Kernel messages to the Console.
+
+printk Wrappers:
+****************
 1. 
