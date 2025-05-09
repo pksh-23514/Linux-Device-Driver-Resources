@@ -21,10 +21,10 @@ Kernel-space: The Kernel connects the generated System-calls to the Device Drive
 						|
 						V
 				--------------------------------	Device Driver takes the burden of:
-				    Device Driver for DEVICE		---> Interacting with the Device.
+				    Device Driver for DEVICE		---> Configuring the various registers of the Device.
 				--------------------------------	---> Exporting the interface to the User-space.
-						^			---> Configuring the various registers of the Device.
-						^
+						^			---> Interacting with the Device.
+						^			---> Processing the requests from the Device.
 						|
 ----------------------------------------------------------------------------------------------------------------------------------------
 Hardware Device: 				|
