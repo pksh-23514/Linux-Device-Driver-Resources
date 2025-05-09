@@ -19,10 +19,12 @@ User-space: Device file interface --->	   /dev/DEVICE
 ----------------------------------------------------------------------------------------------------------------------------------------
 Kernel-space: The Kernel connects the generated System-calls to the Device Driver's System-call Handler Methods.
 						|
+						V
 				--------------------------------	Device Driver takes the burden of:
 				    Device Driver for DEVICE		---> Interacting with the Device.
 				--------------------------------	---> Exporting the interface to the User-space.
-						|			---> Configuring the various registers of the Device.
+						^			---> Configuring the various registers of the Device.
+						^
 						|
 ----------------------------------------------------------------------------------------------------------------------------------------
 Hardware Device: 				|
