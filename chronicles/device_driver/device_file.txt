@@ -43,3 +43,17 @@ Major and Minor Number:
 	=> void unregister_chrdev(unsigned int major, const char *name)
 	---> 'major' argument is the Major number being released.
 	---> 'name' is the associated Device name.
+11. Failing to unregister can generate a fault in the next read of "/proc/devices" because one of the strings still points to the Module’s Memory, which is no longer mapped.
+12. When the Kernel tries to access invalid Memory, the Kernel message displays an 'oops' fault.
+13. Unloading the Driver without unregistering the Major number, recovery will be difficult because the original Module name must be de-referenced by the 'unregister_chrdev'.
+14. The safest alternative for recovery is to reboot the Machine.
+
+mknod Command:
+**************
+1. Device nodes are often created and destroyed automatically by 'udev', a User-space daemon to simplify Device management and allow customization of Device naming schemes.
+2. However, Device files or nodes can also be created manually using the "mknod" command.
+	=> sudo mknod /dev/my_device c <major_number> <minor_number>	# Create a Character Device file.
+	=> sudo mknod /dev/my_block b <major_number> <minor_number>	# Create a Block Device file.
+	=> sudo mknod /path/to/my_pipe p				# Create a named Pipe.
+3. The Device file or node is present unless it is explicitly removed using the command:
+	=> sudo rm /dev/name
