@@ -66,3 +66,26 @@ User-mode Device Driver:
 1. They execute in User-mode and manage the external Devices (such as Plug-and-Play Devices) that Users might connect.
 2. In Windows, they provide an interface between Win32 applications and Kernel-mode Drivers.
 3. They are majorly written to the disk for reducing the strain on the Machine resources.
+
+Character Device Driver:
+************************
+1. They provide unstructured access to the HW Devices.
+2. They transfer data to and from the Devices without using a specific Device Address.
+3. They provide the interfaces for I/O control commands, Memory Mapping and Device Polling.
+4. Their peculiar functionality is the reading or writing of 'one byte at a time' as a stream of sequential data and not as a chunk of data.
+5. They do not handle I/O through the Buffer-Cache i.e there are no sophisticated Buffering strategies involved. Therefore they are more flexible in handling I/O.
+6. The data is directly written to the Device without any immediate Buffering, delayed write-backs and dirty Buffer management.
+7. They are paired with the Block Devices to circumvent the Buffer-Cache to offer raw I/O operations straight to the Program Address-space of the User.
+8. The Char Devices are sensors, RTC, Keyboard, Serial port etc.
+
+Block Device Driver:
+********************
+1. They provide structured access to the HW Devices.
+2. They use file-system Block-sized Buffers from a Buffer-Cache supplied by the Kernel to perform I/O operations.
+3. A Buffer-Cache is a Memory pool established by the Kernel to store frequently accessed blocks via Block Devices.
+4. The Buffer-Cache reduces the amount of 'I/O queries' required for an I/O operation from the Device.
+5. The Device which handles data in chunks or blocks is called a Block Device.
+6. They provide accessible block-oriented I/O and demonstrate Data durability.
+7. They take a file-system request and issue the I/O procedures to the Disk for the transfer of the requested block.
+8. They are more complicated than the Character Device Drivers as they have to implement the advanced Buffering strategies to read and write to the Block Devices.
+9. The Block Devices are Hard-Disks, SDMMC, NAND Flash, USB etc.
