@@ -57,3 +57,14 @@ mknod Command:
 	=> sudo mknod /path/to/my_pipe p				# Create a named Pipe.
 3. The Device file or node is present unless it is explicitly removed using the command:
 	=> sudo rm /dev/name
+
+dev_t Type and kdev_t Header file:
+**********************************
+1. Every time the Kernel calls a Device Driver, it tells the Driver which Device is being acted upon.
+2. The Major and Minor numbers to identify the Device are paired in a single Data-type that resides in the field 'i_rdev' of the 'inode' Structure.
+3. If the Driver receives a Pointer to 'struct inode', the Device number can be extracted by accessing 'inode -> i_rdev'.
+4. Within the Linux Kernel, the 'dev_t' Data-type defined in the Header file <linux/types.h> is used to hold the Device numbers.
+5. In the Header file <linux/kdev_t.h>, there are Macros defined wrt the Major and Minor numbers:
+	=> MAJOR(dev_t dev) - To extract the Major number.
+	=> MINOR(dev_t dev) - To extract the Minor number.
+	=> MKDEV(int major, int minor) - To convert the Major and Minor numbers into 'dev_t' Data-type.
