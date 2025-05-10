@@ -1,0 +1,24 @@
+Device Files:
+=============
+1. Devices are accessed as a file in Linux.
+2. It is a special file or a node in Linux that gets populated in the "/dev" directory during Kernel boot-time or Device Driver hot plug-in events.
+3. They act as an interface between User Programs and HW Devices, allowing the SW to interact with the Device Drivers.
+4. They are managed as a part of the Virtual File-system (VFS) of the Kernel.
+5. The "/dev" directory has several sub-directory hierarchies, each of which holds the Device files that are related to a certain type of Device.
+6. The Device files in sub-directories are actually implemented as Symbolic-links to the Device files in "/dev".
+7. The creation of these files are triggered by the Device Drivers.
+
+Inside the /dev directory:
+**************************
+1. The command to list the details of the "/dev" directory is:
+	=> ls -l
+	=> crw--w----   1 root          tty       5,     1 May 10 11:16 console
+	=> lrwxrwxrwx   1 root          root            11 May 10 11:15 core -> /proc/kcore
+	=> drwxr-xr-x   2 root          root           440 May 10 11:15 block
+	=> brw-rw----   1 root          disk      8,     0 May 10 11:15 sda
+2. The entries with the letters have the following meaning:
+	=> 'c' - Character Device files
+	=> 'l' - Symblic Link
+	=> 'd' - Directory
+	=> 'b' - Block Device files
+3. These Devices have a pair of numbers associated with them instead of a file size: The Major and Minor numbers
