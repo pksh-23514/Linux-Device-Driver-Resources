@@ -21,4 +21,25 @@ Inside the /dev directory:
 	=> 'l' - Symblic Link
 	=> 'd' - Directory
 	=> 'b' - Block Device files
-3. These Devices have a pair of numbers associated with them instead of a file size: The Major and Minor numbers
+3. These Devices have a pair of numbers associated with them (instead of a file size): The Major and Minor number
+
+Major and Minor Number:
+************************
+1. The Major number identifies the Driver associated with the Device. It is also known as the “device number” or “device major”.
+2. The Kernel uses the Major number at 'open' (System-call) time to dispatch the execution to the appropriate Driver.
+3. The Minor number is used only by the Driver that is specified by the Major number for the Device.
+4. The other parts of the Kernel don’t use the Minor number and merely pass it along to the Driver.
+5. It is common for a particular Driver to control several Devices; the Minor number provides a way for the Driver to differentiate among them.
+6. The Major number assignment is made at Driver (Module) initialization by calling the function in the Header file <linux/fs.h>:
+	=> int register_chrdev(unsigned int major, const char *name, struct file_operations *fops)
+	---> The return value for the function: 0 or Positive is Success and Negative is Failure/Error.
+	---> 'major' argument is the Major number being requested.
+	---> 'name' is the Device name that appears in the "/proc/devices".
+	---> 'fops' is the Pointer to an Array of Function Pointers, used to invoke the Driver’s entry points.
+7. The Major numbers are a small integer that serves as the index into a static Array of Char Drivers.
+8. The Minor numbers are not passed to this function as they are used only by the Driver.
+9. Once the Driver has been registered in the Kernel table, it's operations are associated with the given Major number.
+10. When the Driver (Module) is unloaded from the Kernel, the Major number associated must be released by the function in the Header file <linux/fs.h>:
+	=> void unregister_chrdev(unsigned int major, const char *name)
+	---> 'major' argument is the Major number being released.
+	---> 'name' is the associated Device name.
