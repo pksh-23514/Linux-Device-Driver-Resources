@@ -114,3 +114,19 @@ Original Equipment Manufacturer (OEM) Drivers:
 1. They are created by the Original Equipment Manufacturers that are specifically tailored for a particular model.
 2. These proprietary Device Drivers need to be installed separately after installing the OS.
 3. They enable particular functionalities of the OEM HW.
+
+Open-source Device Drivers:
+***************************
+1. They refer to Drivers that are released under a 'Free and Open-source license'.
+2. They are transparent as the source-code is open to anyone making the SW collaborations easier.
+3. They are more trustworthy as anyone can check these Drivers for any malicious code.
+4. If these track Users, a copy of the SW with the tracking removed can be re-distributed. Thus, they offer more privacy.
+5. These last longer as the contributions for improvement are continued even when the OEM stops distributing them.
+
+Virtual Device Drivers:
+***********************
+1. They are essential in controlling the Virtual-Machines (VMs). They operate in both virtualization and non-virtualization environments.
+2. In virtualization environments, they are used to 'emulate' the HW of the Host Device.
+3. They control or manage the resources of the Host Device to ensure that both the Guest and Host Device run as expected.
+4. They imitate the Processor-level occurrences (like Interrupts) and transmit them to the VM.
+5. When a Guest OS works on the Host, it makes function calls to these Device Drivers to access the HW.
