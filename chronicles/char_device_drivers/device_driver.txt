@@ -6,11 +6,13 @@ Device Driver:
 
 How Device Driver Functions:
 ****************************
-1. Device drivers operate inside the OS Kernel-space.
+1. The Device Driver operate inside the OS Kernel-space.
 2. They work in a highly privileged environment because they need low-level access to HW operations to function.
 3. They receive requests from the OS to access and execute Device instructions.
 4. After completing the requests, they transmit the Device’s outputs or messages to the OS.
-5. The complete visual representation of the Device Driver function is as follows:
+
+Visual representation of Device Driver Function:
+************************************************
 ----------------------------------------------------------------------------------------------------------------------------------------
 User-space: User-level Programs ---> read, write, open, echo ...
                                       |      |     |     |
@@ -43,7 +45,7 @@ Properties:
 ***********
 1. A Device Driver is a specialized software that operates a particular Device, offering a SW interface to the HW.
 2. It allows Operating System and other applications to access the Device functionalities.
-3. The Device is linked to a Bus/Communication sub-system via which Device Drivers interact with the Device.
+3. The Device is linked to a Bus/Communication sub-system via which Device Driver interact with the Device.
 4. They are Handler-dependent and OS-specific.
 5. They offer the Interrupt processing that is essential for any time-dependent Asynchronous HW interface.
 6. They define the messages and mechanisms through which the OS and applications can access the Device or make requests to the Device.
@@ -52,15 +54,15 @@ Properties:
 Types of Device Driver:
 =======================
 
-Kernel Device Drivers:
-**********************
+Kernel Device Driver:
+*********************
 1. They are loaded within the OS for Core HW (such as Processors).
 2. They are implemented as discrete and modular components that have more efficient communication and control over HW Devices.
 3. They are layered i.e. the higher-level Drivers (file-system Drivers) filter the received data before passing it to the lower-level Drivers.
 4. They are invoked and loaded into the RAM as required. Therefore, several of them operating at the same time can slow down the Machine.
 
-User-mode Device Drivers:
-*************************
+User-mode Device Driver:
+************************
 1. They execute in User-mode and manage the external Devices (such as Plug-and-Play Devices) that Users might connect.
 2. In Windows, they provide an interface between Win32 applications and Kernel-mode Drivers.
 3. They are majorly written to the disk for reducing the strain on the Machine resources.
