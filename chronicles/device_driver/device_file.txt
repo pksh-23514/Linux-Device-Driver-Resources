@@ -36,6 +36,7 @@ Major and Minor Number:
 	---> 'major' argument is the Major number being requested.
 	---> 'name' is the Device name that appears in the "/proc/devices".
 	---> 'fops' is the Pointer to an Array of Function Pointers, used to invoke the Driver’s entry points.
+	---> This is an Older way and has been replaced in the latest Kernel releases.
 7. The Major numbers are a small integer that serves as the index into a static Array of Char Drivers.
 8. The Minor numbers are not passed to this function as they are used only by the Driver.
 9. Once the Driver has been registered in the Kernel table, it's operations are associated with the given Major number.
@@ -43,6 +44,7 @@ Major and Minor Number:
 	=> void unregister_chrdev(unsigned int major, const char *name)
 	---> 'major' argument is the Major number being released.
 	---> 'name' is the associated Device name.
+	---> This is an Older way and has been replaced in the latest Kernel releases.
 11. Failing to unregister can generate a fault in the next read of "/proc/devices" because one of the strings still points to the Module’s Memory, which is no longer mapped.
 12. When the Kernel tries to access invalid Memory, the Kernel message displays an 'oops' fault.
 13. Unloading the Driver without unregistering the Major number, recovery will be difficult because the original Module name must be de-referenced by the 'unregister_chrdev'.
