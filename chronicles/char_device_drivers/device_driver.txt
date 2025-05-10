@@ -32,5 +32,15 @@ Hardware Device: 				|
 					      DEVICE
 ----------------------------------------------------------------------------------------------------------------------------------------
 
+Properties:
+***********
+1. A Device Driver is a specialized software that operates a particular Device, offering a SW interface to the HW.
+2. It allows Operating System and other applications to access the Device functionalities.
+3. The Device is linked to a Bus/Communication sub-system via which Device Drivers interact with the Device.
+4. They are Handler-dependent and OS-specific.
+5. They offer the Interrupt processing that is essential for any time-dependent Asynchronous HW interface.
+6. They define the messages and mechanisms through which the OS and applications can access the Device or make requests to the Device.
+7. They handle the Device responses and messages for delivery to the OS.
+
 Types of Device Driver:
 =======================
