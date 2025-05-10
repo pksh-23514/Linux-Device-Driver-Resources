@@ -102,3 +102,15 @@ Motherboard Drivers:
 2. They exist within the OS to enable fundamental Computer operations and peripheral connectivity in the OS.
 3. They contain applications that allow the Keyboard and Mouse’s USB devices and I/O ports to work properly. Some provide the support for Video and Audio as well.
 4. They are specific to Chip-set models and might need additional Drivers for full functionality.
+
+Generic Drivers:
+****************
+1. They are the SW Module designed to control a broad range of HW Devices.
+2. They can be used with the 'different brands' of a particular Device type.
+3. Linux works with several Generic Drivers that function without the need to install any other SW manually.
+
+Original Equipment Manufacturer (OEM) Drivers:
+**********************************************
+1. They are created by the Original Equipment Manufacturers that are specifically tailored for a particular model.
+2. These proprietary Device Drivers need to be installed separately after installing the OS.
+3. They enable particular functionalities of the OEM HW.
