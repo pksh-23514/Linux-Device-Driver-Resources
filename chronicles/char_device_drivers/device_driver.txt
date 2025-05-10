@@ -51,3 +51,16 @@ Properties:
 
 Types of Device Driver:
 =======================
+
+Kernel device drivers:
+**********************
+1. They are loaded within the OS for Core HW (such as Processors).
+2. They are implemented as discrete and modular components that have more efficient communication and control over HW Devices.
+3. They are layered i.e. the higher-level Drivers (file-system Drivers) filter the received data before passing it to the lower-level Drivers.
+4. They are invoked and loaded into the RAM as required. Therefore, several of them operating at the same time can slow down the Machine.
+
+User-mode device drivers:
+*************************
+1. They execute in User-mode and manage the external Devices (such as Plug-and-Play Devices) that Users might connect.
+2. In Windows, they provide an interface between Win32 applications and Kernel-mode Drivers.
+3. They are majorly written to the disk for reducing the strain on the Machine resources.
