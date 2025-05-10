@@ -89,3 +89,16 @@ Block Device Driver:
 7. They take a file-system request and issue the I/O procedures to the Disk for the transfer of the requested block.
 8. They are more complicated than the Character Device Drivers as they have to implement the advanced Buffering strategies to read and write to the Block Devices.
 9. The Block Devices are Hard-Disks, SDMMC, NAND Flash, USB etc.
+
+BIOS:
+*****
+1. The basic input-output system (BIOS) is the most fundamental driver on a Computer.
+2. It is located in the ROM chip, which ensures that BIOS will be available even if the Hard-Disk is formatted.
+3. They are responsible for Booting the Computer, performing the Start-up tests and providing the Drivers for basic HW (such as Monitor, Keyboard etc).
+
+Motherboard Drivers:
+********************
+1. They are simple applications that are utilized by both the Windows and the Linux OS.
+2. They exist within the OS to enable fundamental Computer operations and peripheral connectivity in the OS.
+3. They contain applications that allow the Keyboard and Mouse’s USB devices and I/O ports to work properly. Some provide the support for Video and Audio as well.
+4. They are specific to Chip-set models and might need additional Drivers for full functionality.
