@@ -3,7 +3,14 @@ Device Driver:
 1. A Device Driver is a piece of code that configures and manages a Device.
 2. It knows how to configure the Device, sending data to the Device and how to process the requests that originate from the Device.
 3. When the Device Driver is loaded into the OS, it exposes the interface to the User-space to enable the User application's communication with the Device.
-4. The complete visual representation of the Device Driver function is as follows:
+
+How Device Driver Functions:
+****************************
+1. Device drivers operate inside the OS Kernel-space.
+2. They work in a highly privileged environment because they need low-level access to HW operations to function.
+3. They receive requests from the OS to access and execute Device instructions.
+4. After completing the requests, they transmit the Device’s outputs or messages to the OS.
+5. The complete visual representation of the Device Driver function is as follows:
 ----------------------------------------------------------------------------------------------------------------------------------------
 User-space: User-level Programs ---> read, write, open, echo ...
                                       |      |     |     |
