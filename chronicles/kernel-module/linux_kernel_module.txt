@@ -28,8 +28,8 @@ User-space vs Kernel-space:
 11. This is necessary for the Kernel to perform the essential tasks such as scheduling Processes, managing Memory and handling Interrupts.
 12. The Kernel mode is the execution mode of the Kernel which runs in a privileged, root-access mode.
 
-Building the Kernel Module:
-===========================
+Building Kernel Module:
+=======================
 1. The LKM can be built in 2 ways:
         1) Statically linked to the Kernel Image.
         2) Dynamically loadable to the Kernel Image.
