@@ -1,0 +1,7 @@
+Simple Character Utility for Loading Localities (scull):
+========================================================
+1. The scull is a Char Driver that acts on a Memory area as though it were a Device.
+2. For ease of usage, the word Device can be used interchangeably for the Memory area used by scull.
+3. The advantage of scull is that it is HW independent. The reason being that the scull acts on Memory allocated from the Kernel.
+4. The scull is portable across all the Architectures on which the Linux runs.
+5. It is easy for scull to demonstrate the interface between the Kernel and Char Drivers and execute some tests.
