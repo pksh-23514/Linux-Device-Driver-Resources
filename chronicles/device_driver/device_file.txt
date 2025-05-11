@@ -25,7 +25,7 @@ Inside the /dev directory:
 
 Major and Minor Number:
 ************************
-1. The Major number identifies the Driver associated with the Device. It is also known as the “device number” or “device major”.
+1. The Major number identifies the Driver associated with the Device. It is also known as the "device number" or "device major".
 2. The Kernel uses the Major number at 'open' (System-call) time to dispatch the execution to the appropriate Driver.
 3. The Minor number is used only by the Driver that is specified by the Major number for the Device.
 4. The other parts of the Kernel don’t use the Minor number and merely pass it along to the Driver.
