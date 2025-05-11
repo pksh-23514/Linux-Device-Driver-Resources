@@ -5,3 +5,12 @@ Simple Character Utility for Loading Localities (scull):
 3. The advantage of scull is that it is HW independent. The reason being that the scull acts on Memory allocated from the Kernel.
 4. The scull is portable across all the Architectures on which the Linux runs.
 5. It is easy for scull to demonstrate the interface between the Kernel and Char Drivers and execute some tests.
+
+Functioning of scull:
+*********************
+1. The User-space application uses the System-calls to communicate with the HW Device.
+2. These System-calls are connected to the proper implementations of those operations in the Driver.
+3. When the User-application uses 'open' System-call to connect to the Device, it is mapped to the 'open' function implementation of the Driver.
+4. Similarly, the 'read' and 'write' System-calls to perform R/W operations, they are mapped to the 'read' and 'write' function implementation of the Driver.
+5. The process to establish the connection between the User-space applications and the Device Driver is managed as a part of the Virtual File-system (VFS) of the Kernel.
+6. The Driver should be registered with the VFS by the use of VFS Kernel APIs.
