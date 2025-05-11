@@ -1,0 +1,14 @@
+Device Number:
+==============
+1. The Kernel connects the System-calls to the specific operation implementation of the intended Driver.
+2. This connection is established by the Kernel by using the Device number for the Driver.
+3. Char Devices are accessed through names (also called Device files) in the file-system located in the "/dev" directory.
+4. The Device number for a particular Device are a pair of two numbers: Major and Minor number.
+5. The same Driver is capable of handling multiple Devices, therefore there is a pair of Device number to identify the intended Device.
+	=> The Major number identifies the Driver associated with the Device.
+	=> The Minor number identifies the Device instance (exact HW Device).
+6. The Syntax for the Device number is as visible for the Device is:
+	---> Major number , Minor number
+7. The System-calls are made to the particular Device file (/dev/DEVICE) and are handled by the VFS in the Kernel-space.
+8. The VFS compares the Device number with the Driver registration table in the Kernel and picks the correct Driver.
+9. Based on the Driver selected by the VFS, the Kernel connects the System-calls to the specific operation implementation in the Driver.
