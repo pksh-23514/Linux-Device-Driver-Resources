@@ -12,3 +12,15 @@ Device Number:
 7. The System-calls are made to the particular Device file (/dev/DEVICE) and are handled by the VFS in the Kernel-space.
 8. The VFS compares the Device number with the Driver registration table in the Kernel and picks the correct Driver.
 9. Based on the Driver selected by the VFS, the Kernel connects the System-calls to the specific operation implementation in the Driver.
+
+dev_t Type and kdev_t Header file:
+**********************************
+1. In Linux, 'dev_t' is a Data-type used to represent a Device number which combines both a Major and Minor number.
+2. Within the Linux Kernel, the 'dev_t' Data-type defined in the Header file <linux/types.h> is used to hold the Device numbers.
+3. 'dev_t' is a Typedef used to represent the Major and Minor number. It is a 32-bit unsigned Integer where:
+	=> the upper 12 bits store the Major number.
+	=> the lower 20 bits store the Minor number.
+4. In the Header file <linux/kdev_t.h>, there are Macros defined wrt the Major and Minor numbers:
+	=> MAJOR(dev_t dev) - To extract the Major number.
+	=> MINOR(dev_t dev) - To extract the Minor number.
+	=> MKDEV(int major, int minor) - To convert the Major and Minor numbers into 'dev_t' Data-type.
