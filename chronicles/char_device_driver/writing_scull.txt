@@ -25,4 +25,13 @@ Dynamic Allocation of a Range of Device Numbers:
 	---> 'count' is the total number of contiguous device numbers requested.
 	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" path and sysFS.
 	---> The return value for the function: 0 is Success and Negative is Failure/Error.
-5. For this function to work well, the Device number must be known ahead of time.
+5. For this function to work well, the Device number must be known ahead of time. However, most of the time this is not the case.
+
+Freeing the Device Numbers:
+***************************
+1. Regardless of the method used to allocate the Device number, the function to free them is:
+	=> void unregister_chrdev_region(dev_t first, unsigned int count);
+	---> 'first' is the beginning Device number in the range of numbers to be de-registered.
+	---> 'count' is the total number of Device numbers to be de-registered.
+	---> There is no return value for the function.
+2. The usual place to call this function would be in the Module's end function.
