@@ -15,6 +15,7 @@ static int __init hello_world_init (void)
 	return 0;
 }
 
+/* End function */
 static void __exit hello_world_cleanup (void)
 {
 	// Clean-up code for the Module.
