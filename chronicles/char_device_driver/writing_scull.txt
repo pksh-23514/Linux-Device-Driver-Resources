@@ -25,5 +25,4 @@ Dynamic Allocation of a Range of Device Numbers:
 	---> 'count' is the total number of contiguous device numbers requested.
 	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" path and sysFS.
 	---> The return value for the function: 0 is Success and Negative is Failure/Error.
-	---> For this function to work well, the Device number must be known ahead of time.
-5. 
+5. For this function to work well, the Device number must be known ahead of time.
