@@ -1,5 +1,5 @@
-Simple Character Utility for Loading Localities (scull):
-========================================================
+Simple Character Utility for Loadable Localities (scull):
+=========================================================
 1. The scull is a Char Driver that acts on a Memory area as though it were a Device.
 2. For ease of usage, the word Device can be used interchangeably for the Memory area used by scull.
 3. The advantage of scull is that it is HW independent. The reason being that the scull acts on Memory allocated from the Kernel.
@@ -14,3 +14,14 @@ Functioning of scull:
 4. Similarly, the 'read' and 'write' System-calls to perform R/W operations, they are mapped to the 'read' and 'write' function implementation of the Driver.
 5. The process to establish the connection between the User-space applications and the Device Driver is managed as a part of the Virtual File-system (VFS) of the Kernel.
 6. The Driver should be registered with the VFS by the use of VFS Kernel APIs.
+
+Pseudo-Device and scull:
+************************
+1. In Linux, a Pseudo-Device is a Device file that does not correspond to a physical HW Device.
+2. These Devices provide SW based functionality (such as emulating Device behavior or offering unique features).
+3. Some of the Pseudo-Devices are "/dev/null", "/dev/zero" etc.
+4. scull stands for Simple Character Utility for Loadable Localities.
+5. It is a specific example of Character Device Driver used for learning in Linux.
+6. It emulates a Device-like interface in Memory, allowing Users to write and test the Device Drivers without needing the actual HW.
+7. Because it's memory-based, scull is a type of Pseudo-Device.
+8. Therefore, Pseudo-Device can be assumed as super-set to the scull as it is a broader category.
