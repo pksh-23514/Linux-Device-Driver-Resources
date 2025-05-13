@@ -4,6 +4,12 @@ Device Driver:
 2. It knows how to configure the Device, sending data to the Device and how to process the requests that originate from the Device.
 3. When the Device Driver is loaded into the OS, it exposes the interface to the User-space to enable the User application's communication with the Device.
 
+Relationship between Device Driver and Linux Kernel Module:
+***********************************************************
+1. Device Driver is a specific type of Kernel Module that handles the communication with a HW Device.
+2. Similar to a Kernel Module, it can be loaded/unloaded into the Kernel to extend it's functionality.
+3. Kernel Module can be assumed as super-set to the Device Driver as it is a more general piece of code.
+
 How Device Driver Functions:
 ****************************
 1. The Device Driver operate inside the OS Kernel-space.
