@@ -1,0 +1,29 @@
+Steps to Write the scull:
+=========================
+
+Establish Connection between Device file and Driver:
+****************************************************
+1. The Device number is created.
+2. The Device file is created.
+3. The Char Device Driver is registered with the VFS.
+4. The Driver operations for the corresponding System-calls are implemented.
+
+Dynamic Allocation of a Range of Device Numbers:
+************************************************
+1. The first step while setting up a Char Device is to obtain one or more Device numbers.
+2. The Kernel API function to allocate the Major number (the Minor number is returned along with it) dynamically is:
+	=> int alloc_chrdev_region(dev_t *dev, unsigned int baseminor, unsigned int count, const char *name);
+	---> 'dev' is an output-only parameter that on successful execution holds the first number in the allocated range.
+	---> 'baseminor' is the requested first minor number to use. It is usually zero.
+	---> 'count' is the total number of contiguous device numbers requested.
+	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" path and sysFS.
+	---> The return value for the function: 0 is Success and Negative is Failure/Error.
+3. For any new Drivers, it is strongly suggested to use the dynamic allocation of the Major Device number rather than choosing a number randomly that are free.
+4. The Kernel API function to register a range of Device numbers is:
+	=> int register_chrdev_region(dev_t first, unsigned int count, const char *name);
+	---> 'first' is the beginning Device number in the desired range. It must include the Major number. The Minor number portion is not mandatory (often zero).
+	---> 'count' is the total number of contiguous device numbers requested.
+	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" path and sysFS.
+	---> The return value for the function: 0 is Success and Negative is Failure/Error.
+	---> For this function to work well, the Device number must be known ahead of time.
+5. 
