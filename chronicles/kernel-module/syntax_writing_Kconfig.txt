@@ -70,7 +70,7 @@ Write Kconfig file for Module:
 	9) Kconfig source file comment:
 		=> An unquoted '#' character anywhere in a source file line indicates the beginning of a source file comment.  The remainder of that line is a comment.
 		---> # "Kconfig comments"
-3. The position of a menu entry in the tree (Menu structure) is determined in two ways. They are:
+3. The position of a menu entry in the tree (menu structure) is determined in two ways. They are:
         => It can be specified explicitly within the 'menu' ... 'endmenu' block. All entries within become a sub-menu and inherit the dependencies from the menu entry.
                 ---> menu "prompt"
                              depends on <expr>
