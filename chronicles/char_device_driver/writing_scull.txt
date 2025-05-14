@@ -10,28 +10,53 @@ Establish Connection between Device file and Driver:
 
 Dynamic Allocation of a Range of Device Numbers:
 ************************************************
-1. The first step while setting up a Char Device is to obtain one or more Device numbers.
-2. The Kernel API function to allocate the Major number (the Minor number is returned along with it) dynamically is:
+1. The first step is to obtain one or more Device numbers.
+2. The functions used are defined in the Header file <linux/fs.h>.
+3. The Kernel API function to allocate the Major number (the Minor number is returned along with it) dynamically is:
 	=> int alloc_chrdev_region(dev_t *dev, unsigned int baseminor, unsigned int count, const char *name);
 	---> 'dev' is an output-only parameter that on successful execution holds the first number in the allocated range.
 	---> 'baseminor' is the requested first minor number to use. It is usually zero.
 	---> 'count' is the total number of contiguous device numbers requested.
 	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" path and sysFS.
 	---> The return value for the function: 0 is Success and Negative is Failure/Error.
-3. For any new Drivers, it is strongly suggested to use the dynamic allocation of the Major Device number rather than choosing a number randomly that are free.
-4. The Kernel API function to register a range of Device numbers is:
+4. For any new Drivers, it is strongly suggested to use the dynamic allocation of the Major Device number rather than choosing a number randomly that are free.
+5. The Kernel API function to register a range of Device numbers is:
 	=> int register_chrdev_region(dev_t first, unsigned int count, const char *name);
 	---> 'first' is the beginning Device number in the desired range. It must include the Major number. The Minor number portion is not mandatory (often zero).
 	---> 'count' is the total number of contiguous device numbers requested.
 	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" path and sysFS.
 	---> The return value for the function: 0 is Success and Negative is Failure/Error.
-5. For this function to work well, the Device number must be known ahead of time. However, most of the time this is not the case.
+6. For this function to work well, the Device number must be known ahead of time. However, most of the time this is not the case.
+
+Character Device Registration:
+******************************
+1. The next step is to register the Char Device with the VFS before the Kernel can invoke the Device's operations.
+2. The Kernel uses the Structure Data-type 'struct cdev' to represent the Char Devices internally. It is defined in the Header file <linux/cdev.h>.
+	=> struct cdev {
+		   struct kobject kobj;
+		   struct module *owner;
+		   const struct file_operations *ops;
+		   struct list_head list;
+		   dev_t dev;
+		   unsigned int count;
+	   } __randomize_layout;
+3. Each Device being handled has a separate 'cdev' Structure.
+4. Without registering the Device, the User-space System-calls cannot be mapped to the Device Driver operations.
+5. The functions used are defined in the Header file <linux/cdev.h>.
+6. The Kernel API function to initialize the Structure 'cdev' that is already allocated by the User is:
+	=> void cdev_init(struct cdev *cdev, const struct file_operations *fops);
+	---> 'cdev' is the Structure already defined by the User that holds the Device related information.
+	---> 'fops' is the Structure that defines the operations that can be performed on the Device.
+	---> There is no return value for the function.
+7. This function does not allocate Memory, it expects a 'struct cdev' to already exist before the function call.
+8. It sets up the Structure with default values and prepares it for the registration with the Kernel.
 
 Freeing the Device Numbers:
 ***************************
-1. Regardless of the method used to allocate the Device number, the function to free them is:
+1. The function used is defined in the Header file <linux/fs.h>.
+2. Regardless of the method used to allocate the Device number, the function to free them is:
 	=> void unregister_chrdev_region(dev_t first, unsigned int count);
 	---> 'first' is the beginning Device number in the range of numbers to be de-registered.
 	---> 'count' is the total number of Device numbers to be de-registered.
 	---> There is no return value for the function.
-2. The usual place to call this function would be in the Module's end function.
+3. The usual place to call this function would be in the Module's end function.
