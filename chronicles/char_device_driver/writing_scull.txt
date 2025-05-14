@@ -46,10 +46,18 @@ Character Device Registration:
 6. The Kernel API function to initialize the Structure 'cdev' that is already allocated by the User is:
 	=> void cdev_init(struct cdev *cdev, const struct file_operations *fops);
 	---> 'cdev' is the Structure already defined by the User that holds the Device related information.
-	---> 'fops' is the Structure that defines the operations that can be performed on the Device.
+	---> 'fops' is the Structure that defines the operations that can be performed on the Device. The 'struct file_operations' is defined in the Header file <linux/fs.h>.
 	---> There is no return value for the function.
 7. This function does not allocate Memory, it expects a 'struct cdev' to already exist before the function call.
 8. It sets up the Structure with default values and prepares it for the registration with the Kernel.
+9. The Kernel API function to obtain a standalone Structure 'cdev' dynamically is:
+	=> struct cdev *cdev_alloc(void);
+	---> There is no argument required.
+	---> The return value for the function is a Pointer to the allocated Structure.
+10. This function allocates Memory for the Structure 'cdev'.
+11. It is especially helpful where the requirement is to register a dynamic number of Devices or when the Device Structure needs to be part of a larger Data-structure.
+12. The command to use this function is as below:
+	=> struct cdev *my_cdev = cdev_alloc();
 
 Freeing the Device Numbers:
 ***************************
