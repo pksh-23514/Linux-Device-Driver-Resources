@@ -17,14 +17,14 @@ Dynamic Allocation of a Range of Device Numbers:
 	---> 'dev' is an output-only parameter that on successful execution holds the first number in the allocated range.
 	---> 'baseminor' is the requested first minor number to use. It is usually zero.
 	---> 'count' is the total number of contiguous Device numbers requested.
-	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" path and sysFS.
+	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" and "/sys" directories.
 	---> The return value for the function: 0 is Success and Negative is Failure/Error.
 4. For any new Drivers, it is strongly suggested to use the dynamic allocation of the Major Device number rather than choosing a number randomly that are free.
 5. The Kernel API function to register a range of Device numbers is:
 	=> int register_chrdev_region(dev_t first, unsigned int count, const char *name);
 	---> 'first' is the beginning Device number in the desired range. It must include the Major number. The Minor number portion is not mandatory (often zero).
 	---> 'count' is the total number of contiguous Device numbers requested.
-	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" path and sysFS.
+	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" and "/sys" directories.
 	---> The return value for the function: 0 is Success and Negative is Failure/Error.
 6. For this function to work well, the Device number must be known ahead of time. However, most of the time this is not the case.
 
