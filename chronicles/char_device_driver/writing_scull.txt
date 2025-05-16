@@ -54,7 +54,7 @@ Character Device Registration:
 	=> struct cdev *cdev_alloc(void);
 	---> There is no argument required.
 	---> The return value for the function is a Pointer to the allocated Structure.
-10. This function allocates Memory for the Structure 'cdev'.
+10. This function allocates Memory for the Structure 'cdev' using 'kmalloc' (or similar Kernel Memory allocation functions).
 11. It is especially helpful where the requirement is to register a dynamic number of Devices or when the Device Structure needs to be part of a larger Data-structure.
 12. The command to use this function is as below:
 	=> struct cdev *my_cdev = cdev_alloc();
