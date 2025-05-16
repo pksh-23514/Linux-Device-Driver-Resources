@@ -16,14 +16,14 @@ Dynamic Allocation of a Range of Device Numbers:
 	=> int alloc_chrdev_region(dev_t *dev, unsigned int baseminor, unsigned int count, const char *name);
 	---> 'dev' is an output-only parameter that on successful execution holds the first number in the allocated range.
 	---> 'baseminor' is the requested first minor number to use. It is usually zero.
-	---> 'count' is the total number of contiguous device numbers requested.
+	---> 'count' is the total number of contiguous Device numbers requested.
 	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" path and sysFS.
 	---> The return value for the function: 0 is Success and Negative is Failure/Error.
 4. For any new Drivers, it is strongly suggested to use the dynamic allocation of the Major Device number rather than choosing a number randomly that are free.
 5. The Kernel API function to register a range of Device numbers is:
 	=> int register_chrdev_region(dev_t first, unsigned int count, const char *name);
 	---> 'first' is the beginning Device number in the desired range. It must include the Major number. The Minor number portion is not mandatory (often zero).
-	---> 'count' is the total number of contiguous device numbers requested.
+	---> 'count' is the total number of contiguous Device numbers requested.
 	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" path and sysFS.
 	---> The return value for the function: 0 is Success and Negative is Failure/Error.
 6. For this function to work well, the Device number must be known ahead of time. However, most of the time this is not the case.
@@ -53,7 +53,7 @@ Character Device Registration:
 9. The Kernel API function to obtain a standalone Structure 'cdev' dynamically is:
 	=> struct cdev *cdev_alloc(void);
 	---> There is no argument required.
-	---> The return value for the function is a Pointer to the allocated Structure.
+	---> The return value for the function is a Pointer to the allocated Structure 'cdev'.
 10. This function allocates Memory for the Structure 'cdev' using 'kmalloc' (or similar Kernel Memory allocation functions).
 11. It is especially helpful where the requirement is to register a dynamic number of Devices or when the Device Structure needs to be part of a larger Data-structure.
 12. The command to use this function is as below:
@@ -62,6 +62,16 @@ Character Device Registration:
 14. This field is used to prevent the Module from being unloaded while the Device is being used.
 15. 'THIS_MODULE' is a Macro that represents a Pointer to the current Module's 'struct module'. It is defined in the Header file <linux/export.h>.
 16. It is defined during the Build process of a Kernel Module. It is a way for the Kernel to track the Module having the ownership of a particular Device.
+17. The Kernel API function to register the Char Device with the Kernel is:
+	=> int cdev_add(struct cdev *dev, dev_t dev, unsigned int count);
+	---> 'cdev' is the Structure that holds the Device related information.
+	---> 'dev' is the first Device number for which the Device is responsible (obtained from the 'alloc_chrdev_region' function).
+	---> 'count' is the total number of contiguous Device numbers.
+	---> The return value for the function: 0 is Success and Negative is Failure/Error.
+18. This function makes the Device ready to be accessed by the User-space applications. Thus, the Device becomes visible in "/proc/devices" and "/sys" directories.
+19. It adds the Device to the Kernel's internal hash table 'cdev_map' for the Kernel to locate and manage the Device.
+20. However, it does not create the Device nodes itself in "/dev" directory. Also, the function 'cdev_init' must be called before this function call.
+21. As soon as the 'cdev_add' function returns, the Device is live i.e. the Device is immediately available for access and it's operations can be called.
 
 Freeing the Device Numbers:
 ***************************
