@@ -60,7 +60,13 @@ Character Device Registration:
 	=> struct cdev *my_cdev = cdev_alloc();
 13. In both the 'cdev' and 'file_operations' Structure, there is a field 'owner' that should be set to 'THIS_MODULE'.
 14. This field is used to prevent the Module from being unloaded while the Device is being used.
-15. 'THIS_MODULE' is a Macro that represents a Pointer to the current Module's 'struct module'. It is defined in the Header file <linux/export.h>.
+15. 'THIS_MODULE' is a Macro that represents a Pointer to the current Module's 'struct module'. It is defined in the Header file <linux/init.h>.
+	=> #ifdef MODULE
+	   extern struct module __this_module;
+	   #define THIS_MODULE (&__this_module)
+	   #else
+	   #define THIS_MODULE ((struct module *)0)
+	   #endif
 16. It is defined during the Build process of a Kernel Module. It is a way for the Kernel to track the Module having the ownership of a particular Device.
 17. The Kernel API function to register the Char Device with the Kernel is:
 	=> int cdev_add(struct cdev *dev, dev_t dev, unsigned int count);
