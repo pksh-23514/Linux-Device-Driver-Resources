@@ -21,13 +21,25 @@ Structure 'file_operations':
 	1) When the User-space uses 'read' System-call on the Device file in "/dev", this function handles the read operation.
 	2) It handles the low-level details of accessing the registers, managing the Interrupts and buffering the data.
 		=> The requested data is copied from the Device's Memory into a Buffer in the Kernel Memory.
-		=> The Driver then uses the "copy_to_user()" function to copy the data from the Kernel-space to the User-space.
+		=> The Driver then uses the "copy_to_user" function to copy the data from the Kernel-space to the User-space.
 			---> unsigned long copy_to_user(void *to, const void *from, unsigned long count);
 	3) The 'read' function prototype is:
 		=> ssize_t (*read) (struct file *, char __user *, size_t, loff_t *);
 		---> The return value is of 'signed size' type. A non-negative return value represents the number of data bytes read successfully.
+		---> The negative value represent Errors. If some data is read and then the Error occurs, the return value is less than the requested data.
 	4) If this is NULL, the 'read' System-call fails with an 'invalid argument' Error (-EINVAL).
-6. The field 'write' is provied to contain the Driver function to write data on the Device.
+6. The field 'write' is provied to contain the Driver function to send data to the Device.
+	1) When the User-space uses 'write' System-call on the Device file in "/dev", this function handles the write operation.
+	2) It handles the low-level details of accessing the registers, managing the Interrupts and buffering the data.
+		=> The Driver uses the "copy_from_user" function to copy the data from the User-space to the Kernel-space.
+			---> unsigned long copy_from_user(void *to, const void *from, unsigned long count);
+		=> The Driver translates the data and instructions into a format that the Device understands.
+		=> The Driver initiates the write operation such as writing to Memory, sending data to a Peripheral or controlling a HW function.
+	3) The 'write' function prototype is:
+		=> ssize_t (*write) (struct file *, const char __user *, size_t, loff_t *);
+		---> The return value is of 'signed size' type. A non-negative return value represents the number of data bytes written successfully.
+		---> The negative value represent Errors. If some data is written and then the Error occurs, the return value is less than the sent data.
+	4) If this is NULL, the 'write' System-call fails with an 'invalid argument' Error (-EINVAL).
 
 x. The field 'open' is provided to contain the Driver function to perform any initializations in preparation for the later operations.
 	1) When the User-space uses 'open' System-call on the Device file in "/dev", it is transferred to the Kernel.
