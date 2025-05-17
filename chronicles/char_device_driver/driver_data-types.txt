@@ -1,0 +1,30 @@
+Important Data-types for File Operations:
+=========================================
+
+Structure 'file_operations':
+****************************
+1. The Structure Data-type 'file_operations' contains the collection of Pointers to functions defined by the Driver that perform various operations on the Device.
+2. It is defined in the Header file <linux/fs.h>.
+3. The field 'struct module *owner' is the first field of the 'file_operations'.
+	1) The Structure Data-type 'struct module' defined in the Header file <linux/module.h>.
+	2) It is not an operation but the Pointer to the Module that owns the Structure.
+	3) It is used to prevent the Module from being unloaded while the Device is being used.
+	4) It is simply initialized to the value 'THIS_MODULE'.
+4. The field 'llseek' is provided to contain the Driver function to allow for seeking within the file.
+	1) When the User-space uses 'lseek' System-call on the Device file in "/dev", this function handles the logic for updating the file position.
+	2) It manages the 64-bit extended file Pointer for the precise file positioning based on the provided offset and starting point in 'lseek' call.
+	3) The 'llseek' function prototype is:
+		=> loff_t (*llseek) (struct file *, loff_t, int);
+		---> The new file position is returned from the function as a 'long offset' that is 64-bit wide. The negative values represent Errors.
+	4) If this is NULL, the 'lseek' calls will modify the file position in potentially unpredictable ways.
+5.
+
+x. The field 'open' is provided to contain the Driver function to perform any initializations in preparation for the later operations.
+	1) When the User-space uses 'open' System-call on the Device file in "/dev", it is transferred to the Kernel.
+	2) The Kernel VFS processes receives the 'open' System-call and finds the appropriate Driver implementation for it's execution.
+		=> The VFS performs the initialization of a Structure Data-type 'struct file' and links it to the corresponding Structure Data-type 'struct inode'.
+		=> The VFS then calls this 'open' function (pointing to the associated Driver 'open' implementation) to perform the opening on the Device.
+		=> On successful 'open', the VFS assigns a file descriptor and returns it to the User-space.
+	3) The 'open' function prototype is:
+		=> int (*open) (struct inode *, struct file *);
+	4) If this is NULL, opening the Device always succeeds but the Driver isn’t notified.
