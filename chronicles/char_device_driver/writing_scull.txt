@@ -91,6 +91,9 @@ Character Driver File Operation Methods:
 		   ssize_t (*read) (struct file *, char __user *, size_t, loff_t *);
 		   ssize_t (*write) (struct file *, const char __user *, size_t, loff_t *);
 		   ...
+		   __poll_t (*poll) (struct file *, struct poll_table_struct *);
+		   long (*unlocked_ioctl) (struct file *, unsigned int, unsigned long);
+		   long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
 		   int (*mmap) (struct file *, struct vm_area_struct *);
 		   int (*open) (struct inode *, struct file *);
 		   int (*flush) (struct file *, fl_owner_t id);
@@ -102,9 +105,11 @@ Character Driver File Operation Methods:
 	   } __randomize_layout;
 4. Conventionally, the 'struct file_operations' is called 'fops'.
 5. Each field in the Structure must point to a specific function or left as NULL for unsupported operations.
-6. There are a number of operations that have a parameter with including '__user'. This annotation is a form of documentation.
-7. It notes that the Pointer is a User-space Address that cannot be directly de-referenced.
-8. For normal compilation, it has no effect but it can be used by external checking SW to find the misuse of User-space Addresses.
+6. There are a number of operations that have a parameter with including '__user'. This is defined in the Header file <linux/compiler_types.h>.
+	=> # define __user	__attribute__((noderef, address_space(__user)))
+	1) It notes that the Pointer is a User-space Address that cannot be directly de-referenced.
+	2) It allows tools like 'sparse' to tell Kernel developers/system that they're possibly using an untrusted Pointer (invalid in the current Virtual Address mapping).
+	3) For normal compilation, it has no effect but it can be used by external checking SW to find the misuse of User-space Addresses.
 
 Freeing the Device Numbers:
 ***************************
