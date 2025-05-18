@@ -50,6 +50,25 @@ Structure 'file_operations':
 		=> __poll_t (*poll) (struct file *, struct poll_table_struct *);
 		---> The return type of the bitmask of event flags is '__poll_t' indicating the readiness of the Device for the I/O operations.
 	4) If this is NULL, the Device is assumed to be always readable and writable without blocking.
+8. The field 'unlocked_ioctl' is provided to contain the Driver function to issue Device-specific commands.
+	1) When the User-space uses 'ioctl' System-call on the Device file in "/dev", this function handles the way to provide I/O and control operations.
+		=> The 'ioctl' call used to run under the Big Kernel Lock (BKL). It used to lock the whole Kernel during it's operation.
+		=> The usage of BKL made it possible for the long-running 'ioctl' calls to create long latencies for unrelated processes.
+		=> The 'ioctl' call is a powerful mechanism for User-space applications to control the behavior of Devices.
+		=> However, it was seen as a completely uncontrolled entry point to the Kernel-space.
+	2) The new way to implement this function is introduced which doesn't lock the Kernel during the operation.
+		=> The request code (an integer) is passed that determines the specific action to be performed on the Device.
+	3) The 'unlocked_ioctl' function prototype is:
+		=> long (*unlocked_ioctl) (struct file *, unsigned int, unsigned long);
+		---> The return value if non-negative represents Success. The negative value represent Errors.
+	4) If this is NULL, the 'ioctl' call returns an Error for any request (that is not pre-defined) i.e. no such Device 'ioctl' (-ENOTTY).
+9. The field 'compat_ioctl' is provided to contain the Driver function to maintain compatiblity to 'ioctl' calls.
+	1) It is unrelated to 'unlocked_ioctl' function implementation.
+	2) The purpose of this implementation is to allow 32-bit User-space applications to generate 'ioctl' calls on 64-bit Kernel.
+		=> It should do the required conversion of the arguments to the native Data-types and carry out the request.
+	3) The 'compat_ioctl' function prototype is:
+		=> long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
+	4) If this is NULL, the Data Structures must be compatible for both 32-bit and 64-bit Kernels and the 'unlocked_ioctl' implementation must be used.
 
 x. The field 'open' is provided to contain the Driver function to perform any initializations in preparation for the later operations.
 	1) When the User-space uses 'open' System-call on the Device file in "/dev", it is transferred to the Kernel.
