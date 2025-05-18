@@ -69,6 +69,18 @@ Structure 'file_operations':
 	3) The 'compat_ioctl' function prototype is:
 		=> long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
 	4) If this is NULL, the Data Structures must be compatible for both 32-bit and 64-bit Kernels and the 'unlocked_ioctl' implementation must be used.
+10. The field 'mmap' is provided to contain the Driver function to perform the Memory mapping for the Devices.
+	1) When the User-space uses 'mmap' System-call on the Device file in "/dev", this function handles the process to map the Devices into Memory.
+		=> The Memory mapped file I/O can be accessed and modified as if they are directly in the Memory.
+		=> It eliminates the need for traditional 'read' and 'write' System-calls. It is faster and more efficient.
+		=> It uses demand Paging i.e. the file contents are loaded in the Memory when they are accessed (useful for very large files).
+	2) It is often used to create Shared Memory regions between processes.
+		=> Multiple processes can map the same file into their Address spaces, allowing them to share data efficiently without using traditional IPC mechanisms.
+	3) The 'mmap' function prototype is:
+		=> int (*mmap) (struct file *, struct vm_area_struct *);
+		---> The 'struct vm_area_struct' argument is used to indicate the Virtual Address space where the Memory should be mapped by the Device.
+		---> When the 'mmap' is used to modify the files, it is crucial to synchronize (fsync/msync) the changes back to the file on Disk to ensure data persistence.
+	4) If this is NULL, the 'mmap' call returns Error (-ENODEV).
 
 x. The field 'open' is provided to contain the Driver function to perform any initializations in preparation for the later operations.
 	1) When the User-space uses 'open' System-call on the Device file in "/dev", it is transferred to the Kernel.
