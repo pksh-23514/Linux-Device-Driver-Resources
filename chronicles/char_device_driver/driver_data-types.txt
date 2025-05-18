@@ -81,9 +81,8 @@ Structure 'file_operations':
 		---> The 'struct vm_area_struct' argument is used to indicate the Virtual Address space where the Memory should be mapped by the Device.
 		---> When the 'mmap' is used to modify the files, it is crucial to synchronize (fsync/msync) the changes back to the file on Disk to ensure data persistence.
 	4) If this is NULL, the 'mmap' call returns Error (-ENODEV).
-
-x. The field 'open' is provided to contain the Driver function to perform any initializations in preparation for the later operations.
-	1) When the User-space uses 'open' System-call on the Device file in "/dev", it is transferred to the Kernel.
+11. The field 'open' is provided to contain the Driver function to perform any initializations in preparation for the later operations.
+	1) When the User-space uses 'open' System-call on the Device file in "/dev", this function establishes connection to the Device file.
 	2) The Kernel VFS processes receives the 'open' System-call and finds the appropriate Driver implementation for it's execution.
 		=> The VFS performs the initialization of a Structure Data-type 'struct file' and links it to the corresponding Structure Data-type 'struct inode'.
 		=> The VFS then calls this 'open' function (pointing to the associated Driver 'open' implementation) to perform the opening on the Device.
