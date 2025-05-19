@@ -81,7 +81,7 @@ Structure 'file_operations':
 		---> The 'struct vm_area_struct' argument is used to indicate the Virtual Address space where the Memory should be mapped by the Device.
 		---> When the 'mmap' is used to modify the files, it is crucial to synchronize (fsync/msync) the changes back to the file on Disk to ensure data persistence.
 	4) If this is NULL, the 'mmap' call returns Error (-ENODEV).
-11. The field 'open' is provided to contain the Driver function to perform any initializations in preparation for the later operations.
+11. The field 'open' is provided to contain the Driver function to perform the initial access of the Device along with initializations and setting up resources.
 	1) When the User-space uses 'open' System-call on the Device file in "/dev", this function establishes connection to the Device file.
 	2) The Kernel VFS processes receives the 'open' System-call and finds the appropriate Driver implementation for it's execution.
 		=> The VFS performs the initialization of a Structure Data-type 'struct file' and links it to the corresponding Structure Data-type 'struct inode'.
@@ -90,3 +90,15 @@ Structure 'file_operations':
 	3) The 'open' function prototype is:
 		=> int (*open) (struct inode *, struct file *);
 	4) If this is NULL, the 'open' System-call always succeeds but the Driver isn’t notified.
+12. The field 'flush' is provided to contain the Driver function to perform the 'flushing' on the Device.
+	1) When the User-space uses 'close' System-call on the Device file in "/dev", this function handles the closing of the copy of the file descriptor wrt a process.
+	2) The Kernel invokes this function internally if it is implemented. It is called whenever a file descriptor is closed.
+		=> The order is: close(fd) ---> sys_close() ---> filp_close() ---> file_operations.flush
+		=> It's similar to 'release', but it’s guaranteed to be called once per file descriptor close.
+		=> It is used to flush any pending data, clean up resources, flush caches, or finalize I/O operations before a file descriptor is closed.
+		=> This is very rarely used in the Drivers.
+	3) The 'flush' function prototype is:
+		=> int (*flush) (struct file *, fl_owner_t id);
+		---> The 'fl_owner_t' argument identifies the owner of the file lock.
+		---> The return value if non-negative represents Success. The negative value represent Errors.
+	4) If this is NULL, the Kernel simply ignores the User-space 'close' call request.
