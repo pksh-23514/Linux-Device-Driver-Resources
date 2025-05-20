@@ -61,7 +61,7 @@ Structure 'file_operations':
 	3) The 'unlocked_ioctl' function prototype is:
 		=> long (*unlocked_ioctl) (struct file *, unsigned int, unsigned long);
 		---> The return value if non-negative represents Success. The negative value represent Errors.
-	4) If this is NULL, the 'ioctl' call returns an Error for any request (that is not pre-defined) i.e. no such Device 'ioctl' (-ENOTTY).
+	4) If this is NULL, the 'ioctl' System-call returns an Error for any request (that is not pre-defined) i.e. no such Device 'ioctl' (-ENOTTY).
 9. The field 'compat_ioctl' is provided to contain the Driver function to maintain compatiblity to 'ioctl' calls.
 	1) It is unrelated to 'unlocked_ioctl' function implementation.
 	2) The purpose of this implementation is to allow 32-bit User-space applications to generate 'ioctl' calls on 64-bit Kernel.
@@ -80,16 +80,18 @@ Structure 'file_operations':
 		=> int (*mmap) (struct file *, struct vm_area_struct *);
 		---> The 'struct vm_area_struct' argument is used to indicate the Virtual Address space where the Memory should be mapped by the Device.
 		---> When the 'mmap' is used to modify the files, it is crucial to synchronize (fsync/msync) the changes back to the file on Disk to ensure data persistence.
-	4) If this is NULL, the 'mmap' call returns Error (-ENODEV).
+	4) If this is NULL, the 'mmap' System-call returns Error (-ENODEV).
+---------------------------
 11. The field 'open' is provided to contain the Driver function to perform the initial access of the Device along with initializations and setting up resources.
 	1) When the User-space uses 'open' System-call on the Device file in "/dev", this function establishes connection to the Device file.
-	2) The Kernel VFS processes receives the 'open' System-call and finds the appropriate Driver implementation for it's execution.
+	2) The Kernel VFS processes receives the 'open' System
 		=> The VFS performs the initialization of a Structure Data-type 'struct file' and links it to the corresponding Structure Data-type 'struct inode'.
 		=> The VFS then calls this 'open' function (pointing to the associated Driver 'open' implementation) to perform the opening on the Device.
 		=> On successful 'open', the VFS assigns a file descriptor and returns it to the User-space.
 	3) The 'open' function prototype is:
 		=> int (*open) (struct inode *, struct file *);
 	4) If this is NULL, the 'open' System-call always succeeds but the Driver isn’t notified.
+---------------------------
 12. The field 'flush' is provided to contain the Driver function to perform the 'flushing' on the Device.
 	1) When the User-space uses 'close' System-call on the Device file in "/dev", this function handles the closing of the copy of the file descriptor wrt a process.
 	2) The Kernel invokes this function internally if it is implemented. It is called whenever a file descriptor is closed.
@@ -101,4 +103,18 @@ Structure 'file_operations':
 		=> int (*flush) (struct file *, fl_owner_t id);
 		---> The 'fl_owner_t' argument identifies the owner of the file lock.
 		---> The return value if non-negative represents Success. The negative value represent Errors.
-	4) If this is NULL, the Kernel simply ignores the User-space 'close' call request.
+	4) If this is NULL, the Kernel simply ignores the User-space 'close' System-call request.
+---------------------------
+13. The field 'release' is provided to contain the Driver function
+---------------------------
+14. The field 'fsync' is provided to contain the Driver function to perform the flushing of the pending data to the Device.
+	1) When the User-space uses 'fsync'/'fdatasync' System-calls on the Device in "/dev", this function handles the back-end for flushing.
+	2) The Kernel invokes this function to flush the file data and/or the meta-data to the Device based on the System-call from the User-space.
+		=> This ensures data integrity by synchronizing the file contents and the meta-data to the storage Device.
+	3) The 'fsync' function prototype is:
+		=> int (*fsync) (struct file *, loff_t, loff_t, int datasync);
+		---> The return value if non-negative represents Success. The negative value represent Errors.
+		---> The 'datasync' argument decides the contents to be flushed.
+		=> The 'fsync' call sets the 'datasync' argument to '0' and flushes all the data and the meta-data of the Device file.
+		=> The 'fdatasync' call sets the 'datasync' argument to '1' and flushes only the file data and minimal meta-data required for data retrieval.
+	4) If this is NULL, the 'fsync' and 'fdatasync' System-calls fail with an 'invalid argument' Error (-EINVAL).
