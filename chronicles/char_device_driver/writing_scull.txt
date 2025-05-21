@@ -103,7 +103,7 @@ Character Driver File Operation Methods:
 		   int (*lock) (struct file *, int, struct file_lock *);
 		   ...
 	   } __randomize_layout;
-4. Conventionally, the 'struct file_operations' is called 'fops'.
+4. Conventionally, the 'struct file_operations' variable or the Pointer to the Structure is called 'fops' (or some variation).
 5. Each field in the Structure must point to a specific function or left as NULL for unsupported operations.
 6. There are a number of operations that have a parameter with including '__user'. This is defined in the Header file <linux/compiler_types.h>.
 	=> # define __user	__attribute__((noderef, address_space(__user)))
