@@ -110,6 +110,9 @@ Character Driver File Operation Methods:
 	1) It notes that the Pointer is a User-space Address that cannot be directly de-referenced.
 	2) It allows tools like 'sparse' to tell Kernel developers/system that they're possibly using an untrusted Pointer (invalid in the current Virtual Address mapping).
 	3) For normal compilation, it has no effect but it can be used by external checking SW to find the misuse of User-space Addresses.
+7. The User-space System-calls are used on the Device file. These calls are then transferred to the Kernel which processes them through the VFS.
+8. The VFS then finds the appropriate implementation in the Driver for the System-call a
+9. The control-flow: User-space ---> Kernel-space ---> System-call Dispatcher ---> VFS sub-system ---> Driver File Operation and Execution ---> Kernel-space ---> User-space
 
 Freeing the Device Numbers:
 ***************************
