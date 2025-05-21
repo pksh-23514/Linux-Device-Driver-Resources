@@ -118,3 +118,13 @@ Structure 'file_operations':
 		=> The 'fsync' call sets the 'datasync' argument to '0' and flushes all the data and the meta-data of the Device file.
 		=> The 'fdatasync' call sets the 'datasync' argument to '1' and flushes only the file data and minimal meta-data required for data retrieval.
 	4) If this is NULL, the 'fsync' and 'fdatasync' System-calls fail with an 'invalid argument' Error (-EINVAL).
+15. The field 'fasync' is provided to contain the Driver function to perform the asynchronous notification setup on the Device.
+	1) When the User-space uses the 'fcntl' System-call on the Device file in "/dev", this function notifies the Device about a change in FASYNC flag.
+	2) The Kernel invokes this function and passes the flags 'F_SETFL' and 'O_ASYNC' to set up the asynchronous notification mechanism.
+		=> It allows User-space to be notified via signals when the Device becomes ready for I/O.
+	3) The 'fasync' function prototype is:
+		=> int (*fasync) (int, struct file *, int);
+		---> The last argument is the mode i.e. non-zero value is to enable and zero is to disable the asynchronous notification.
+		---> The return value if non-negative represents Success. The negative value represent Errors.
+	4) If this is NULL, the 'fcntl' System-call will return Success only if the flag is being set but no signal is ever delivered from the Device.
+		=> If the Driver does not support asynchronous mechanism, this function can be safely set to NULL.
