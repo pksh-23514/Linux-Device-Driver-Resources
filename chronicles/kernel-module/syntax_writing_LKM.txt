@@ -11,7 +11,7 @@ Header section:
 1. The Header section contains all the required Kernel Header files.
 2. The Kernel Header files are located in the Linux cloned directory at the path (<linux_SRC>/include/linux).
 3. The LKM are executed in the Kernel-space and therefore, they require the Kernel Headers which are different from the User-space Headers (C-Standard Library Headers).
-4. There is no User-space library that is linked to the LKM.
+4. There is no User-space Library that is linked to the LKM.
 5. The Kernel Headers include the C files that specify the interface between the Linux Kernel and User-space libraries and programs.
 6. The Kernel Headers define the structures and constants that are needed for the building of most standard programs.
 7. Lastly, every LKM needs to include the Header file <linux/module.h>.
