@@ -128,3 +128,13 @@ Structure 'file_operations':
 		---> The return value if non-negative represents Success. The negative value represent Errors.
 	4) If this is NULL, the 'fcntl' System-call will return Success only if the flag is being set but no signal is ever delivered from the Device.
 		=> If the Driver does not support asynchronous mechanism, this function can be safely set to NULL.
+16. The field 'lock' is provided to contain the Driver function to perform the advisory file locking.
+	1) When the User-space uses the 'fcntl' System-call on the Device file in "/dev", this function handles the locking request.
+	2) The Kernel invokes this function and passes the flags 'F_GETLK, 'F_SETLK' or 'F_SETLKW' as the locking command.
+		=> This is very rarely used in the Drivers.
+	3) The 'lock' function prototype is:
+		=> int (*lock) (struct file *, int, struct file_lock *);
+		---> The 'struct file_lock' argument describes the lock to be applied.
+		---> The return value if non-negative represents Success. The negative value represent Errors.
+	4) If this is NULL, the 'fcntl' System-call falls back to the default VFS-level locking behavior.
+		=> If the file (a Device node, "/proc" entry or special file) requires custom lock handling and 'lock' is NULL, the locking might not behave correctly.
