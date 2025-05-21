@@ -148,3 +148,13 @@ Structure 'file':
 	2) The spinlock is used to protect the critical sections of the code that cannot be executed concurrently on multiple threads.
 	3) The declaration is:
 		=> spinlock_t f_lock;
+4. The field 'fmode_t f_mode' is a declaration to define how the file shall be handled i.e. the mode in which the Device file is opened.
+	1) The 'f_mode' variable holds the file mode or file access flags for a specific Device file.
+	2) The file modes are:
+		=> FMODE_READ - Read access
+		=> FMODE_WRITE - Write access
+		=> FMODE_APPEND - Append mode
+		=> FMODE_EXEC - Execute access
+		=> FMODE_NONBLOCK - Non-blocking mode
+	3) The declaration is:
+		=> fmode_t f_mode;
