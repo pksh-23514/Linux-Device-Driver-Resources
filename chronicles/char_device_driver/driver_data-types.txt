@@ -158,3 +158,8 @@ Structure 'file':
 		=> 'FMODE_NONBLOCK' is the Non-blocking mode for the file.
 	3) The declaration is:
 		=> fmode_t f_mode;
+5. The field 'f_op' is a declaration of Pointer to the Structure of operations performed on the Device file.
+	1) The System-calls generated for the Device file are mapped to the operations defined in this Structure.
+	2) The declaration is:
+		=> const struct file_operations *f_op;
+		---> The 'const' declaration indicates that the Structure pointed by 'f_op' should not be modified.
