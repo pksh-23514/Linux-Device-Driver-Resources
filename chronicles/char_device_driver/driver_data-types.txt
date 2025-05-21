@@ -163,7 +163,12 @@ Structure 'file':
 	2) The declaration is:
 		=> const struct file_operations *f_op;
 		---> The 'const' declaration indicates that the Structure pointed by 'f_op' should not be modified.
-
+6. The field 'f_mapping' is a declaration that defines how the Device file I/O interacts with the Page-Cache and Memory-mapped I/O.
+	1) The 'f_mapping pointer' allows the Device file to be associated with an Address space, which handles the operations like:
+		=> The reading or writing Pages to and from the Disk.
+		=> The handling of the Memory-mapped Device file I/O.
+	2) The declaration is:
+		=> struct address_space *f_mapping;
 ---------------------------
 x. This Structure 'file' is not related to the 'FILE' Pointers in C-programs.
 	=> The 'FILE' is defined in the C-Library and these Pointers never appear in the Kernel programs.
