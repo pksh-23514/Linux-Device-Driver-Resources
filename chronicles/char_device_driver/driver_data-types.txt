@@ -138,3 +138,13 @@ Structure 'file_operations':
 		---> The return value if non-negative represents Success. The negative value represent Errors.
 	4) If this is NULL, the 'fcntl' System-call falls back to the default VFS-level locking behavior.
 		=> If the file (a Device node, "/proc" entry or special file) requires custom lock handling and 'lock' is NULL, the locking might not behave correctly.
+
+Structure 'file':
+*****************
+1. The Structure Data-type 'file' represents the specific 'open' file instance whenever a Device file is opened.
+2. It is defined in the Header file <linux/fs.h>.
+3. The field 'spinlock_t f_lock' is a declaration of a spinlock used for ensuring mutual exclusion in concurrent programming.
+	1) A spinlock is a type of lock where the thread trying to acquire the lock will repeatedly check if it is available (i.e., "spin") instead of blocking the thread.
+	2) The spinlock is used to protect the critical sections of the code that cannot be executed concurrently on multiple threads.
+	3) The declaration is:
+		=> spinlock_t f_lock;
