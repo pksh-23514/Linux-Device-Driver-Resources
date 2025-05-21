@@ -143,18 +143,18 @@ Structure 'file':
 *****************
 1. The Structure Data-type 'file' represents the specific 'open' file instance whenever a Device file is opened.
 2. It is defined in the Header file <linux/fs.h>.
-3. The field 'spinlock_t f_lock' is a declaration of a spinlock used for ensuring mutual exclusion in concurrent programming.
+3. The field 'f_lock' is a declaration of a spinlock used for ensuring mutual exclusion in concurrent programming.
 	1) A spinlock is a type of lock where the thread trying to acquire the lock will repeatedly check if it is available (i.e., "spin") instead of blocking the thread.
 	2) The spinlock is used to protect the critical sections of the code that cannot be executed concurrently on multiple threads.
 	3) The declaration is:
 		=> spinlock_t f_lock;
-4. The field 'fmode_t f_mode' is a declaration to define how the file shall be handled i.e. the mode in which the Device file is opened.
+4. The field 'f_mode' is a declaration to define how the file shall be handled i.e. the mode in which the Device file is opened.
 	1) The 'f_mode' variable holds the file mode or file access flags for a specific Device file.
-	2) The file modes are:
-		=> FMODE_READ - Read access
-		=> FMODE_WRITE - Write access
-		=> FMODE_APPEND - Append mode
-		=> FMODE_EXEC - Execute access
-		=> FMODE_NONBLOCK - Non-blocking mode
+	2) The flags used are:
+		=> 'FMODE_READ' is the Read access for the file.
+		=> 'FMODE_WRITE' is the Write access for the file.
+		=> 'FMODE_APPEND' is the Append mode for the file.
+		=> 'FMODE_EXEC' is the Execute access for the file.
+		=> 'FMODE_NONBLOCK' is the Non-blocking mode for the file.
 	3) The declaration is:
 		=> fmode_t f_mode;
