@@ -252,6 +252,35 @@ Structure 'inode':
 	2) This is very crucial for the performance and Memory management.
 	3) The declaration is:
 		=> struct address_space *i_mapping;
+10. The field 'i_rdev' is a declaration that stores the actual Device number of the Device file.
+	1) The 'i_rdev' variable holds the Device number i.e. the combination of the Major and Minor numbers.
+	2) It is only meaningful when the inode represents a Device file.
+	3) The declaration is:
+		=> dev_t i_rdev;
+11. The field 'i_size' is a declaration that represents the size of a file in bytes.
+	1) The 'i_size' variable is used by the file-system to keep track of how large the file is.
+	2) It is updated during the R/W operations to reflect the current size.
+	3) The declaration is:
+		=> loff_t i_size;
+12. The fields 'i_atime_sec', 'i_mtime_sec' and 'i_ctime_sec' are declarations to store the time-stamp details of the inode.
+	1) The various variables store the following details:
+		=> 'i_atime_sec' represents the access time 'atime' in seconds for an inode.
+		=> 'i_mtime_sec' represents the modification time 'mtime' (time when the file contents are modified) in seconds for an inode.
+		=> 'i_ctime_sec' represents the change time 'ctime' (time when the file's meta-data are changed) in seconds for an inode.
+	2) The declarations are:
+		=> time64_t i_atime_sec;
+		=> time64_t i_mtime_sec;
+		=> time64_t i_ctime_sec;
+		---> The 'time64_t' Data-type is a 64-bit signed integer to store time values in seconds. It is designed to avoid the 'Year 2038' problem.
+13. The fields 'i_atime_nsec', 'i_mtime_nsec' and 'i_ctime_nsec' are declarations to store the nano-seconds portion of the time-stamp details of the inode.
+	1) The various variables store the following details:
+		=> 'i_atime_nsec' represents the nano-seconds portion of the last access time 'atime' for an inode.
+		=> 'i_mtime_nsec' represents the nano-seconds portion of the last modification time 'mtime' for an inode.
+		=> 'i_ctime_nsec' represents the nano-seconds portion of the last change time 'ctime' for an inode.
+	2) The declarations are:
+		=> u32 i_atime_nsec;
+		=> u32 i_mtime_nsec;
+		=> u32 i_ctime_nsec;
 ---------------------------
 x. There can be numerous 'struct file' Structures representing multiple open descriptors for the same Device file i.e. the same file can be opened multiple times.
 x. However, all the 'struct file' Structures representing the same opened file points to the single 'struct inode' Structure.
