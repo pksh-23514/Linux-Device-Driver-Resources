@@ -308,5 +308,5 @@ x. The inode is created and stored in the Memory as and when a new Device file i
 x. There can be numerous 'struct file' Structures representing multiple open descriptors for the same Device file i.e. the same file can be opened multiple times.
 x. However, all the 'struct file' Structures representing the same opened file points to the single 'struct inode' Structure.
 x. The unique thing about inode is they contain the information about the Device file without having any information about the file name.
-x. So, even if the file name is changed in the future, the inode number remains same. The inode number is stored permanently, for the file-system to handle a file.
+x. So, even if the file name is changed in the future, the inode number remains same. The inode number needs to be stored permanently, for the file-system to handle a file.
 x. Thus, the contents of the 'struct inode' are present as long as the file is not deleted. They are written on the Disk instead of being present only in the Kernel Memory.
