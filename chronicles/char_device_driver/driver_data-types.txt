@@ -144,7 +144,7 @@ Structure 'file':
 1. The Structure Data-type 'file' represents the specific 'open' file instance whenever a Device file is opened.
 2. It is defined in the Header file <linux/fs.h>.
 3. The field 'f_lock' is a declaration of a spinlock used for ensuring mutual exclusion in concurrent programming.
-	1) A spinlock is a type of lock where the thread trying to acquire the lock will repeatedly check if it is available (i.e., "spin") instead of blocking the thread.
+	1) A spinlock is a type of lock where the thread trying to acquire the lock will repeatedly check if it is available (i.e., 'spin') instead of blocking the thread.
 	2) The spinlock is used to protect the critical sections of the code that cannot be executed concurrently on multiple threads.
 	3) The declaration is:
 		=> spinlock_t f_lock;
@@ -176,6 +176,18 @@ Structure 'file':
 	2) It can be NULL or point to some User-allocated data. However, if it is not NULL, the Memory being pointed should be freed in the 'release' function.
 	3) The declaration is:
 		=> void *private_data;
+8. The field 'f_inode' is a declaration to store the metadata about a Device file (such as ownership, permissions, time-stamps).
+	1) The 'f_inode' Pointer accesses the 'struct inode' associated with the opened Device file. However, it does not stores the file name or file contents.
+	2) It is very useful in the Device file manangement.
+	3) The declaration is:
+		=> struct inode *f_inode;
+9. The field 'f_flags' is a declaration to hold the various bitwise file flags of the Device.
+	1) The 'f_flags' variable store the flag values that indicate the state or access mode of the Device file.
+		=> Each bit in the variable can represent a different flag (such as O_RDONLY, O_WRONLY, O_RDWR).
+		=> They are often set or checked using the bitwise operations.
+	2) These flags are defined in the Header file <linux/fcntl.h>.
+	3) The declaration is:
+		=> unsigned int f_flags;
 ---------------------------
 x. This Structure 'file' is not related to the 'FILE' Pointers in C-programs.
 	=> The 'FILE' is defined in the C-Library and these Pointers never appear in the Kernel programs.
