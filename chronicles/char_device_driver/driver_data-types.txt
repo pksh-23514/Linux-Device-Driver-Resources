@@ -214,7 +214,27 @@ Structure 'inode':
 ******************
 1. The Structure Data-type 'inode' contains the meta-data to uniquely identify a file. The 'inode' is short form for 'index node'.
 2. It is defined in the Header file <linux/fs.h>.
-3. 
+3. The field 'i_mode' is a declaration to represent the file type and access permissions of an inode.
+	1) The 'i_mode' variable encodes the following:
+		=> The File type (regular file, directory, symbolic link, etc).
+		=> The Permissions (read / write / execute for User, Group, Others).
+	2) The declaration is:
+		=> umode_t i_mode;
+		---> The Macros (such as S_IFREG, S_IFDIR, S_IRUSR, S_IWUSR, S_IXUSR etc) are defined in the Header file <uapi/linux/stat.h>.
+4. The field 'i_uid' is a declaration to represent the User ID for the Device file owner.
+	1) The 'i_uid' variable is used by the Kernel to manage the 'uid's securely and properly across the different User name-spaces.
+	2) It helps the Kernel to determine the file ownership that is essential for enforcing the access permissions and audit logging.
+	3) The declaration is:
+		=> kuid_t i_uid;
+5. The field 'i_gid' is a declaration to represent the Group ID for the Device file owner.
+	1) The 'i_gid' variable is used by the Kernel to manage the 'gid's securely and properly across the different User name-spaces.
+	2) It helps the Kernel to handle the translation of the IDs in a secure and isolated way.
+	3) The declaration is:
+		=> kgid_t i_gid;
+6. The field 'i_flags' is a declaration to store a set of bitwise flags.
+	1) The 'i_flags' is typically used as a Bit-field to represent the multiple boolean options compactly.
+	2) The declaration is:
+		=> unsigned int i_flags;
 ---------------------------
 x. There can be numerous 'struct file' Structures representing multiple open descriptors for the same Device file i.e. the same file can be opened multiple times.
 x. However, all the 'struct file' Structures representing the same opened file points to the single 'struct inode' Structure.
