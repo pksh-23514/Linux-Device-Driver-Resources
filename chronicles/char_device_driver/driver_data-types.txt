@@ -164,11 +164,18 @@ Structure 'file':
 		=> const struct file_operations *f_op;
 		---> The 'const' declaration indicates that the Structure pointed by 'f_op' should not be modified.
 6. The field 'f_mapping' is a declaration that defines how the Device file I/O interacts with the Page-Cache and Memory-mapped I/O.
-	1) The 'f_mapping pointer' allows the Device file to be associated with an Address space, which handles the operations like:
+	1) The 'f_mapping' Pointer allows the Device file to be associated with an Address space, which handles the operations like:
 		=> The reading or writing Pages to and from the Disk.
 		=> The handling of the Memory-mapped Device file I/O.
 	2) The declaration is:
 		=> struct address_space *f_mapping;
+7. The field 'private_data' is a declaration that is useful to preserve the state information across System-calls.
+	1) The generic 'private_data' Pointer is often used:
+		=> To store a reference to some data which cannot be tied to a specific Data-type.
+		=> To associate some arbitrary data with a Structure in callbacks or context switching.
+	2) It can be NULL or point to some User-allocated data. However, if it is not NULL, the Memory being pointed should be freed in the 'release' function.
+	3) The declaration is:
+		=> void *private_data;
 ---------------------------
 x. This Structure 'file' is not related to the 'FILE' Pointers in C-programs.
 	=> The 'FILE' is defined in the C-Library and these Pointers never appear in the Kernel programs.
