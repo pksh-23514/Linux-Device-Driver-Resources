@@ -176,14 +176,14 @@ Structure 'file':
 	2) It can be NULL or point to some User-allocated data. However, if it is not NULL, the Memory being pointed should be freed in the 'release' function.
 	3) The declaration is:
 		=> void *private_data;
-8. The field 'f_inode' is a declaration to store the metadata about a Device file (such as ownership, permissions, time-stamps).
+8. The field 'f_inode' is a declaration to store the meta-data about a Device file (such as ownership, permissions, time-stamps etc).
 	1) The 'f_inode' Pointer accesses the 'struct inode' associated with the opened Device file. However, it does not stores the file name or file contents.
 	2) It is very useful in the Device file manangement.
 	3) The declaration is:
 		=> struct inode *f_inode;
 9. The field 'f_flags' is a declaration to hold the various bitwise file flags of the Device.
 	1) The 'f_flags' variable store the flag values that indicate the state or access mode of the Device file.
-		=> Each bit in the variable can represent a different flag (such as O_RDONLY, O_WRONLY, O_RDWR).
+		=> Each bit in the variable can represent a different flag (such as O_RDONLY, O_WRONLY, O_RDWR etc).
 		=> They are often set or checked using the bitwise operations.
 	2) These flags are defined in the Header file <linux/fcntl.h>.
 	3) The declaration is:
@@ -209,3 +209,13 @@ Structure 'file':
 14. The 'struct file' is created by the Kernel on 'open' System-call and passed to all the functions operating on the Device file.
 15. After all the instances of the Device file are closed, the Kernel releases this Data Structure.
 16. Conventionally, the 'struct file' variable is called 'file'. The Pointer to the Structure is called 'filp' (file Pointer).
+
+Structure 'inode':
+******************
+1. The Structure Data-type 'inode' contains the meta-data to uniquely identify a file. The 'inode' is short form for 'index node'.
+2. It is defined in the Header file <linux/fs.h>.
+3. 
+---------------------------
+x. There can be numerous 'struct file' Structures representing multiple open descriptors for the same Device file i.e. the same file can be opened multiple times.
+x. However, all the 'struct file' Structures representing the same opened file points to the single 'struct inode' Structure.
+x. The unique thing about 'inode' is they contain the information about the Device file without having any information about the file name.
