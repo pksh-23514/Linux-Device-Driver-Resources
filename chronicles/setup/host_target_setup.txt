@@ -17,7 +17,7 @@ Download Toolchain on Host:
 1. To cross-compile the Linux Kernel or Applications or Kernel Modules to the ARM Cortex-Ax architecture, a Cross-Compiler is required.
 2. The Cross-Compiler can be downloaded from the link: https://releases.linaro.org/components/toolchain/binaries/
 3. Check the latest release for the Toolchain.
-4. The Target BeagleBone Black SoC is AM335x from TI which is based on ARM Cortex-A8 processor of 32-bit ARMv7 architecture.
+4. The Target BeagleBone Black SoC is AM335x from TI which is based on ARM Cortex-A8 Processor of 32-bit ARMv7 architecture.
 5. The Toolchain for the SoC is "arm-linux-gnueabihf". 
 6. For the 64-bit OS (uname -a), choose the version "gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabihf.tar.xz".
 
