@@ -304,4 +304,5 @@ union {
 ---------------------------
 x. There can be numerous 'struct file' Structures representing multiple open descriptors for the same Device file i.e. the same file can be opened multiple times.
 x. However, all the 'struct file' Structures representing the same opened file points to the single 'struct inode' Structure.
-x. The unique thing about 'inode' is they contain the information about the Device file without having any information about the file name.
+x. The unique thing about inode is they contain the information about the Device file without having any information about the file name.
+x. The inode is created and stored in the Memory as and when a new Device file is created.
