@@ -248,7 +248,7 @@ Structure 'inode':
 9. The field 'i_mapping' is a declaration that defines how the Device file I/O interacts with the Page-Cache and Memory-mapped I/O.
 	1) The 'i_mapping' Pointer allows the inode to be associated with Address space.
 		=> For R/W operations on a file, the Kernel checks the Page-Cache via 'i_mapping'.
-		=> The 'mmap' function uses 'i_mapping' to map the file's contents
+		=> The 'mmap' function uses 'i_mapping' to map the file's contents.
 	2) This is very crucial for the performance and Memory management.
 	3) The declaration is:
 		=> struct address_space *i_mapping;
@@ -281,6 +281,26 @@ Structure 'inode':
 		=> u32 i_atime_nsec;
 		=> u32 i_mtime_nsec;
 		=> u32 i_ctime_nsec;
+14. The field 'i_lock' is a declaration of a spinlock used for ensuring mutual exclusion in concurrent programming.
+	1) The 'i_lock' variable is used to protect critical sections that must not be interrupted or concurrently accessed.
+	2) This ensures that only one thread or Processor Core can execute the code between 'spin_lock()' and 'spin_unlock()' at a time.
+	3) The declaration is:
+		=> spinlock_t i_lock;
+15. The field 'i_state' is a declaration to track the current state of the inode using bitwise flags.
+	1) The 'i_state' variable is 32-bit wide and each bit represents a state flag.
+		=> The inode state bits are defined in the Header file <linux/fs.h>.
+	2) The declaration is:
+		=> u32 i_state;
+16. The field 'i_fop'
+17. The field 'i_flctx'
+18. The field 'i_data'
+19. The field
+union {
+		struct pipe_inode_info	*i_pipe;
+		struct cdev		*i_cdev;
+		char			*i_link;
+		unsigned		i_dir_seq;
+	};
 ---------------------------
 x. There can be numerous 'struct file' Structures representing multiple open descriptors for the same Device file i.e. the same file can be opened multiple times.
 x. However, all the 'struct file' Structures representing the same opened file points to the single 'struct inode' Structure.
