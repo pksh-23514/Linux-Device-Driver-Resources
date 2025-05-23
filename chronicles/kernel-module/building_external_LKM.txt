@@ -15,7 +15,7 @@ Build Syntax for External Module:
 	=> The 'make -C' is used to trigger the top-level Makefiles of the Linux Kernel Source. It utilizes the Compiler switches, the Dependency list and the Version string.
 	=> The top-level Makefile is directed to the local Makefile or to a local folder containing the Module source code by the 'M=<dir>' option.
 	=> The 'target' option can be included in the command for various Target options:
-		--> modules - The default target option for External Modules. It builds the Module located in the the Absolute Path of the Module directory.
+		--> modules - The default target option for External Modules. It builds the Module located in the the Absolute path of the Module directory.
 		--> modules_install - To install the external Module(s). The default location is "/lib/modules/<kernel_release>/extra".
 		--> clean - To remove all the generated files in the Module directory only.
 		--> help - To list the available 'targets' for the External Modules.
