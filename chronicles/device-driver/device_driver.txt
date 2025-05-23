@@ -71,7 +71,7 @@ User-mode Device Driver:
 ************************
 1. They execute in User-mode and manage the external Devices (such as Plug-and-Play Devices) that Users might connect.
 2. In Windows, they provide an interface between Win32 applications and Kernel-mode Drivers.
-3. They are majorly written to the disk for reducing the strain on the Machine resources.
+3. They are majorly written to the Disk for reducing the strain on the Machine resources.
 
 Character Device Driver:
 ************************
