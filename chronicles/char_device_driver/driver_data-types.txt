@@ -216,7 +216,7 @@ Structure 'inode':
 2. It is defined in the Header file <linux/fs.h>.
 3. The field 'i_mode' is a declaration to represent the file type and access permissions of an inode.
 	1) The 'i_mode' variable encodes the following:
-		=> The File type (regular file, directory, symbolic link, etc).
+		=> The File type (regular file, directory, symbolic link etc).
 		=> The Permissions (read / write / execute for User, Group, Others).
 	2) The declaration is:
 		=> umode_t i_mode;
@@ -235,6 +235,23 @@ Structure 'inode':
 	1) The 'i_flags' is typically used as a Bit-field to represent the multiple boolean options compactly.
 	2) The declaration is:
 		=> unsigned int i_flags;
+7. The field 'i_op' is a declaration to access the set of operations that can be performed on an inode.
+	1) The 'i_op' Pointer references to the 'struct inode_operations' Structure that define the operations.
+		=> The set of operations for an inode differ depending on the type of file (e.g., regular file, directory, symbolic link etc) and the file-system.
+	2) The declaration is:
+		=> const struct inode_operations *i_op;
+		---> The 'const' declaration indicates that the Structure pointed by 'i_op' should not be modified.
+8. The field 'i_sb' is a declaration that allows the inode to have access of the global information about the file-system where the inode belongs.
+	1) The 'i_sb' Pointer references to the 'struct super_block' Structure that contains the details of the superblock of the file-system.
+	2) The declaration is:
+		=> struct super_block *i_sb;
+9. The field 'i_mapping' is a declaration that defines how the Device file I/O interacts with the Page-Cache and Memory-mapped I/O.
+	1) The 'i_mapping' Pointer allows the inode to be associated with Address space.
+		=> For R/W operations on a file, the Kernel checks the Page-Cache via 'i_mapping'.
+		=> The 'mmap' function uses 'i_mapping' to map the file's contents
+	2) This is very crucial for the performance and Memory management.
+	3) The declaration is:
+		=> struct address_space *i_mapping;
 ---------------------------
 x. There can be numerous 'struct file' Structures representing multiple open descriptors for the same Device file i.e. the same file can be opened multiple times.
 x. However, all the 'struct file' Structures representing the same opened file points to the single 'struct inode' Structure.
