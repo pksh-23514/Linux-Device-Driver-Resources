@@ -188,7 +188,22 @@ Structure 'file':
 	2) These flags are defined in the Header file <linux/fcntl.h>.
 	3) The declaration is:
 		=> unsigned int f_flags;
----------------------------
+10. The field 'f_owner' is a declaration that is used for tracking the ownership information of the Device file descriptor.
+	1) The 'f_owner' Pointer accesses the Structure that allows the Kernel to know which process should receive the notifications related to the particular file descriptor.
+	2) The declaration is:
+		=> struct fown_struct *f_owner;
+11. The field 'f_path' is a declaration that is used for resolving the file paths.
+	1) The 'f_path' Structure contains the fields for 'dentry' (directory entry) and 'vfsmount' (VFS mount point).
+		=> It is used to identify a specific location in the VFS.
+	2) It is very useful in resolving file paths during file open operations, symbolic link resolutions etc.
+	3) The declaration is:
+		=> struct path f_path;
+12. The field 'f_pos' field is a declaration to represent the current Device file offset.
+	1) The 'f_pos' variable value is read by the Driver to know the current position in the Device file.
+		=> Only the R/W operations and the 'llseek' System-call are able to modify this variable.
+	2) The declaration is:
+		=> loff_t f_pos;
+
 x. This Structure 'file' is not related to the 'FILE' Pointers in C-programs.
 	=> The 'FILE' is defined in the C-Library and these Pointers never appear in the Kernel programs.
 	=> The 'struct file' is a Kernel Structure and it is never used in the User programs.
