@@ -249,9 +249,14 @@ Structure 'inode':
 		=> struct super_block *i_sb;
 9. The field 'i_mapping' is a declaration that defines how the Device file I/O interacts with the Page-Cache and Memory-mapped I/O.
 	1) The 'i_mapping' Pointer allows the inode to be associated with Address space.
+		=> It is a Pointer to the Structure 'address_space'. The Kernel uses 'i_mapping' as a general interface to the Address space of an inode.
+		=> It usually points to the Address space that should be used for Page-Cache operations related to the inode.
+		=> In most cases, the 'i_mapping' points to the inode’s own 'i_data' field. However, it can point elsewhere too (especially for special files).
+		=> It may point to a different Address space i.e. maybe one shared among multiple inodes or a special mapping.
+	2) It is useful for the operations:
 		=> For R/W operations on a file, the Kernel checks the Page-Cache via 'i_mapping'.
-		=> The 'mmap' function uses 'i_mapping' to map the file's contents.
-	2) This is very crucial for the performance and Memory management.
+		=> The 'mmap' function uses 'i_mapping' to determine how to map the file into Memory.
+		=> It also helps in managing the dirty Pages i.e. Pages that have been modified but not written back to the Disk.
 	3) The declaration is:
 		=> struct address_space *i_mapping;
 10. The field 'i_rdev' is a declaration that stores the actual Device number of the Device file.
@@ -295,7 +300,13 @@ Structure 'inode':
 		=> u32 i_state;
 16. The field 'i_fop'
 17. The field 'i_flctx'
-18. The field 'i_data'
+18. The field 'i_data' is a declaration that is an actual instance i.e. a Structure and not Pointer of 'struct address_space' embedded inside the inode Structure.
+	1) The 'i_data' Structure is the default Address space used for the inode.
+		=> Unlike the 'i_mapping' that can point to shared Address space, 'i_data' is the actual Address space.
+		=> Block Devices may use a shared Address space. Regular files use their own embedded 'i_data'.
+	2) It allows the inode to have its own Address space for managing Page-Cache and Memory mapping of the file that the inode represents.
+	3) The declaration is:
+		=> struct address_space i_data;
 19. The field
 union {
 		struct pipe_inode_info	*i_pipe;
