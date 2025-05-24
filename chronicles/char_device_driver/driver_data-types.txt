@@ -298,8 +298,16 @@ Structure 'inode':
 		=> The inode state bits are defined in the Header file <linux/fs.h>.
 	2) The declaration is:
 		=> u32 i_state;
-16. The field 'i_fop'
-17. The field 'i_flctx'
+16. The field 'i_fop' is a declaration that points to the file operation implementations for the Device file.
+	1) The 'i_fop' Pointer contains function pointers for performing file operations like open, read, write, release etc.
+	2) The declaration is:
+		=> const struct file_operations *i_fop;
+		---> The 'const' declaration indicates that the Structure pointed by 'i_fop' should not be modified.
+17. The field 'i_flctx' is a declaration to maintain lock-related information for a Device file.
+	1) The 'i_flctx' Pointer allows the file-system to manage the file locks (like POSIX locks or lease-based locks) associated with a file.
+		=> The actual file locking mechanism and meta-data are stored in the 'file_lock_context' Structure.
+	2) The declaration is:
+		=> struct file_lock_context *i_flctx;
 18. The field 'i_data' is a declaration that is an actual instance i.e. a Structure and not Pointer of 'struct address_space' embedded inside the inode Structure.
 	1) The 'i_data' Structure is the default Address space used for the inode.
 		=> Unlike the 'i_mapping' that can point to shared Address space, 'i_data' is the actual Address space.
