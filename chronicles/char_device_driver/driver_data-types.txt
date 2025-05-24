@@ -315,17 +315,14 @@ Structure 'inode':
 	2) It allows the inode to have its own Address space for managing Page-Cache and Memory mapping of the file that the inode represents.
 	3) The declaration is:
 		=> struct address_space i_data;
-19. The field
-union {
-		struct pipe_inode_info	*i_pipe;
-		struct cdev		*i_cdev;
-		char			*i_link;
-		unsigned		i_dir_seq;
-	};
----------------------------
-x. The inode is created and stored in the Memory as and when a new Device file is created.
-x. There can be numerous 'struct file' Structures representing multiple open descriptors for the same Device file i.e. the same file can be opened multiple times.
-x. However, all the 'struct file' Structures representing the same opened file points to the single 'struct inode' Structure.
-x. The unique thing about inode is they contain the information about the Device file without having any information about the file name.
-x. So, even if the file name is changed in the future, the inode number remains same. The inode number needs to be stored permanently, for the file-system to handle a file.
-x. Thus, the contents of the 'struct inode' are present as long as the file is not deleted. They are written on the Disk instead of being present only in the Kernel Memory.
+19. The field 'i_cdev' is a declaration that contains the Kernel's internal Structure to represent the Character Device.
+	1) The 'i_cdev' Pointer points to the 'struct cdev' Structure when the inode refers to a Character Device file.
+		=> It contains the meta-data and operations related to the Character Device.
+	2) The declaration is:
+		=> struct cdev *i_cdev;
+20. The inode is created and stored in the Memory as and when a new Device file is created.
+21. There can be numerous 'struct file' Structures representing multiple open descriptors for the same Device file i.e. the same file can be opened multiple times.
+22. However, all the 'struct file' Structures representing the same opened file points to the single 'struct inode' Structure.
+23. The unique thing about inode is they contain the information about the Device file without having any information about the file name.
+24. So, even if the file name is changed in the future, the inode number remains same. The inode number needs to be stored permanently, for the file-system to handle a file.
+25. Thus, the contents of the 'struct inode' are present as long as the file is not deleted. They are written on the Disk instead of being present only in the Kernel Memory.
