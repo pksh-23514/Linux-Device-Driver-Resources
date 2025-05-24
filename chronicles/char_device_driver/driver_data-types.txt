@@ -260,8 +260,13 @@ Structure 'inode':
 	3) The declaration is:
 		=> struct address_space *i_mapping;
 10. The field 'i_rdev' is a declaration that stores the actual Device number of the Device file.
-	1) The 'i_rdev' variable holds the Device number i.e. the combination of the Major and Minor numbers.
-	2) It is only meaningful when the inode represents a Device file.
+	1) The 'i_rdev' variable holds the Device number i.e. the combination of the Major and Minor numbers. It is only meaningful when the inode represents a Device file.
+	2) For the sake of portable programming, there are 2 inline functions to obtain the Major and Minor number from an inode.
+		=> static inline unsigned imajor(const struct inode *inode);
+		=> static inline unsigned iminor(const struct inode *inode);
+		---> These functions internally operate on the field 'i_rdev' to get the Device number from an inode.
+		--->  They are defined in the Header file <linux/fs.h>.
+		=> It is preferred to use these functions instead of reading the inode directly.
 	3) The declaration is:
 		=> dev_t i_rdev;
 11. The field 'i_size' is a declaration that represents the size of a file in bytes.
