@@ -81,17 +81,15 @@ Structure 'file_operations':
 		---> The 'struct vm_area_struct' argument is used to indicate the Virtual Address space where the Memory should be mapped by the Device.
 		---> When the 'mmap' is used to modify the files, it is crucial to synchronize (fsync/msync) the changes back to the file on Disk to ensure data persistence.
 	4) If this is NULL, the 'mmap' System-call returns Error (-ENODEV).
----------------------------
-11. The field 'open' is provided to contain the Driver function to perform the initial access of the Device along with initializations and setting up resources.
+11. The field 'open' is provided to contain the Driver function to perform any Device-specific opening logic.
 	1) When the User-space uses 'open' System-call on the Device file in "/dev", this function establishes connection to the Device file.
-	2) The Kernel VFS processes receives the 'open' System
-		=> The VFS performs the initialization of a Structure Data-type 'struct file' and links it to the corresponding Structure Data-type 'struct inode'.
-		=> The VFS then calls this 'open' function (pointing to the associated Driver 'open' implementation) to perform the opening on the Device.
-		=> On successful 'open', the VFS assigns a file descriptor and returns it to the User-space.
+		=> The Kernel resolves the file path and retrieves the associated inode and 'struct file_operations' Structure.
+		=> The VFS performs the initialization of a 'struct file' Structure and links it to the corresponding 'struct inode' Structure.
+		=> The VFS then calls this 'open' function to perform the opening on the Device.
+	2) On successful opening of the Device file, the VFS assigns a file descriptor and returns it to the User-space.
 	3) The 'open' function prototype is:
 		=> int (*open) (struct inode *, struct file *);
 	4) If this is NULL, the 'open' System-call always succeeds but the Driver isn’t notified.
----------------------------
 12. The field 'flush' is provided to contain the Driver function to perform the 'flushing' on the Device.
 	1) When the User-space uses 'close' System-call on the Device file in "/dev", this function handles the closing of the copy of the file descriptor wrt a process.
 	2) The Kernel invokes this function internally if it is implemented. It is called whenever a file descriptor is closed.
