@@ -83,17 +83,17 @@ Structure 'file_operations':
 	4) If this is NULL, the 'mmap' System-call returns Error (-ENODEV).
 11. The field 'open' is provided to contain the Driver function to perform any Device-specific opening logic.
 	1) When the User-space uses 'open' System-call on the Device file in "/dev", this function establishes connection to the Device file.
-		=> The Kernel resolves the file path and retrieves the associated inode and 'struct file_operations' Structure.
+		=> The Kernel resolves the file path and retrieves the associated inode.
 		=> The VFS performs the initialization of a 'struct file' Structure and links it to the corresponding 'struct inode' Structure.
-		=> The VFS then calls this 'open' function to perform the opening on the Device.
+		=> The VFS identifies the 'struct file_operations' Structure and then calls the Driver 'open' function to perform the opening on the Device.
 	2) On successful opening of the Device file, the VFS assigns a file descriptor and returns it to the User-space.
 	3) The 'open' function prototype is:
 		=> int (*open) (struct inode *, struct file *);
+		---> The return value if non-negative represents Success. The negative value represent Errors.
 	4) If this is NULL, the 'open' System-call always succeeds but the Driver isn’t notified.
 12. The field 'flush' is provided to contain the Driver function to perform the 'flushing' on the Device.
 	1) When the User-space uses 'close' System-call on the Device file in "/dev", this function handles the closing of the copy of the file descriptor wrt a process.
 	2) The Kernel invokes this function internally if it is implemented. It is called whenever a file descriptor is closed.
-		=> The order is: close(fd) ---> sys_close() ---> filp_close() ---> file_operations.flush
 		=> It's similar to 'release', but it’s guaranteed to be called once per file descriptor close.
 		=> It is used to flush any pending data, clean up resources, flush caches, or finalize I/O operations before a file descriptor is closed.
 		=> This is very rarely used in the Drivers.
@@ -102,9 +102,17 @@ Structure 'file_operations':
 		---> The 'fl_owner_t' argument identifies the owner of the file lock.
 		---> The return value if non-negative represents Success. The negative value represent Errors.
 	4) If this is NULL, the Kernel simply ignores the User-space 'close' System-call request.
----------------------------
-13. The field 'release' is provided to contain the Driver function
----------------------------
+13. The field 'release' is provided to contain the Driver function to perform any Device-specific closing logic.
+	1) When the User-space uses 'close' System-call on the Device file in "/dev", this function performs the closing of the Device file.
+	2) The Kernel invokes this function internally. It is called whenever a Device or when all the references to a file descriptor associated to the Device is closed.
+		=> When the reference count reaches zero i.e. there are no more Device file open, the Kernel calls the 'release' function.
+		=> It's the counterpart to the 'open' function, responsible for undoing any actions taken during the open operation and ensuring proper clean up of resources.
+		=> If the Device requires specific actions while closing (like releasing HW resources or stopping a process), the 'release' function does it.
+	3) The 'release' function prototype is:
+		=> int (*release) (struct inode *, struct file *);
+		---> The return value if non-negative represents Success. The negative value represent Errors.
+		---> The Kernel doesn't act on the return value i.e it is not used or propagated back to the User-space.
+	4) If this is NULL, the Kernel simply ignores the User-space 'close' System-call request.
 14. The field 'fsync' is provided to contain the Driver function to perform the flushing of the pending data to the Device.
 	1) When the User-space uses 'fsync'/'fdatasync' System-calls on the Device in "/dev", this function handles the back-end for flushing.
 	2) The Kernel invokes this function to flush the file data and/or the meta-data to the Device based on the System-call from the User-space.
