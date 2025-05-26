@@ -1,0 +1,45 @@
+Important File Operations for the scull:
+========================================
+
+open Function:
+**************
+1. The 'open' function is provided for a Driver to do any initialization in preparation for later operations.
+2. Generally, it performs the following tasks:
+	1) Check for the Device-specific errors such as 'device-not-ready' or 'similar hardware problems' etc.
+	2) Initialize the Device if it is being opened for the first time.
+	3) Identify the Minor number and update the 'f_op' Pointer, if necessary.
+	4) Allocate and fill any Data Structure to be put in the 'private_data' field.
+	5) Increment the Usage-count.
+3. The 'open' System-call flow is as follows:
+	1) The User-space executes 'open' call.
+	2) The glibc wrapper calls the 'syscall' wrapper.
+	3) The Kernel-space calls the System-call Handler 'sys_open' / 'sys_openat'.
+	4) The Handler calls the Kernel functions:
+		=> do_sys_open() / do_sys_openat2()
+			|
+			V
+		=> do_filp_open() ---> The 'struct file' is created.
+			|
+                        V
+		=> path_openat() ---> The core path resolution logic.
+			|
+                        V
+		=> do_open()
+			|
+                        V
+		=> vfs_open()
+			|
+                        V
+		=> do_dentry_open() ---> The 'struct file' fields are initialized and the field 'f_op' is initialized with the field 'i_fop'.
+			|
+                        V
+		=> chrdev_open() ---> The 'struct cdev' is retrieved based on the registered Device number and the field 'f_op' is initialized with the field 'ops'.
+			|
+                        V
+		=> filp->f_op->open() ---> The Driver's 'open' function is called.
+	5) The Kernel functions are defined in the following files:
+		=> <fs/open.c>
+		=> <fs/namei.c>
+		=> <fs/char_dev.c>
+4. The brief explanation of the operation is:
+	1) 
