@@ -37,9 +37,32 @@ open Function:
 			|
                         V
 		=> filp->f_op->open() ---> The Driver's 'open' function is called.
+			|
+			V
+		=> do_sys_open() / do_sys_openat2() ---> The 'fd' for the open file is returned to the User-space.
 	5) The Kernel functions are defined in the following files:
 		=> <fs/open.c>
 		=> <fs/namei.c>
 		=> <fs/char_dev.c>
-4. The brief explanation of the operation is:
-	1) 
+4. The brief explanation for the above flow is:
+	1) Whenever a Device file is created, the 'init_special_inode' is called to initialize the inode as follows:
+		=> The field 'i_fop' is initialized with a default file operation implementation based on the 'mode' argument i.e Char/Block/FIFO Device.
+		=> The field 'i_rdev' is initialized with the Device number 'rdev' argument of the newly created Device file.
+	2) The dummy default file operation for the Character Device is defined in the <fs/char_dev.c> file as follows:
+		=> const struct file_operations def_chr_fops = {
+			   .open = chrdev_open,
+			   .llseek = noop_llseek,
+		   };
+	3) The 'do_filp_open' function creates the 'file' Structure to represent the open Device file.
+	4) The 'do_dentry_open' function calls the default 'def_chr_fops' file operation which in turn calls the 'chrdev_open' open operation implementation.
+	5) The 'chrdev_open' function is executed as follows:
+		=> The field 'i_cdev' is NULL as 'init_special_inode' function doesn't initializes this field of the inode.
+		=> The 'kobj_lookup' function is used to find the 'kobj' field of the 'cdev' Structure for the Device using the Device number 'i_rdev' argument in the 'cdev_map'.
+		=> The 'container_of' Macro is used to retrieve a Pointer to the 'cdev' Structure using the 'kobj' field Pointer.
+		=> This 'cdev' Structure is the one that gets added in the 'cdev_add' function while registering the Device.
+		=> The 'i_cdev' field is then initialized with the 'cdev' Structure of the Device.
+		=> The 'fops' is then initialized with the 'cdev' Structure field 'ops'. This is the file operations that can be performed on the Device.
+		=> The 'replace_fops' function is used to replace the default file operations with the actual Driver file operations.
+		=> Then, the Driver 'open' function is called to execute the 'open' System-call.
+		=> Based on the return values from all the Kernel functions, the 'do_sys_openat2' function returns the file descriptor to the User-space.
+5. 
