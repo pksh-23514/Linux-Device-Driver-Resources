@@ -7,9 +7,11 @@ open Function:
 2. Generally, it performs the following tasks:
 	1) Check for the Device-specific errors such as 'device-not-ready' or 'similar hardware problems' etc.
 	2) Initialize the Device if it is being opened for the first time.
-	3) Identify the Minor number and update the 'f_op' Pointer, if necessary.
-	4) Allocate and fill any Data Structure to be put in the 'private_data' field.
-	5) Increment the Usage-count.
+	3) Check the permissions (O_RDONLY, O_WRONLY, O_RDWR etc) for the file being opened.
+	4) Identify the Minor number and update the 'f_op' Pointer, if necessary.
+	5) Allocate and fill any Data Structure to be put in the 'private_data' field.
+	6) Update the 'f_pos' field if necessary.
+	7) Increment the Usage-count.
 3. The 'open' System-call flow is as follows:
 	1) The User-space executes 'open' call.
 	2) The glibc wrapper calls the 'syscall' wrapper.
