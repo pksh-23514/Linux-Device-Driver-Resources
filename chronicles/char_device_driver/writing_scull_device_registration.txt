@@ -1,0 +1,14 @@
+Device Registration in the scull:
+=================================
+
+scull Structure:
+****************
+1. Internally, the scull represents each Device with a Structure Data-type 'struct scull_dev'.
+	=> struct scull_dev {
+		   struct scull_qset *data;	/* The Pointer to the first quantum set */
+		   int quantum;			/* The current quantum size */
+		   int qset;			/* The current array size */
+		   unsigned long size;		/* The amount of data stored here */
+		   struct semaphore sem;	/* The mutual exclusion Semaphore */
+		   struct cdev cdev;		/* The Char Device Structure */
+	   };
