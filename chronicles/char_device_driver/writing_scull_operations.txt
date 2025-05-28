@@ -10,7 +10,7 @@ open Function:
 	3) Check the permissions (O_RDONLY, O_WRONLY, O_RDWR etc) for the file being opened.
 	4) Identify the Minor number and update the 'f_op' Pointer, if necessary.
 	5) Allocate and fill any Data Structure to be put in the 'private_data' field.
-	6) Update the 'f_pos' field if necessary.
+	6) Update the 'f_pos' field, if necessary.
 	7) Increment the Usage-count.
 3. The 'open' System-call flow is as follows:
 	1) The User-space executes 'open' call.
@@ -67,4 +67,10 @@ open Function:
 		=> The 'replace_fops' function is used to replace the default file operations with the actual Driver file operations.
 		=> Then, the Driver 'open' function is called to execute the 'open' System-call.
 		=> Based on the return values from all the Kernel functions, the 'do_sys_openat2' function returns the file descriptor to the User-space.
-5. 
+5. The Minor number plays an important role in the Device being opened.
+	1) The Kernel doesn't use the Minor number of the Device, so the Driver can use it at will.
+	2) The different Minor numbers are used to access different Devices or to open the same Device in different ways.
+6. The Driver never knows the name of the Device being opened. It just knows the Device number.
+	1) The same Device can be provided new names by aliasing for convinience.
+	2) If there are 2 Device files with the same Device numbers, they cannot be differentiated.
+	3) The same effect can be obtained using a symbolic or hard link and the preferred way to implement aliasing is creating a symbolic link to the Device file.
