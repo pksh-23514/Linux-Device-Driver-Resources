@@ -84,3 +84,11 @@ open Function:
 	3) The 'container_of' Macro is used to return the Pointer to the required 'scull_dev' Structure.
 	=> dev = container_of(inode->i_cdev, struct scull_dev, cdev);
 	4) This 'dev' Pointer can then be stored in the 'private_data' field of the 'struct file' Structure.
+10. There is no particular Device handling for the scull when opened.
+	1) Specifically, there is no such action as 'initializing the Device on first open' because there is no count for the opening in the sculls.
+	2) The only real operation performed on the Device is truncating it to a length of 0 when the Device is opened for writing only.
+	3) It is performed because by design, overwriting a scull Device with a shorter file results in a shorter Device data area.
+	=> if ((filp->f_flags & O_ACCMODE) == O_WRONLY) {
+		   scull_trim(dev);
+	   }
+	4) There is no such operation required if the Device is opened for reading only.
