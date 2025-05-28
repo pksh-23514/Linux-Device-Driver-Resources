@@ -78,3 +78,9 @@ open Function:
 	=> int open(struct inode *inode, struct file *filp);
 	---> The return value if non-negative represents Success. The negative value represent Errors.
 8. The 'open' function can be left empty or not defined i.e. it is optional.
+9. The 'cdev' Structure (set up during the Char Device registration in scull) information is needed to identify the Device being opened.
+	1) This information is obtained from the 'i_cdev' field of the 'inode' Structure argument.
+	2) However, the the desired information here is not the 'cdev' Structure itself but the 'scull_dev' Structure containing it.
+	3) The 'container_of' Macro is used to return the Pointer to the required 'scull_dev' Structure.
+	=> dev = container_of(inode->i_cdev, struct scull_dev, cdev);
+	4) This 'dev' Pointer can then be stored in the 'private_data' field of the 'struct file' Structure.
