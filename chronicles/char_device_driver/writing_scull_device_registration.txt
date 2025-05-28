@@ -9,7 +9,7 @@ scull Structure:
 		   int quantum;			/* The current quantum size */
 		   int qset;			/* The current Array size */
 		   unsigned long size;		/* The amount of data stored here */
-		   struct semaphore sem;	/* The mutual exclusion Semaphore */
+		   struct mutex lock;		/* The Mutex lock */
 		   struct cdev cdev;		/* The Char Device Structure */
 	   };
 
