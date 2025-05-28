@@ -12,3 +12,11 @@ scull Structure:
 		   struct semaphore sem;	/* The mutual exclusion Semaphore */
 		   struct cdev cdev;		/* The Char Device Structure */
 	   };
+
+Char Device Registration Implementation:
+****************************************
+1. The 'cdev' Structure is embedded within the 'scull_dev' Structure.
+2. Therefore to initialize the 'cdev' Structure using the 'cdev_init' function, the 'scull_dev' Structure field shall be used.
+	=> cdev_init(&dev->cdev, &scull_fops);
+3. To register the 'cdev' Structure with the Kernel using the 'cdev_add' function, the same 'scull_dev' Structure field shall be used.
+	=> err = cdev_add(&dev->cdev, dev, 1);
