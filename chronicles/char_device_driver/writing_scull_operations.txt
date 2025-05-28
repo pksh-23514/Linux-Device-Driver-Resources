@@ -74,3 +74,7 @@ open Function:
 	1) The same Device can be provided new names by aliasing for convinience.
 	2) If there are 2 Device files with the same Device numbers, they cannot be differentiated.
 	3) The same effect can be obtained using a symbolic or hard link and the preferred way to implement aliasing is creating a symbolic link to the Device file.
+7. The 'open' function prototype is:
+	=> int open(struct inode *inode, struct file *filp);
+	---> The return value if non-negative represents Success. The negative value represent Errors.
+8. The 'open' function can be left empty or not defined i.e. it is optional.
