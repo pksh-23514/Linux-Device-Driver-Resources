@@ -100,9 +100,32 @@ release Function:
 	1) Deallocate any Data Structure that is allocated in the 'private_data' field.
 	2) Shut down the Device on last 'close' System-call on the Device file.
 3. The Kernel keeps a counter of the number of times a 'struct file' Structure is being used.
-	=> Every time a file descriptor is duplicated using the 'dup' and 'fork' System-calls, the counter is incremented.
-	=> When a file descriptor is closed, the counter is decremented.
-	=> When the counter reaches 0, the 'struct file' Structure is freed from the Memory using the 'release' function.
-	=> Therefore, not every 'close' System-call invokes the 'release' function.
-	=> The 'release' function is called when all the refrences to an opened file is closed.
-	=> The 'f_ref' field of the 'struct file' Structure is used to handle reference counting.
+	1) Every time a file descriptor is duplicated using the 'dup' and 'fork' System-calls, the counter is incremented.
+	2) When a file descriptor is closed, the counter is decremented.
+	3) When the counter reaches 0, the 'struct file' Structure is freed from the Memory using the 'release' function.
+	4) Therefore, not every 'close' System-call invokes the 'release' function.
+	5) The 'release' function is called when all the refrences to an opened file is closed.
+	6) The 'f_ref' field of the 'struct file' Structure is used to handle reference counting.
+4. The 'close' System-call flow is as follows:
+	1) The User-space executes 'open' call.
+	2) The glibc wrapper calls the 'syscall' wrapper.
+	3) The Kernel-space calls the System-call Handler 'sys_close'.
+	4) 4) The Handler calls the Kernel functions:
+		=> file_close_fd() ---> The 'struct file' is retrieved.
+			|
+			V
+		=> filp_flush()
+			|
+			V
+		=> fput_close_sync() ---> The logic to synchronously close and release the 'struct file'.
+			|
+			V
+		=> __fput() ---> The last reference of the 'struct file' is released.
+			|
+			V
+		=> filp->f_op->release() ---> The Driver's 'release' function is called.
+	5) The Kernel functions are defined in the following files:
+		=> <fs/file_table.c>
+		=> <fs/open.c>
+		=> <fs/file.c>
+		=> <include/linux/file_ref.h>
