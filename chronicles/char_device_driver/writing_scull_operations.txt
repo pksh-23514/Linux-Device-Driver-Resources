@@ -92,3 +92,17 @@ open Function:
 		   scull_trim(dev);
 	   }
 	4) There is no such operation required if the Device is opened for reading only.
+
+release Function:
+*****************
+1. The 'release' function is provided for a Driver to reverse the operations done in 'open' function.
+2. Generally, it performs the following tasks:
+	1) Deallocate any Data Structure that is allocated in the 'private_data' field.
+	2) Shut down the Device on last 'close' System-call on the Device file.
+3. The Kernel keeps a counter of the number of times a 'struct file' Structure is being used.
+	=> Every time a file descriptor is duplicated using the 'dup' and 'fork' System-calls, the counter is incremented.
+	=> When a file descriptor is closed, the counter is decremented.
+	=> When the counter reaches 0, the 'struct file' Structure is freed from the Memory using the 'release' function.
+	=> Therefore, not every 'close' System-call invokes the 'release' function.
+	=> The 'release' function is called when all the refrences to an opened file is closed.
+	=> The 'f_ref' field of the 'struct file' Structure is used to handle reference counting.
