@@ -129,3 +129,10 @@ release Function:
 		=> <fs/open.c>
 		=> <fs/file.c>
 		=> <include/linux/file_ref.h>
+5. The 'flush' function is called everytime a 'close' System-call is executed in the User-space. However, rarely the 'flush' function is implemented in the Drivers.
+	=> The reason being there is nothing to be performed at the 'close' call unless the 'release' or the last 'close' is executed.
+6. Even if the 'close' System-call is not called by the User-space, the Kernel automatically calls it internally during the exit time.
+7. The 'release' function prototype is:
+	=> int release(struct inode *inode, struct file *filp);
+	---> The return value if non-negative represents Success. The negative value represent Errors.
+8. There is no particular Device handling for the scull when released.
