@@ -160,4 +160,19 @@ read Function:
 		=> copy_to_user() ---> The number of bytes read are returned to the User-space.
 	5) The Kernel functions are defined in the following files:
 		=> <fs/read_write.c>
-		=> <linux/uaccess.h>
+		=> <include/linux/uaccess.h>
+4. The 'read' function writes the data to the User-space Buffer. Therefore, it cannot be directly de-referenced in the Kernel-space.
+	1) Depending on the architecture the Driver is running and how the Kernel is configured, the User-space Pointer may be invalid in the Kernel-space.
+	2) The User-space Memory is paged. So, attempting to reference it directly from the Kernel-space may generate a Page-fault.
+	3) The Pointer supplied by the User-space could possibly be buggy or malicious. This could compromise the security of the Kernel.
+5. Obviously, the Driver must be able to access the User-space Buffer in order to get the job done. It is done with the help of special Kernel function.
+	1) The 'copy_to_user' function is used to handle the data copy from the Kernel-space to the User-space safely.
+		=> It validates the User-space Pointer. If it finds the Pointer invalid, no data copy is performed.
+		=> If an invalid Address is encountered in between, it halts the data copy.
+	2) The 'copy_to_user' function prototype is:
+		=> static __always_inline unsigned long __must_check copy_to_user(void __user *to, const void *from, unsigned long n);
+		---> The return value 0 represents Success. Any other value represents Errors.
+		---> Typically, the non-zero return value is the amount of data still to be copied.
+	3) It is defined in the Header file <linux/uaccess.h>.
+6. After a successful 'read' System-call, the current file position must be updated by the amount of data read by the Driver.
+	1) The Kernel propogates the updated file position to the 'struct file' Structure field in the 'ksys_read' function.
