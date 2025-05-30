@@ -204,19 +204,24 @@ Structure 'file':
 	2) It is very useful in resolving file paths during file open operations, symbolic link resolutions etc.
 	3) The declaration is:
 		=> struct path f_path;
-12. The field 'f_pos' field is a declaration to represent the current Device file offset.
+12. The field 'f_pos' is a declaration to represent the current Device file offset.
 	1) The 'f_pos' variable value is read by the Driver to know the current position in the Device file.
 		=> Only the R/W operations and the 'llseek' System-call are able to modify this variable.
 	2) The declaration is:
 		=> loff_t f_pos;
-13. This Structure 'file' is not related to the 'FILE' Pointers in C-programs.
+13. The field 'f_ref' is a declaration to represent the internal reference counting mechanism for 'struct file' Structures.
+	1) The 'f_ref' Structure contains the field 'refcnt' which is used by the Kernel for tracking whether it can safely free the resources.
+		=> The 'file_ref_t' Structure Typedef is defined in the Header file <linux/file_ref.h>.
+	2) The declaration is:
+		=> file_ref_t f_ref;
+14. This Structure 'file' is not related to the 'FILE' Pointers in C-programs.
 	=> The 'FILE' is defined in the C-Library and these Pointers never appear in the Kernel programs.
 	=> The 'struct file' is a Kernel Structure and it is never used in the User programs.
-14. The 'struct file' is created by the Kernel on 'open' System-call and passed to all the functions operating on the Device file.
-15. Therefore, if a file is opened multiple times, multiple 'struct file' Structures are created in the Memory i.e. one for each time the file is opened.
-16. After all the instances of the Device file are closed, the Kernel releases this Data Structure. They are never stored permanently.
-17. Thus, the contents of the 'struct file' are only present in the Kernel Memory during the time, the file is open. They are never written back to the Disk.
-18. Conventionally, the 'struct file' variable is called 'file'. The Pointer to the Structure is called 'filp' (file Pointer).
+15. The 'struct file' is created by the Kernel on 'open' System-call and passed to all the functions operating on the Device file.
+16. Therefore, if a file is opened multiple times, multiple 'struct file' Structures are created in the Memory i.e. one for each time the file is opened.
+17. After all the instances of the Device file are closed, the Kernel releases this Data Structure. They are never stored permanently.
+18. Thus, the contents of the 'struct file' are only present in the Kernel Memory during the time, the file is open. They are never written back to the Disk.
+19. Conventionally, the 'struct file' variable is called 'file'. The Pointer to the Structure is called 'filp' (file Pointer).
 
 Structure 'inode':
 ******************
