@@ -7,3 +7,43 @@ Device in scull:
 2. This Memory allocation technique is limited to scull only. Also, it is very different from the actual HW management in the real Device Drivers.
 3. The region of Memory used by scull is called as Device. It is variable in length.
 4. The more data is written to the Device, it is grown bigger. Similarly, the trimming is performed by over-writing this Device with a shorter file.
+
+kmalloc and kfree Functions:
+****************************
+1. The 'kmalloc' function is a Memory allocation function used in the Kernel (within Kernel's Memory management system).
+2. The 'kmalloc' function prototype is:
+	=> void *kmalloc(size_t size, int flags);
+	---> The 'size' argument denotes the number of bytes to be allocated.
+	---> The 'flags' argument denotes how the Memory should be allocated. They are also called as GFP flags i.e. General Function Purpose flags.
+	---> The return value is a Pointer to the allocated Memory on Success. Otherwise, it returns NULL on Error.
+3. The GFP flags are defined in the Header file <linux/gfp_types.h>.
+	=> #define GFP_ATOMIC	(__GFP_HIGH|__GFP_KSWAPD_RECLAIM)
+	=> #define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+	=> #define GFP_KERNEL_ACCOUNT (GFP_KERNEL | __GFP_ACCOUNT)
+	=> #define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM | __GFP_NOWARN)
+	=> #define GFP_NOIO	(__GFP_RECLAIM)
+	=> #define GFP_NOFS	(__GFP_RECLAIM | __GFP_IO)
+	=> #define GFP_USER	(__GFP_RECLAIM | __GFP_IO | __GFP_FS | __GFP_HARDWALL)
+	=> #define GFP_DMA		__GFP_DMA
+	=> #define GFP_DMA32	__GFP_DMA32
+	=> #define GFP_HIGHUSER	(GFP_USER | __GFP_HIGHMEM)
+	=> #define GFP_HIGHUSER_MOVABLE	(GFP_HIGHUSER | __GFP_MOVABLE | __GFP_SKIP_KASAN)
+	=> #define GFP_TRANSHUGE_LIGHT	((GFP_HIGHUSER_MOVABLE | __GFP_COMP | \
+				   __GFP_NOMEMALLOC | __GFP_NOWARN) & ~__GFP_RECLAIM)
+	=> #define GFP_TRANSHUGE	(GFP_TRANSHUGE_LIGHT | __GFP_DIRECT_RECLAIM)
+4. The 'kmalloc' function is not the most efficient way to allocate large Memory areas. However, it is easy for depicting the R/W operations in scull.
+	1) So, the scull uses 'kmalloc' function without resorting to allocation of whole Pages which is a more efficient way.
+	2) The 'kmalloc' function is generally preferred for allocations (less than 128 kB).
+	3) On the flip side, the Device area should not be limited for a practical use.
+		=> Practically, the scull can be used to temporarily eat up the system’s Memory in order to run tests under low-Memory conditions.
+5. The 'kfree' function is Memory releasing function for previously allocated Memory in the Kernel (within Kernel's Memory management system).
+6. The 'kfree' function prototype is:
+	=> void kfree(void *ptr);
+	---> The 'ptr' is the Pointer to the Memory block to be released back to the Kernel Memory allocator. It is legal to pass a NULL Pointer to 'kfree'.
+	---> There is no return value.
+	---> If the 'ptr' is NULL, the 'kfree' function does nothing.
+7. The Pointer passed to the 'kfree' function must be returned from the 'kmalloc' function.
+	1) Using the 'kfree' function on a Pointer that was not allocated by Kernel Memory allocation routines lead to Kernel crashes.
+	2) Using the 'kfree' function on a Pointer that has already been freed can also result in undefined behavior or Kernel crashes.
+8. They are defined in the Header file <linux/slab.h>.
+9. For the scull implementation, the GFP_KERNEL flag is used in 'kmalloc' function and the allocated Memory should be freed with the 'kfree' function.
