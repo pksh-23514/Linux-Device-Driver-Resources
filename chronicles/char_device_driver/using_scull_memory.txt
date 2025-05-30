@@ -1,0 +1,9 @@
+Memory Usage in the scull:
+==========================
+
+Device in scull:
+****************
+1. Before implementing the 'read' and 'write' functions for the scull, it is important to understand how the scull performs Memory allocation.
+2. This Memory allocation technique is limited to scull only. Also, it is very different from the actual HW management in the real Device Drivers.
+3. The region of Memory used by scull is called as Device. It is variable in length.
+4. The more data is written to the Device, it is grown bigger. Similarly, the trimming is performed by over-writing this Device with a shorter file.
