@@ -143,3 +143,21 @@ read Function:
 2. Generally, it performs the following tasks:
 	1) Access the Device data i.e. data from the Buffer or Memory on the Device.
 	2) Copy this data to the User-space Buffer with a return value depicting the number of bytes read.
+3. The 'read' System-call flow is as follows:
+	1) The User-space executes 'read' call.
+	2) The glibc wrapper calls the 'syscall' wrapper.
+	3) The Kernel-space calls the System-call Handler 'sys_read'.
+	4) The Handler calls the Kernel functions:
+		=> ksys_read() ---> The 'struct file' is retrieved.
+			|
+			V
+		=> vfs_read() ---> The 'struct file' validation logic.
+			|
+			V
+		=> filp->f_op->read() ---> The Driver's 'read' function is called.
+			|
+			V
+		=> copy_to_user() ---> The number of bytes read are returned to the User-space.
+	5) The Kernel functions are defined in the following files:
+		=> <fs/read_write.c>
+		=> <linux/uaccess.h>
