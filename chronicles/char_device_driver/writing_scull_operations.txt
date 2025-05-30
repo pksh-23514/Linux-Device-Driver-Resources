@@ -136,3 +136,10 @@ release Function:
 	=> int release(struct inode *inode, struct file *filp);
 	---> The return value if non-negative represents Success. The negative value represent Errors.
 8. There is no particular Device handling for the scull when released.
+
+read Function:
+**************
+1. The 'read' function is provided for a Driver to handle the read requests from the User-space i.e. to read the data from the Device.
+2. Generally, it performs the following tasks:
+	1) Access the Device data i.e. data from the Buffer or Memory on the Device.
+	2) Copy this data to the User-space Buffer with a return value depicting the number of bytes read.
