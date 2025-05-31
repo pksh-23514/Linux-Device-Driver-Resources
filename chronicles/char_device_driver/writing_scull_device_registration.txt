@@ -28,7 +28,7 @@ scull Structure:
 		   +------------+
 		   | scull_qset | ---> next ---> [scull_qset] ---> ... --->
 		   |------------|
-		   |     data --|----> | ptr | ptr | ptr | ...
+		   |    data  --|----> | ptr | ptr | ptr | ...
 		   +------------+
 
 Char Device Registration Implementation:
