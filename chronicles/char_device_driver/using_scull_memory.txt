@@ -108,3 +108,23 @@ Address Calculation logic:
 	=> rest = 5,400,000 % 4,000,000 = 1,400,000	---> This means how far into the 'qset[1]' the 'f_pos' points.
 	=> s_pos = 1,400,000 / 4000 = 350		---> This means the 'f_pos' points to the 'quantum[350]'.
 	=> q_pos = 1,400,000 % 4000 = 0			---> This means the 'f_pos' points to the starting of the 'quantum[350]'.
+
+Advantages of this Memory Organization:
+***************************************
+1. This logic ensures:
+	1) The scull doesn’t need a large contiguous Buffer.
+	2) The Memory can be navigated with a simple 3-step calculation.
+	3) It can be dynamically grown as more data is written.
+
+Implementation in the various File Operations:
+**********************************************
+1. The steps for 'write' function are:
+	1) Determine the file position in the Device (via 'f_pos').
+	2) Allocate the 'scull_qset' Structures as needed.
+	3) Allocate the 'quantum' blocks as needed.
+	4) Copy the data from User-space into the allocated 'quantum'.
+2. The steps for 'read' function are:
+	1) Map the file position to the appropriate 'quantum' (via 'f_pos').
+	2) Read the data from the Memory and copy it to the User-space.
+3. The steps for the 'scull_cleanup_module' function which invokes the 'scull_trim' function are:
+	1) All the allocated Memory (the 'quantum's and the 'qset's) is freed when the Module is unloaded or the Device is released.
