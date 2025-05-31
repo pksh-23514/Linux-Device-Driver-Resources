@@ -12,6 +12,24 @@ scull Structure:
 		   struct mutex lock;		/* The Mutex lock */
 		   struct cdev cdev;		/* The Char Device Structure */
 	   };
+2. The 'struct scull_qset' Structure Data-type is represented as:
+	=> struct scull_qset {
+		   void **data;
+		   struct scull_qset *next;
+	   };
+	---> The 'data' is a Pointer to an Array of Pointers that point to the Memory areas i.e. 'quantum'.
+	---> The size of 'data' Pointer i.e. number of Pointers is defined by the field 'qset' in the 'scull_dev' Structure.
+	---> Each Pointer in 'data[]' points to a Memory area of size defined by the field 'quantum' in the 'scull_dev' Structure.
+	---> The 'next' is a Pointer to the next 'scull_qset' Structure allowing the creation of the Linked-List of Quantum Sets.
+	---> The visual representation is:
+		=> scull_dev
+			|
+			V
+		   +------------+
+		   | scull_qset | ---> next ---> [scull_qset] ---> ... --->
+		   |------------|
+		   |     data --|----> | ptr | ptr | ptr | ...
+		   +------------+
 
 Char Device Registration Implementation:
 ****************************************
