@@ -76,3 +76,15 @@ Memory Organization in scull:
 		.	      .		    .
 	   [quantum_999] [quantum_999] [quantum_999]
 5. After one Quantum Set is fully occupied, a new Quantum Set is dynamically allocated and linked to the previous Quantum Set.
+
+Memory Footprint:
+*****************
+1. The Memory usage depends on the following:
+	1) The size of the data written to the Device.
+	2) The Quantum and Quantum Set configuration.
+	3) Fragmentation (since not all the Quantums are necessarily fully used).
+2. Let us take an example where a data of 10 million bytes are to be written to the Device.
+	=> quantum = 4000 bytes
+	=> qset = 1000 (each qset can point to 1000 quantums)
+	=> Each qset can store: 4000 * 1000 = 4 million bytes
+	=> So 10 million bytes will require: 3 qsets i.e. 2 full qsets and 1 partially filled qset.
