@@ -47,3 +47,32 @@ kmalloc and kfree Functions:
 	2) Using the 'kfree' function on a Pointer that has already been freed can also result in undefined behavior or Kernel crashes.
 8. They are defined in the Header file <linux/slab.h>.
 9. For the scull implementation, the GFP_KERNEL flag is used in 'kmalloc' function and the allocated Memory should be freed with the 'kfree' function.
+
+Memory Organization in scull:
+*****************************
+1. The scull uses a 2-level Memory structure:
+	1) Quantum - It is a small fixed-size block of Memory which is a basic data unit in the scull's Memory layout.
+	2) Quantum Set - It is a Structure that contains an Array of Pointers to the Quantums. It also has a Pointer to the next Quantum Set.
+2. Each Quantum holds the data like a Page or mini-Buffer. The Quantum Set is like a Page table entry to tell where the Quantum is present.
+3. The size of each Quantum is typically 4000 bytes and the Array size i.e. number of Quantum Pointers is typically 1000.
+	1) Both the parameters are set by the scull in the 'scull_dev' Structure.
+	2) It implies that each Quantum Set can point to 1000 Quantums and each Quantum is of the size 4000 bytes.
+	3) Therefore, one Quantum Set takes up: 4000 * 1000 = 4 million bytes
+4. The Memory representation in the scull can be visualized as:
+	=> scull_dev
+		|
+		V
+	   [qset_0] ---> [qset_1] ---> [qset_2] ---> ... ---> NULL
+		|	      |		    |
+		V	      V             V
+	   1000 Quantums 1000 Quantums 1000 Quantums
+	     [*data]	   [*data]	 [*data]
+		|	      |		    |
+		V	      V		    V
+	   [quantum_0]	 [quantum_0]   [quantum_0]
+	   [quantum_1]	 [quantum_1]   [quantum_1]
+		.	      .		    .
+		.	      .		    .
+		.	      .		    .
+	   [quantum_999] [quantum_999] [quantum_999]
+5. After one Quantum Set is fully occupied, a new Quantum Set is dynamically allocated and linked to the previous Quantum Set.
