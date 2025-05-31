@@ -54,6 +54,8 @@ Memory Organization in scull:
 	1) Quantum - It is a small fixed-size block of Memory which is a basic data unit in the scull's Memory layout.
 	2) Quantum Set - It is a Structure that contains an Array of Pointers to the Quantums. It also has a Pointer to the next Quantum Set.
 2. Each Quantum holds the data like a Page or mini-Buffer. The Quantum Set is like a Page table entry to tell where the Quantum is present.
+	1) This is very similar to a 2-dimensional Array but it is implemented dynamically using Linked-Lists.
+	2) The new Memory is allocated on-demand i.e. only when a data is written.
 3. The size of each Quantum is typically 4000 bytes and the Array size i.e. number of Quantum Pointers is typically 1000.
 	1) Both the parameters are set by the scull in the 'scull_dev' Structure.
 	2) It implies that each Quantum Set can point to 1000 Quantums and each Quantum is of the size 4000 bytes.
@@ -88,3 +90,21 @@ Memory Footprint:
 	=> qset = 1000 (each qset can point to 1000 quantums)
 	=> Each qset can store: 4000 * 1000 = 4 million bytes
 	=> So 10 million bytes will require: 3 qsets i.e. 2 full qsets and 1 partially filled qset.
+
+Address Calculation logic:
+**************************
+1. In file operations, the scull maps the file position to the correct Memory locations using the logic as below:
+	=> int itemsize = quantum * qset;	// The size of Memory in the qset.
+	=> item = (long)*f_pos / itemsize;	// The correct qset in the Linked-List.
+	=> rest = (long)*f_pos % itemsize;	// How far in this correct qset.
+	=> s_pos = rest / quantum;		// The correct quantum in the qset.
+	=> q_pos = rest % quantum;		// The byte position inside the quantum.
+2. Let us take an example where:
+	=> f_pos = 5,400,000 (bytes into the Device)
+	=> quantum = 4000 bytes
+	=> qset = 1000
+	=> itemsize = 4,000,000
+	=> item = 5,400,000 / 4,000,000 = 1		---> This means the 'f_pos' is in the 'qset[1].
+	=> rest = 5,400,000 % 4,000,000 = 1,400,000	---> This means how far into the 'qset[1]' the 'f_pos' points.
+	=> s_pos = 1,400,000 / 4000 = 350		---> This means the 'f_pos' points to the 'quantum[350]'.
+	=> q_pos = 1,400,000 % 4000 = 0			---> This means the 'f_pos' points to the starting of the 'quantum[350]'.
