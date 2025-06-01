@@ -222,3 +222,21 @@ write Function:
 2. Generally, it performs the following tasks:
 	1) Copy the data from the User-space to the Kernel-space and process it based on the Device logic.
 	2) Send the data to the Device and return a value depicting the number of bytes written.
+3. The 'write' System-call flow is as follows:
+	1) The User-space executes 'write' call.
+	2) The glibc wrapper calls the 'syscall' wrapper.
+	3) The Kernel-space calls the System-call Handler 'sys_write'.
+	4) The Handler calls the Kernel functions:
+		=> ksys_write() ---> The 'struct file' is retrieved.
+			|
+			V
+		=> vfs_write() ---> The 'struct file' validation logic.
+			|
+			V
+		=> filp->f_op->write() ---> The Driver's 'write' function is called.
+			|
+			V
+		=> copy_from_user() ---> The number of bytes written are returned to the User-space.
+	5) The Kernel functions are defined in the following files:
+		=> <fs/read_write.c>
+		=> <include/linux/uaccess.h>
