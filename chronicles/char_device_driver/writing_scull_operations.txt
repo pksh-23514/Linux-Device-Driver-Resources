@@ -142,7 +142,7 @@ read Function:
 1. The 'read' function is provided for a Driver to handle the read requests from the User-space i.e. to read the data from the Device.
 2. Generally, it performs the following tasks:
 	1) Access the Device data i.e. data from the Buffer or Memory on the Device.
-	2) Copy this data to the User-space Buffer with a return value depicting the number of bytes read.
+	2) Copy this data from the Kernel-space to the User-space Buffer with a return value depicting the number of bytes read.
 3. The 'read' System-call flow is as follows:
 	1) The User-space executes 'read' call.
 	2) The glibc wrapper calls the 'syscall' wrapper.
@@ -215,3 +215,10 @@ read Function:
 	   *f_pos += count;
 15. The scull finally returns the number of bytes read after the read operation.
 	=> retval = count;
+
+write Function:
+***************
+1. The 'write' function is provided for a Driver to handle the write requests from the User-space i.e. to write the data on the Device.
+2. Generally, it performs the following tasks:
+	1) Copy the data from the User-space to the Kernel-space and process it based on the Device logic.
+	2) Send the data to the Device and return a value depicting the number of bytes written.
