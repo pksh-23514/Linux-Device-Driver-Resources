@@ -255,3 +255,11 @@ write Function:
 	3) It is defined in the Header file <linux/uaccess.h>.
 6. After a successful 'write' System-call, the current file position must be updated by the amount of data written by the Driver.
 	1) The Kernel propogates the updated file position to the 'struct file' Structure field in the 'ksys_write' function.
+7. The 'write' function prototype is:
+	=> ssize_t write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos);
+	---> The 'buf' is the User-space Buffer, 'count' is the bytes to be written and the 'f_pos' is the current file position from which the write Operations is executed.
+	---> The return value is interpreted as follows:
+		=> If the value is equal to the 'count' argument passed, the requested number of bytes is transferred.
+		=> If the value is less than the 'count' argument passed, only a part of the data requested is transferred.
+		=> If the value is 0, EOF is reached i.e. no data can be transferred.
+		=> If the value is negative, there is an Error.
