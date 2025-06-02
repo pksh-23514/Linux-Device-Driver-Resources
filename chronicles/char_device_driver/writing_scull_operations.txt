@@ -213,7 +213,7 @@ read Function:
 		   goto out;
 	   }
 	   *f_pos += count;
-15. The scull finally returns the number of bytes read after the read operation.
+15. The scull finally returns the number of bytes read after the 'read' operation.
 	=> retval = count;
 
 write Function:
@@ -263,3 +263,38 @@ write Function:
 		=> If the value is less than the 'count' argument passed, only a part of the data requested is transferred.
 		=> If the value is 0, EOF is reached i.e. no data can be transferred.
 		=> If the value is negative, there is an Error.
+8.Each invocation of scull 'write' call deals with a single data quantum only, without implementing a loop to gather all the data.
+	1) If there is a request for more data, the 'write' call is reiterated.
+9. The scull must be able to find calculate the position within the Device: the correct 'qset', how far in the 'qset' and the correct 'quantum' byte position in the 'qset'.
+	=> int itemsize = quantum * qset;
+	=> item = (long)*f_pos / itemsize;
+	=> rest = (long)*f_pos % itemsize;
+	=> s_pos = rest / quantum;
+	=> q_pos = rest % quantum;
+10. The scull then traverses the Linked-List to the correct 'qset' based on the above calculations.
+	=> dptr = scull_follow(dev, item);
+11. The scull then allocates the Memory for the 'qset', if it is not allocated already.
+	=> if (!dptr->data) {
+		   dptr->data = kmalloc(qset * sizeof(char *), GFP_KERNEL);
+		   if (!dptr->data)
+			   return 0;
+		   memset(dptr->data, 0, qset * sizeof(char *));
+	   }
+12. The scull then allocates the Memory for the 'quantum', if it is not allocated already.
+	=> if (!dptr->data[s_pos]) {
+		   dptr->data[s_pos] = kmalloc(quantum, GFP_KERNEL);
+		   if (!dptr->data[s_pos])
+			   return 0;
+13. The scull limits the reading to the end of the 'quantum' only by adjusting the 'count'.
+	=> if (count > quantum - q_pos)
+		   count = quantum - q_pos;
+14. The scull performs the transfer of data from the User-space to the Kernel-space and updates the current file position after the write operation.
+	=> if (copy_from_user(dptr->data[s_pos]+q_pos, buf, count)) {
+		   retval = -EFAULT;
+		   goto out;
+	   }
+	   *f_pos += count;
+15. The scull finally returns the number of bytes written after the 'write' operation and updates the size of the data stored on the Device.
+	=> retval = count;
+	=> if (dev->size < *f_pos)
+		   dev->size = *f_pos;
