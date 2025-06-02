@@ -298,3 +298,10 @@ write Function:
 	=> retval = count;
 	=> if (dev->size < *f_pos)
 		   dev->size = *f_pos;
+
+llseek Function:
+****************
+1. The 'llseek' function is provided for a Driver to update the file position based on a given offset and a reference point.
+2. Generally, it performs the following tasks:
+	1) Interprets the offset value and the reference point to adjust the file position in the 'struct file' Structure.
+	2) Performs the boundary checks to ensure the new file position is valid.
