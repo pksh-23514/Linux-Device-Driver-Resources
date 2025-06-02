@@ -305,3 +305,17 @@ llseek Function:
 2. Generally, it performs the following tasks:
 	1) Interprets the offset value and the reference point to adjust the file position in the 'struct file' Structure.
 	2) Performs the boundary checks to ensure the new file position is valid.
+3. The 'lseek' System-call flow is as follows:
+	1) The User-space executes 'write' call.
+	2) The glibc wrapper calls the 'syscall' wrapper.
+	3) The Kernel-space calls the System-call Handler 'sys_lseek'.
+	4) The Handler calls the Kernel functions:
+		=> ksys_lseek() ---> The 'struct file' is retrieved and the refrence point is validated.
+			|
+			V
+		=> vfs_llseek()
+			|
+			V
+		=> filp->f_op->llseek() ---> The Driver's 'llseek' function is called.
+	5) The Kernel functions are defined in the following file:
+		=> <fs/read_write.c>
