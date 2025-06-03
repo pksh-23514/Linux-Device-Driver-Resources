@@ -319,3 +319,9 @@ llseek Function:
 		=> filp->f_op->llseek() ---> The Driver's 'llseek' function is called.
 	5) The Kernel functions are defined in the following file:
 		=> <fs/read_write.c>
+4. After a successful 'lseek' System-call, the new file position must be returned to the User-space.
+	1) The scull must update the new file position to the 'struct file' Structure field in the 'llseek' function.
+5. The 'llseek' function prototype is:
+	=> loff_t llseek(struct file *filp, loff_t off, int whence);
+	---> The 'off' is the offset to seek to and 'whence' is to indicate how the offset is to be interpreted (SEEK_SET, SEEK_CUR, or SEEK_END).
+	---> The return value if non-negative represents Success. The negative value represent Errors.
