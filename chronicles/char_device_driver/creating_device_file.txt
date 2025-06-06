@@ -25,3 +25,20 @@ Dynamic Device File Creation in Linux:
 	2) /lib/udev/rules.d/ => The System-supplied rules.
 	3) /etc/udev/udev.conf => The main configuration file.
 6. The Device Driver needs to ensure that any Major and Minor numbers assigned to a Device controlled by the Driver should be exported to the User-space through the "/sys".
+7. The Kernel API function to export all the information regarding the Device is:
+        => struct device *device_create(const struct class *cls, struct device *parent, dev_t devt, void *drvdata, const char *fmt, ...);
+        ---> 'class' is the Pointer to the Device class. It is created with the function 'class_create'.
+	---> 'parent' is the Pointer to the Parent Device. It can be NULL.
+	---> 'devt' is the Device number.
+	---> 'drvdata' is the Driver-specific data associated with the Device.
+	---> 'fmt' is the format String containing the Device name.
+	---> The return value for the function: Pointer to the 'struct device' is Success and ERR_PTR is Failure.
+	---> It is defined in the Header file <linux/device.h>.
+8. The Kernel API function to create a Device class under the "/sys/class" is:
+	=> struct class * __must_check class_create(const char *name);
+	---> 'name' is the name of the class. It appears with the same name in the "/sys/class".
+	---> The return value for the function: Pointer to the 'struct class' is Success and ERR_PTR is Failure.
+	---> It is defined in the Header file <linux/device/class.h>.
+9. The 'class_create' function creates a directory 'class_name' in the "/sys/class" and the 'device_create' function creates a sub-directory in the "/sys/class/class_name".
+10. The meaning of all this information exported to the User-space is that the "/sys/class" is available in the User-space.
+11. The 'udev' relies on this Device information being exported from the "/sys" to create the appropriate Device file in the "/dev".
