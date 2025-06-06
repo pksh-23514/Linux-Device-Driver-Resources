@@ -42,3 +42,32 @@ Dynamic Device File Creation in Linux:
 9. The 'class_create' function creates a directory 'class_name' in the "/sys/class" and the 'device_create' function creates a sub-directory in the "/sys/class/class_name".
 10. The meaning of all this information exported to the User-space is that the "/sys/class" is available in the User-space.
 11. The 'udev' relies on this Device information being exported from the "/sys" to create the appropriate Device file in the "/dev".
+
+Visual Representation of Device File Creation:
+**********************************************
+----------------------------------------------------------------------------------------------------------------------------------------
+User-space:
+
+		/sys/class/class_name			/sys/class/class_name/device_name/dev <---- 'dev' file has the Device number
+			  ^						^		   ^
+			  |						|		   |-----------	udev ------> /dev/device_name
+----------------------------------------------------------------------------------------------------------------------------------------
+Kernel-space:		  |						|	__________________________^ <---- (3) 'uevent'
+			  |						|	|
+		(1) class_create("class_name")		(2) device_create(...,"device_name",...)
+----------------------------------------------------------------------------------------------------------------------------------------
+
+The flow for the 'uevent' goes as follows:
+	=> [Hardware Event]
+		    |
+		    V
+		[Kernel] ---> Updates the "/sys/class" and the "/sys/devices"
+		    |
+		    V
+		[udevd] ---> It reads the attributes from the "/sys/class/class_name" entries.
+		    |
+		    V
+		[udev rules] ---> The match is checked based on the "/sys" attributes.
+		    |
+		    V
+		/dev/device_name and the symlinks, permissions, etc are created.
