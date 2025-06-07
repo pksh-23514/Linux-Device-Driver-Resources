@@ -18,3 +18,4 @@ Dynamic Device File Deletion in Linux:
 	---> There is no return value for the function.
 	---> It is defined in the Header file <linux/device/class.h>.
 5. The 'class_destroy' function free the allocated Memory for the 'class'. After this function call, the particular 'class' Pointer becomes invalid.
+6. In the LKM, these 2 functions are called in the end function for the Module.
