@@ -28,7 +28,7 @@ Dynamic Device File Creation in Linux:
 7. The Kernel API function to export all the information regarding the Device is:
         => struct device *device_create(const struct class *cls, struct device *parent, dev_t devt, void *drvdata, const char *fmt, ...);
         ---> 'class' is the Pointer to the Device class. It is created with the function 'class_create'.
-	---> 'parent' is the Pointer to the Parent Device. It can be NULL.
+	---> 'parent' is the Pointer to the Parent Device (if the Device is the child of some Parent Device). It can be NULL.
 	---> 'devt' is the Device number.
 	---> 'drvdata' is the Driver-specific data associated with the Device.
 	---> 'fmt' is the format String containing the Device name.
@@ -42,6 +42,7 @@ Dynamic Device File Creation in Linux:
 9. The 'class_create' function creates a directory 'class_name' in the "/sys/class" and the 'device_create' function creates a sub-directory in the "/sys/class/class_name".
 10. The meaning of all this information exported to the User-space is that the "/sys/class" is available in the User-space.
 11. The 'udev' relies on this Device information being exported from the "/sys" to create the appropriate Device file in the "/dev".
+12. In the LKM, these 2 functions are called in the start function for the Module.
 
 Visual Representation of Device File Creation:
 **********************************************
