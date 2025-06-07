@@ -126,6 +126,13 @@ Character Device Deletion:
 	---> There is no return value for the function.
 4. After the 'cdev_del' function returns, the association between the Device number and the 'file_operations' Structure is removed.
 5. The Kernel prevents any new User-space access to the Device via the Device files in "/dev".
+6. The 'cdev_del' function does not free the Memory allocated to the 'cdev' Structure.
+	1) If the Structure 'cdev' is allocated by the User statically, the 'cdev_del' function is enough to unregister.
+	2) However, if the Structure 'cdev' is allocated dynamically using the 'cdev_alloc' or ''kmalloc' functions; the 'cdev_del' function is not enough to unregister.
+7. To free the Memory allocated to the Structure 'cdev', the 'kfree' function must be executed.
+	1) The command executed after the 'cdev_del' function to free the Memory is:
+		=> kfree (&dev);
+8. It is crucial for the proper clean up and prevents any Memory leaks.
 
 Device Numbers Deletion:
 ************************
