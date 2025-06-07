@@ -25,7 +25,7 @@ Dynamic Device File Creation in Linux:
 	2) /lib/udev/rules.d/ => The System-supplied rules.
 	3) /etc/udev/udev.conf => The main configuration file.
 6. The Device Driver needs to ensure that any Major and Minor numbers assigned to a Device controlled by the Driver should be exported to the User-space through the "/sys".
-7. The Kernel API function to export all the information regarding the Device is:
+7. The Kernel API function to create and export all the information regarding the Device is:
         => struct device *device_create(const struct class *cls, struct device *parent, dev_t devt, void *drvdata, const char *fmt, ...);
         ---> 'class' is the Pointer to the Device class. It is created with the function 'class_create'.
 	---> 'parent' is the Pointer to the Parent Device (if the Device is the child of some Parent Device). It can be NULL.
