@@ -1,0 +1,20 @@
+Removing the Device Files:
+==========================
+
+Dynamic Device File Deletion in Linux:
+**************************************
+1. The chronology for the Device file deletion is exactly reverse of the steps followed in the Device file creation.
+2. The Kernel API function to remove all the information regarding the Device that was previously created with the 'device_create' function is:
+	=> void device_destroy(const struct class *cls, dev_t devt);
+	---> 'class' is the Pointer to the Device class. It is created with the function 'class_create'.
+	---> 'devt' is the Device number.
+	---> There is no return value for the function.
+	---> It is defined in the Header file <linux/device.h>.
+3. The 'device_destroy' function does not free the allocated Memory for the 'class' or unregister the Device number.
+	1) It is crucial for the proper clean up in LKM to prevent the Device file leaks or dangling references.
+4. The Kernel API function to destroy a Device class under the "/sys/class" that was previously created with the 'class_create' function is:
+	=> void class_destroy(const struct class *cls);
+	---> 'class' is the Pointer to the Device class. It is created with the function 'class_create'.
+	---> There is no return value for the function.
+	---> It is defined in the Header file <linux/device/class.h>.
+5. The 'class_destroy' function free the allocated Memory for the 'class'. After this function call, the particular 'class' Pointer becomes invalid.
