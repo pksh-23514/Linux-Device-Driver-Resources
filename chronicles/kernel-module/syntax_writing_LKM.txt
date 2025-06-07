@@ -41,7 +41,7 @@ Code Section:
 
 Start function:
 ***************
-1. The start fumction:
+1. The start function:
 	1) Either registers a Handler for something with the Kernel.
 	2) Or replaces one of the Kernel functions with it's own code (usually the code does something and then calls the original function).
 2. The prototype for the start function is: static int __init function_name(void)
