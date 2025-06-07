@@ -19,7 +19,7 @@ Dynamic Device File Creation in Linux:
 4. The "/sys/class" is a part of the VFS provided by the Kernel.
 	1) Each sub-directory in the "/sys/class" corresponds to a Device class like 'block', 'net', 'tty' etc.
 	2) These sub-directories contain symbolic links to the actual Device objects in "/sys/devices".
-	3) These Device objects contain attributes like 'dev', 'subsystem', 'device', 'events' etc.
+	3) These Device objects contain attributes like 'dev', 'subsystem', 'device', 'uevent' etc.
 5. The 'udev' rules and configurations are placed in the following location:
 	1) /etc/udev/rules.d/ => The Admin-defined rules.
 	2) /lib/udev/rules.d/ => The System-supplied rules.
