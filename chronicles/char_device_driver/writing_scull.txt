@@ -116,8 +116,8 @@ Character Driver File Operation Methods:
 10. The control-flow is as follows:
 	=> User-space ---> Trap to Kernel-space ---> System-call Dispatcher ---> VFS sub-system ---> Driver File Operation and Execution ---> Kernel-space ---> User-space
 
-Freeing the Device Numbers:
-***************************
+Device Numbers Deletion:
+************************
 1. The function used is defined in the Header file <linux/fs.h>.
 2. Regardless of the method used to allocate the Device number, the function to free them is:
 	=> void unregister_chrdev_region(dev_t first, unsigned int count);
