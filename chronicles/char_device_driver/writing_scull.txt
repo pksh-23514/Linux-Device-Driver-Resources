@@ -116,9 +116,20 @@ Character Driver File Operation Methods:
 10. The control-flow is as follows:
 	=> User-space ---> Trap to Kernel-space ---> System-call Dispatcher ---> VFS sub-system ---> Driver File Operation and Execution ---> Kernel-space ---> User-space
 
+Character Device Deletion:
+**************************
+1. The 'cdev' Structure representing the Device registered with the User-space needs to be unregistered separately.
+2. The function used is defined in the Header file <linux/cdev.h>.
+3. The Kernel API function to unregister the Char Device with the Kernel is:
+	=> void cdev_del(struct cdev *dev);
+	---> 'cdev' is the Structure that holds the Device related information.
+	---> There is no return value for the function.
+4. After the 'cdev_del' function returns, the association between the Device number and the 'file_operations' Structure is removed.
+5. The Kernel prevents any new User-space access to the Device via the Device files in "/dev".
+
 Device Numbers Deletion:
 ************************
-1. The function used is defined in the Header file <linux/fs.h>.
+1. The Device numbers allocated dynamically are to be removed separately. The function used is defined in the Header file <linux/fs.h>.
 2. Regardless of the method used to allocate the Device number, the function to free them is:
 	=> void unregister_chrdev_region(dev_t first, unsigned int count);
 	---> 'first' is the beginning Device number in the range of numbers to be de-registered.
