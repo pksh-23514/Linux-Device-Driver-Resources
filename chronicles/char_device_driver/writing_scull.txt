@@ -79,6 +79,25 @@ Character Device Registration:
 20. However, it does not create the Device nodes itself in "/dev" directory. Also, the function 'cdev_init' must be called before this function call.
 21. As soon as the 'cdev_add' function returns, the Device is live i.e. the Device is immediately available for access and it's operations can be called.
 
+Device Class Creation:
+**********************
+1. The next step is to create a Device class to which the Device belongs in the VFS.
+2. In Linux, the "/sys" directory exposes the Device configurations and information to the User-space.
+3. A Device class is an abstraction which the Kernel uses to group together all the similar types of Devices.
+4. They do not necessarily reflect the same physical layout but have similar functionalities (such as all the Block Devices, Input Devices, Network interfaces etc).
+5. The "/sys/class" is a part of the VFS provided by the Kernel.
+	1) Each sub-directory in the "/sys/class" corresponds to a Device class like 'block', 'net', 'tty' etc.
+	2) These sub-directories contain symbolic links to the actual Device objects in "/sys/devices".
+	3) These Device objects contain attributes like 'dev', 'subsystem', 'device', 'uevent' etc.
+6. The Kernel API function to create a Device class under the "/sys/class" is:
+	=> struct class * __must_check class_create(const char *name);
+	---> 'name' is the name of the class. It appears with the same name in the "/sys/class".
+	---> The return value for the function: Pointer to the 'struct class' is Success and ERR_PTR is Failure.
+	---> It is defined in the Header file <linux/device/class.h>.
+
+Device File Creation:
+*********************
+
 Character Driver File Operation Methods:
 ****************************************
 1. The Char Device Drivers have operations that provide implementations to the User-space System-calls such as open, read, write, close, llseek etc.
@@ -115,6 +134,12 @@ Character Driver File Operation Methods:
 9. The Driver returns the result to the Kernel. The Kernel returns this value as the result of the System-call to the User-space.
 10. The control-flow is as follows:
 	=> User-space ---> Trap to Kernel-space ---> System-call Dispatcher ---> VFS sub-system ---> Driver File Operation and Execution ---> Kernel-space ---> User-space
+
+Device File Deletion:
+*********************
+
+Device Class Deletion:
+**********************
 
 Character Device Deletion:
 **************************
