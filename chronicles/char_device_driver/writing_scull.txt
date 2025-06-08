@@ -149,6 +149,13 @@ Character Driver File Operation Methods:
 
 Device File Deletion:
 *********************
+1. The last initializartion step in the start function needs to be the first clean up step for the Device.
+2. The Kernel API function to remove all the information regarding the Device that was previously created with the 'device_create' function is:
+	=> void device_destroy(const struct class *cls, dev_t devt);
+	---> 'class' is the Pointer to the Device class. It is created with the function 'class_create'.
+	---> 'devt' is the Device number.
+	---> There is no return value for the function.
+	---> It is defined in the Header file <linux/device.h>.
 
 Device Class Deletion:
 **********************
