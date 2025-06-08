@@ -37,7 +37,7 @@ Major and Minor Number:
 	---> 'name' is the Device name that appears in the "/proc/devices".
 	---> 'fops' is the Pointer to an Array of Function Pointers, used to invoke the Driver’s entry points.
 	---> This is an Older way and has been replaced in the latest Kernel releases.
-7. The Major numbers are a small integer that serves as the index into a static Array of Char Drivers.
+7. The Major numbers are a small Integer that serves as the index into a static Array of Char Drivers.
 8. The Minor numbers are not passed to this function as they are used only by the Driver.
 9. Once the Driver has been registered in the Kernel table, it's operations are associated with the given Major number.
 10. When the Driver (Module) is unloaded from the Kernel, the Major number associated must be released by the function in the Header file <linux/fs.h>:

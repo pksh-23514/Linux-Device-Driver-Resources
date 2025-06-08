@@ -57,7 +57,7 @@ Structure 'file_operations':
 		=> The 'ioctl' call is a powerful mechanism for User-space applications to control the behavior of Devices.
 		=> However, it was seen as a completely uncontrolled entry point to the Kernel-space.
 	2) The new way to implement this function is introduced which doesn't lock the Kernel during the operation.
-		=> The request code (an integer) is passed that determines the specific action to be performed on the Device.
+		=> The request code (an Integer) is passed that determines the specific action to be performed on the Device.
 	3) The 'unlocked_ioctl' function prototype is:
 		=> long (*unlocked_ioctl) (struct file *, unsigned int, unsigned long);
 		---> The return value if non-negative represents Success. The negative value represent Errors.
@@ -294,7 +294,7 @@ Structure 'inode':
 		=> time64_t i_atime_sec;
 		=> time64_t i_mtime_sec;
 		=> time64_t i_ctime_sec;
-		---> The 'time64_t' Data-type is a 64-bit signed integer to store time values in seconds. It is designed to avoid the 'Year 2038' problem.
+		---> The 'time64_t' Data-type is a 64-bit signed Integer to store time values in seconds. It is designed to avoid the 'Year 2038' problem.
 13. The fields 'i_atime_nsec', 'i_mtime_nsec' and 'i_ctime_nsec' are declarations to store the nano-seconds portion of the time-stamp details of the inode.
 	1) The various variables store the following details:
 		=> 'i_atime_nsec' represents the nano-seconds portion of the last access time 'atime' for an inode.
