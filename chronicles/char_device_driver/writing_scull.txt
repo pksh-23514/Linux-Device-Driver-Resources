@@ -262,3 +262,12 @@ Handling Implementations:
 	   out:
 		  pr_info("Module Insertion Failed\n");
 		  return ret;
+
+Handling Chronology:
+********************
+1. The first step or the first condition to be checked shall have the label at the end.
+2. Therefore, the order of the labels is as follows:
+	1) class_del
+	2) chrdev_del
+	3) unreg_chrdev
+	4) out
