@@ -4,7 +4,7 @@ Parts of the Linux Kernel Module:
 	1) Header sction
 	2) Code section
 	3) Registration section
-	4) Module Description section
+	4) Description section
 
 Header section:
 ===============
@@ -32,12 +32,6 @@ Code Section:
 	2) __exit --> It directs the Compiler to keep the data or code in an Output section called ".exit" of the final ELF of the Kernel.
 	3) If no attributes are defined for the function, they are placed in the ".text" section of the final ELF of the Kernel.
 9. The Macros "__initdata" and "__initconst" discard the Variables after the initialization.
-10. The Module description can be provided using the Macros "MODULE_LICENSE", "MODULE_AUTHOR" and "MODULE_DESCRIPTION".
-11. The license can be GPL (free) or non-GPL (proprietary) licenses. If a Module license is non-GPL, the Kernel triggers a warning of being 'tainted'.
-12. The allowed free license parameters that can be used are defined in the Header file <linux/module.h>.
-13. The Macro "MODULE_INFO" is used to provide a custom message about the Module. It is used to store the Key-Value pairs in the ".modinfo" section of the compiled Modules.
-14. All the Module descriptions use "MODULE_INFO" to store the information in the ".modinfo" section of the compiled Modules.
-15. The "modinfo" command in Linux is used to display all the Module descriptions.
 
 Start function:
 ***************
@@ -80,3 +74,12 @@ Registration Section:
 1. The "module_init" and "module_exit" Macros are used to register the start and end functions with the Kernel.
 2. The "module_init" is used to add the parameter i.e. the start function to the 'init' Entry point database of the Kernel.
 3. The "module_exit" is used to add the parameter i.e. the end function to the 'exit' Entry point database of the Kernel.
+
+Description Section:
+====================
+1. The Module description can be provided using the Macros "MODULE_LICENSE", "MODULE_AUTHOR" and "MODULE_DESCRIPTION".
+2. The license can be GPL (free) or non-GPL (proprietary) licenses. If a Module license is non-GPL, the Kernel triggers a warning of being 'tainted'.
+3. The allowed free license parameters that can be used are defined in the Header file <linux/module.h>.
+4. The Macro "MODULE_INFO" is used to provide a custom message about the Module. It is used to store the Key-Value pairs in the ".modinfo" section of the compiled Modules.
+5. All the Module descriptions use "MODULE_INFO" to store the information in the ".modinfo" section of the compiled Modules.
+6. The "modinfo" command in Linux is used to display all the Module descriptions.
