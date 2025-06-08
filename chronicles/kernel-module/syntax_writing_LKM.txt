@@ -73,8 +73,13 @@ End function:
 Registration Section:
 =====================
 1. The "module_init" and "module_exit" Macros are used to register the start and end functions with the Kernel.
-2. The "module_init" is used to add the parameter i.e. the start function to the 'init' Entry point database of the Kernel.
-3. The "module_exit" is used to add the parameter i.e. the end function to the 'exit' Entry point database of the Kernel.
+2. The "module_init" is used to add the parameter i.e. the start function to the 'init' entry-point database of the Kernel.
+	=> module_init(func_name)
+	---> 'func_name' is the name of the start function of the LKM.
+3. The "module_exit" is used to add the parameter i.e. the end function to the 'exit' entry-point database of the Kernel.
+	=> module_exit(func_name)
+	---> 'func_name' is the name of the end function of the LKM.
+4. These two Macros are defined in the Header file <linux/module.h>.
 
 Description Section:
 ====================
