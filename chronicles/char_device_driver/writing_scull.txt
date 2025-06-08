@@ -1,13 +1,6 @@
 Steps to Write the scull:
 =========================
 
-Establish Connection between Device file and Driver:
-****************************************************
-1. The Device number is created.
-2. The Device file is created.
-3. The Char Device Driver is registered with the VFS.
-4. The Driver operations for the corresponding System-calls are implemented.
-
 Dynamic Allocation of a Range of Device Numbers:
 ************************************************
 1. The first step is to obtain one or more Device numbers.
