@@ -159,6 +159,12 @@ Device File Deletion:
 
 Device Class Deletion:
 **********************
+1. The next step is to delete the Device class from the "/sys" directory.
+2. The Kernel API function to destroy a Device class under the "/sys/class" that was previously created with the 'class_create' function is:
+	=> void class_destroy(const struct class *cls);
+	---> 'class' is the Pointer to the Device class. It is created with the function 'class_create'.
+	---> There is no return value for the function.
+	---> It is defined in the Header file <linux/device/class.h>.
 
 Character Device Deletion:
 **************************
