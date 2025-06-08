@@ -27,6 +27,7 @@ Dynamic Allocation of a Range of Device Numbers:
 	---> 'name' is the Device name associated with the number range. This appears in the "/proc/devices" and "/sys" directories.
 	---> The return value for the function: 0 is Success and Negative is Failure/Error.
 6. For this function to work well, the Device number must be known ahead of time. However, most of the time this is not the case.
+7. The usual place to call this function would be in the Module's start function.
 
 Character Device Registration:
 ******************************
@@ -78,6 +79,7 @@ Character Device Registration:
 19. It adds the Device to the Kernel's internal hash table 'cdev_map' for the Kernel to locate and manage the Device.
 20. However, it does not create the Device nodes itself in "/dev" directory. Also, the function 'cdev_init' must be called before this function call.
 21. As soon as the 'cdev_add' function returns, the Device is live i.e. the Device is immediately available for access and it's operations can be called.
+22. The usual place to call this function would be in the Module's start function.
 
 Device Class Creation:
 **********************
@@ -94,6 +96,7 @@ Device Class Creation:
 	---> 'name' is the name of the class. It appears with the same name in the "/sys/class".
 	---> The return value for the function: Pointer to the 'struct class' is Success and ERR_PTR is Failure.
 	---> It is defined in the Header file <linux/device/class.h>.
+7. The usual place to call this function would be in the Module's start function.
 
 Device File Creation:
 *********************
@@ -109,6 +112,7 @@ Device File Creation:
 	---> 'fmt' is the format String containing the Device name.
 	---> The return value for the function: Pointer to the 'struct device' is Success and ERR_PTR is Failure.
 	---> It is defined in the Header file <linux/device.h>.
+5. The usual place to call this function would be in the Module's start function.
 
 Character Driver File Operation Methods:
 ****************************************
@@ -156,6 +160,7 @@ Device File Deletion:
 	---> 'devt' is the Device number.
 	---> There is no return value for the function.
 	---> It is defined in the Header file <linux/device.h>.
+3. The usual place to call this function would be in the Module's end function.
 
 Device Class Deletion:
 **********************
@@ -165,10 +170,11 @@ Device Class Deletion:
 	---> 'class' is the Pointer to the Device class. It is created with the function 'class_create'.
 	---> There is no return value for the function.
 	---> It is defined in the Header file <linux/device/class.h>.
+3. The usual place to call this function would be in the Module's end function.
 
 Character Device Deletion:
 **************************
-1. The 'cdev' Structure representing the Device registered with the User-space needs to be unregistered separately.
+1. The next step is to unregister the 'cdev' Structure representing the Device that is registered with the User-space.
 2. The function used is defined in the Header file <linux/cdev.h>.
 3. The Kernel API function to unregister the Char Device with the Kernel is:
 	=> void cdev_del(struct cdev *dev);
@@ -183,10 +189,11 @@ Character Device Deletion:
 	1) The command executed after the 'cdev_del' function to free the Memory is:
 		=> kfree (&dev);
 8. It is crucial for the proper clean up and prevents any Memory leaks.
+9. The usual place to call this function would be in the Module's end function.
 
 Device Numbers Deletion:
 ************************
-1. The Device numbers allocated dynamically are to be removed separately. The function used is defined in the Header file <linux/fs.h>.
+1. The final step is to unregister the Device numbers allocated dynamically. The function used is defined in the Header file <linux/fs.h>.
 2. Regardless of the method used to allocate the Device number, the function to free them is:
 	=> void unregister_chrdev_region(dev_t first, unsigned int count);
 	---> 'first' is the beginning Device number in the range of numbers to be de-registered.
