@@ -193,3 +193,72 @@ Device Numbers Deletion:
 	---> 'count' is the total number of Device numbers to be de-registered.
 	---> There is no return value for the function.
 3. The usual place to call this function would be in the Module's end function.
+
+Error Handling in the scull:
+============================
+
+goto Statement:
+***************
+1. The 'goto' statement is a low-level control statement to jump to another part of the code using labels.
+2. The implementation of a 'goto' statement is as follows:
+	=> if(condition == True)
+		// Statements
+	   else
+		goto label_name;
+	   label_name:
+		   // Statements
+3. It is generally discouraged to use the 'goto' statement as it becomes harder to debug. However, it is very effective in handling the error conditions.
+
+Handling Pointer Return Value:
+******************************
+1. The functions such as 'class_create' or 'device_create' return a Structure Data-type Pointer if successful. Otherwise, they return 'ERR_PTR' if any error occurs.
+2. The 'ERR_PTR' is defined in the Header file <linux/err.h>.
+	1) It encodes the Error code into a Pointer.
+	2) It is defined as below:
+	=> static inline void * __must_check ERR_PTR(long error)
+	   {
+		   return (void *) error;
+	   }
+3. The way to check such kind of return values is:
+	1) IS_ERR(ptr) - Checks if a Pointer is actually an encoded Error.
+	2) PTR_ERR(ptr) - Extracts the Error code from the Pointer.
+
+Handling Implementations:
+*************************
+1. The 'device_create' function can be handled as below:
+	=> struct device *dev_file = device_create(dev_class, NULL, dev, NULL, "scull");
+	   int ret;
+	   if(IS_ERR(dev_file)) {
+		   pr_err("device_create Failed\n");
+		   ret = PTR_ERR(dev_file);
+		   goto class_del;
+	   }
+	   class_del:
+		 class_destroy(dev_class);
+2. The 'class_create' function can be handled as below:
+	=> struct class *dev_class = class_create("pcd");
+	   int ret;
+	   if(IS_ERR(dev_class)) {
+		   pr_err("class_create Failed\n");
+		   ret = PTR_ERR(dev_class);
+		   goto chrdev_del;
+	   }
+	   chrdev_del:
+		  cdev_del(&dev);
+3. The 'cdev_add' function can be handled as below:
+	=> int ret = cdev_add(&dev, dev, count)
+	   if(ret < 0) {
+		   pr_err("cdev_add Failed\n");
+		   goto unreg_chrdev;
+	   }
+	   unreg_chrdev:
+		  unregister_chrdev_region(first, count);
+4. The 'alloc_chrdev_region' function can be handled as below:
+	=> int ret = alloc_chrdev_region(&dev, baseminor, count, "scull");
+	   if(ret < 0) {
+		   pr_err("alloc_chrdev_region Failed\n");
+		   goto out;
+	   }
+	   out:
+		  pr_info("Module Insertion Failed\n");
+		  return ret;
