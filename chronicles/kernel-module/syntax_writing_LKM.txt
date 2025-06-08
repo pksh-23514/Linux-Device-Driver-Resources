@@ -5,6 +5,7 @@ Parts of the Linux Kernel Module:
 	2) Code section
 	3) Registration section
 	4) Description section
+	5) Parameter section
 
 Header section:
 ===============
@@ -83,3 +84,28 @@ Description Section:
 4. The Macro "MODULE_INFO" is used to provide a custom message about the Module. It is used to store the Key-Value pairs in the ".modinfo" section of the compiled Modules.
 5. All the Module descriptions use "MODULE_INFO" to store the information in the ".modinfo" section of the compiled Modules.
 6. The "modinfo" command in Linux is used to display all the Module descriptions.
+
+Parameter Section:
+==================
+1. The Module can take Command-Line arguments as parameters during load-time i.e. with the 'insmod' command.
+2. It can only accept a range of Data-types passed in the CLA.
+	1) It cannot accept the 'argc/argv' type of arguments.
+	2) It can accept the Character Pointer i.e. Strings but it shall be NULL terminated.
+	3) It cannot accept the Float values.
+	4) It can accept Boolean type of arguments.
+	5) It can accept both the signed and unsigned Integer values
+3. To allow the arguments to be passed, the variables receiving those arguments must be declared as the Global variable in the Module.
+4. The "module_param" Macro is used to pass the parameters to a Kernel Module at the time it is loaded.
+	=> module_param(name, type, perm)
+	---> 'name' is the variable name.
+	---> 'type' is the variable Data-type.
+	---> 'perm' is the file permissions for the "/sys" entry (like 0644). Use '0' to prevent it from appearing in "/sys".
+5. The "module_param_array" Macro is used to pass the parameters which is an Array to a Kernel Module at the time it is loaded.
+	=> module_param_array(name, type, nump, perm)
+	---> 'name' is the Array name.
+	---> 'type' is the Array type.
+	---> 'nump' is the Pointer to an Integer that stores the number of parameters actually passed. It can be NULL.
+	---> 'perm' is the file permissions for the "/sys" entry (like 0644). Use '0' to prevent it from appearing in "/sys".
+6. These two Macros are defined in the Header file <linux/moduleparam.h>.
+7. The Macro "MODULE_PARM_DESC" is used to provide a description about a Module parameter.
+8. The Global variable declaration and the Macro to receive the parameters must be placed at the beginning of the Module for clarity.
